@@ -1,4 +1,6 @@
 {
     "presets": ["next/babel"],
-    "plugins": []
+    "plugins": [
+        "./@tarojs/babel-plugins/taro-router"
+    ]
 }
