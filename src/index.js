@@ -1,9 +1,11 @@
 const path = require('path')
 const fs = require('fs')
 const {src, dest} = require('gulp')
-const replace = require('gulp-replace');
+const replace = require('gulp-replace')
+const rename = require('gulp-rename')
 const es = require('event-stream')
 const {merge} = require('lodash')
+const ejs = require('ejs')
 const {ensureLeadingSlash} = require('./utils')
 
 module.exports = ctx => {
@@ -14,7 +16,7 @@ module.exports = ctx => {
         name: 'nextjs',
         useConfigName: 'h5',
         async fn({config}) {
-            const {sourceRoot, outputRoot, router} = config;
+            const {sourceRoot, outputRoot, router, env} = config
 
             if (router.mode !== 'browser') {
                 throw new Error('Next.js only support `browser` router mode.')
@@ -60,7 +62,14 @@ module.exports = ctx => {
                     src(`${sourceDir}/**`).pipe(dest(outputSourceDir)),
                     src(`${templateDir}/pages/**`).pipe(dest(path.join(outputDir, 'pages'))),
                     src(`${templateDir}/@tarojs/**`).pipe(dest(path.join(outputDir, '@tarojs'))),
-                    src(`${templateDir}/next.config.js`).pipe(dest(outputDir)),
+                    src(`${templateDir}/next.config.ejs`)
+                        .pipe(es.through(function (data) {
+                            const result = ejs.render(data.contents.toString(), {env})
+                            data.contents = Buffer.from(result)
+                            this.emit('data', data)
+                        }))
+                        .pipe(rename('next.config.js'))
+                        .pipe(dest(outputDir)),
                     src(`${templateDir}/postcss.config.js`).pipe(dest(outputDir)),
                     src(`${templateDir}/.babelrc`).pipe(dest(outputDir)),
                     src(`${templateDir}/package.json`)

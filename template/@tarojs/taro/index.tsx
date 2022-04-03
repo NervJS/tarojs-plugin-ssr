@@ -53,7 +53,13 @@ function navigateBack() {
     console.log('TODO: navigateBack')
 }
 
+function getStorageSync(key: string): any | undefined {
+    console.log('TODO: getStorageSync')
+}
+
 export default {
     getCurrentInstance,
-    navigateBack
+    navigateBack,
+
+    getStorageSync
 }

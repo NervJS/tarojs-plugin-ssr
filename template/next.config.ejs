@@ -1,0 +1,12 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    env: {
+    <%_ Object.keys(env).forEach(function (key){ _%>
+        <%_ if (key !== 'NODE_ENV') { _%>
+        <%- key %>: <%- env[key] %>,
+        <%_ } _%>
+    <%_ }) _%>
+    }
+}
+  
+module.exports = nextConfig
