@@ -3,6 +3,7 @@ const fs = require('fs')
 const {src, dest} = require('gulp')
 const replace = require('gulp-replace')
 const rename = require('gulp-rename')
+const filter = require('gulp-filter')
 const es = require('event-stream')
 const {merge} = require('lodash')
 const ejs = require('ejs')
@@ -59,7 +60,30 @@ module.exports = ctx => {
 
             function scaffold() {
                 return es.merge(
-                    src(`${sourceDir}/**`).pipe(dest(outputSourceDir)),
+                    src(`${sourceDir}/**`)
+                        .pipe(filter(file => {
+                            const stat = fs.statSync(file.path)
+                            if (stat.isDirectory()) {
+                                return true
+                            }
+
+                            const ext = path.extname(file.path)
+                            if (!helper.SCRIPT_EXT.includes(ext)) {
+                                return true
+                            }
+
+                            const dir = path.dirname(file.path)
+                            const name = path.basename(file.path, ext)
+                            const specifiedFilePath = path.join(dir, `${name}.h5${ext}`)
+                            return !fs.existsSync(specifiedFilePath)
+                        }))
+                        .pipe(rename(p => {
+                            const secondaryExt = path.extname(p.basename)
+                            if (secondaryExt === '.h5') {
+                                p.basename = path.basename(p.basename, secondaryExt)
+                            }
+                        }))
+                        .pipe(dest(outputSourceDir)),
                     src(`${templateDir}/pages/**`).pipe(dest(path.join(outputDir, 'pages'))),
                     src(`${templateDir}/@tarojs/**`).pipe(dest(path.join(outputDir, '@tarojs'))),
                     src(`${templateDir}/next.config.ejs`)
