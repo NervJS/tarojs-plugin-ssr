@@ -49,17 +49,4 @@ function getCurrentInstance(nextRouter?: NextRouter): TaroInstance {
     throw new Error('An error occurred while calling `getCurrentInstance`')
 }
 
-function navigateBack() {
-    console.log('TODO: navigateBack')
-}
-
-function getStorageSync(key: string): any | undefined {
-    console.log('TODO: getStorageSync')
-}
-
-export default {
-    getCurrentInstance,
-    navigateBack,
-
-    getStorageSync
-}
+export default getCurrentInstance

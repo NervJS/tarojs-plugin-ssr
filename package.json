@@ -19,6 +19,8 @@
   "dependencies": {
     "@babel/core": "^7.17.7",
     "@babel/helper-split-export-declaration": "^7.16.7",
+    "chalk": "^4.1.2",
+    "cross-spawn": "^7.0.3",
     "ejs": "^3.1.6",
     "event-stream": "^4.0.1",
     "gulp": "^4.0.2",
@@ -28,6 +30,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@tarojs/taro-h5": "^3.4.4",
     "babel-plugin-tester": "^10.1.0",
     "jest": "^27.5.1",
     "next": "^12.1.4"

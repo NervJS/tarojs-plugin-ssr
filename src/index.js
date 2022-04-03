@@ -7,7 +7,7 @@ const filter = require('gulp-filter')
 const es = require('event-stream')
 const {merge} = require('lodash')
 const ejs = require('ejs')
-const {ensureLeadingSlash} = require('./utils')
+const {ensureLeadingSlash, install} = require('./utils')
 
 module.exports = ctx => {
     const {paths, helper} = ctx
@@ -124,7 +124,9 @@ module.exports = ctx => {
                         .pipe(dest(outputDir))
                 )
             }
-            scaffold()
+            scaffold().on('end', () => {
+                install({cwd: outputDir})
+            })
 
             function createNextjsPages() {
                 const nextjsPagesDir = `${outputDir}/pages`
