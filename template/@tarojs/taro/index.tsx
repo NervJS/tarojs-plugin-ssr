@@ -5,11 +5,11 @@ interface TaroRouter {
     path: string
 }
 
-interface Current {
+interface TaroInstance {
     router: TaroRouter | null
 }
 
-function getCurrentInstance(nextRouter?: NextRouter): Current {
+function getCurrentInstance(nextRouter?: NextRouter): TaroInstance {
     if (typeof window !== 'undefined') {
         const obj = new URLSearchParams(location.search)
         const params: Record<string, string> = Array.from(obj.entries())
@@ -49,6 +49,11 @@ function getCurrentInstance(nextRouter?: NextRouter): Current {
     throw new Error('An error occurred while calling `getCurrentInstance`')
 }
 
+function navigateBack() {
+    console.log('TODO: navigateBack')
+}
+
 export default {
-    getCurrentInstance
+    getCurrentInstance,
+    navigateBack
 }

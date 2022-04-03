@@ -10,23 +10,23 @@ module.exports = function (babel) {
      * retains its original name so that `toString` is not affected, other
      * references to the class are renamed instead.
      */
-    function replaceClassWithVar(path) {
+     function replaceClassWithVar(path) {
         if (path.type === 'ClassDeclaration') {
             const varId = path.scope.generateUidIdentifierBasedOnNode(path.node.id)
             const classId = t.identifier(path.node.id.name)
-        
+
             path.scope.rename(classId.name, varId.name)
-        
+
             path.insertBefore(
                 t.variableDeclaration('let', [t.variableDeclarator(varId)])
             )
             path.get('id').replaceWith(classId)
-        
+
             return [t.cloneNode(varId), path]
         } else {
             let className
             let varId
-        
+
             if (path.node.id) {
                 className = path.node.id.name
                 varId = path.scope.parent.generateDeclaredUidIdentifier(className)
@@ -46,100 +46,18 @@ module.exports = function (babel) {
                 path.node.superClass,
                 path.node.body || []
             )
-        
+
             const [newPath] = path.replaceWith(
                 t.sequenceExpression([newClassExpr, varId])
             )
-    
+
             return [t.cloneNode(varId), newPath.get('expressions.0')]
         }
     }
 
-    function transformClass() {
-        return {
-            Program: {
-                enter() {
-                    needsWithRouter = false
-                },
-                exit(path) {
-                    if (needsWithRouter) {
-                        const id = t.identifier('withRouter')
-                        path.node.body.unshift(
-                            t.importDeclaration(
-                                [t.importSpecifier(id, id)],
-                                t.stringLiteral('next/router')
-                            )
-                        )
-                    }
-                }
-            },
-            ClassDeclaration: {
-                enter(path) {
-                    if (
-                        t.isIdentifier(path.node.superClass)
-                        && ['Component', 'PureComponent'].includes(path.node.superClass.name)
-                    ) {
-                        isInClassComponent = true
-                    }
-                },
-                exit(path) {
-                    if (isInClassComponent && isCalledGetCurrentInstance) {
-                        needsWithRouter = true
-
-                        const [localId, classPath] = replaceClassWithVar(path)
-                        classPath.insertAfter(
-                            t.expressionStatement(
-                                t.assignmentExpression(
-                                    '=',
-                                    localId,
-                                    t.callExpression(
-                                        t.identifier('withRouter'),
-                                        [t.identifier(classPath.node.id.name)]
-                                    )
-                                )
-                            )
-                        )
-                    }
-
-                    isInClassComponent = false
-                }
-            },
-            'ExportNamedDeclaration|ExportDefaultDeclaration'(path) {
-                if (!path.get('declaration').isClassDeclaration()) return
-
-                splitExportDeclaration(path)
-            },
-            CallExpression(path) {
-                if (
-                    t.isIdentifier(path.node.callee, {
-                        type: 'Identifier',
-                        name: 'getCurrentInstance'
-                    })
-                    || (
-                        t.isMemberExpression(path.node.callee)
-                        && t.isIdentifier(path.node.callee.property, {name: 'getCurrentInstance'})
-                    )
-                ) {
-                    isCalledGetCurrentInstance = true
-
-                    const exp = t.cloneNode(path.node)
-                    exp.arguments.push(
-                        t.memberExpression(
-                            t.memberExpression(
-                                t.thisExpression(),
-                                t.identifier('props')
-                            ),
-                            t.identifier('router')
-                        )
-                    )
-                    path.replaceWith(exp)
-                    path.skip()
-                }
-            }
-        }
-    }
-
     let needsWithRouter = false
+
+    let isWithRouterImported = false
 
     let isInClassComponent = false
 
@@ -149,11 +67,18 @@ module.exports = function (babel) {
         name: 'taro-router-plugin',
         visitor: {
             Program: {
-                enter(path) {
+                enter(programPath) {
                     needsWithRouter = false
 
                     // 由于 `@babel/plugin-transform-classes` 在转换类时影响 this，因此 program enter 时提前进行转换
-                    path.traverse({
+                    programPath.traverse({
+                        ImportDeclaration(path) {
+                            if (t.isStringLiteral(path.node.source, {value: 'next/router'})) {
+                                if (path.node.specifiers.find(specifier => t.isIdentifier(specifier.imported, {name: 'withRouter'}))) {
+                                    isWithRouterImported = true
+                                }
+                            }
+                        },
                         ClassDeclaration: {
                             enter(path) {
                                 if (
@@ -166,22 +91,36 @@ module.exports = function (babel) {
                             exit(path) {
                                 if (isInClassComponent && isCalledGetCurrentInstance) {
                                     needsWithRouter = true
-            
-                                    const [localId, classPath] = replaceClassWithVar(path)
-                                    classPath.insertAfter(
-                                        t.expressionStatement(
-                                            t.assignmentExpression(
-                                                '=',
-                                                localId,
-                                                t.callExpression(
-                                                    t.identifier('withRouter'),
-                                                    [t.identifier(classPath.node.id.name)]
+
+                                    const isDecorated = Array.from(path.parentPath.node.body).some(exp => (
+                                        t.isExpressionStatement(exp)
+                                        && t.isAssignmentExpression(exp.expression)
+                                        && t.isCallExpression(exp.expression.right)
+                                        && t.isIdentifier(exp.expression.right.callee, {
+                                            name: 'withRouter'
+                                        })
+                                        && exp.expression.right.arguments.some(arg => t.isIdentifier(arg, {
+                                            name: path.node.id.name
+                                        }))
+                                    ))
+
+                                    if (!isDecorated) {
+                                        const [localId, classPath] = replaceClassWithVar(path)
+                                        classPath.insertAfter(
+                                            t.expressionStatement(
+                                                t.assignmentExpression(
+                                                    '=',
+                                                    localId,
+                                                    t.callExpression(
+                                                        t.identifier('withRouter'),
+                                                        [t.identifier(classPath.node.id.name)]
+                                                    )
                                                 )
                                             )
                                         )
-                                    )
+                                    }
                                 }
-            
+
                                 isInClassComponent = false
                             }
                         },
@@ -203,31 +142,37 @@ module.exports = function (babel) {
                             ) {
                                 isCalledGetCurrentInstance = true
             
-                                const exp = t.cloneNode(path.node)
-                                exp.arguments.push(
-                                    t.memberExpression(
+                                if (path.node.arguments.length === 0) {
+                                    const exp = t.cloneNode(path.node)
+                                    exp.arguments.push(
                                         t.memberExpression(
-                                            t.thisExpression(),
-                                            t.identifier('props')
-                                        ),
-                                        t.identifier('router')
+                                            t.memberExpression(
+                                                t.thisExpression(),
+                                                t.identifier('props')
+                                            ),
+                                            t.identifier('router')
+                                        )
                                     )
-                                )
-                                path.replaceWith(exp)
-                                path.skip()
+                                    path.replaceWith(exp)
+                                    path.skip()
+                                }
                             }
                         }
                     })
                 },
                 exit(path) {
-                    if (needsWithRouter) {
-                        const id = t.identifier('withRouter')
-                        path.node.body.unshift(
+                    if (needsWithRouter && !isWithRouterImported) {
+                        path.unshiftContainer(
+                            'body',
                             t.importDeclaration(
-                                [t.importSpecifier(id, id)],
+                                [t.importSpecifier(
+                                    t.identifier('withRouter'),
+                                    t.identifier('withRouter')
+                                )],
                                 t.stringLiteral('next/router')
                             )
                         )
+                        path.skip()
                     }
                 }
             }

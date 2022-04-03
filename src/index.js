@@ -60,6 +60,7 @@ module.exports = ctx => {
                     src(`${sourceDir}/**`).pipe(dest(outputSourceDir)),
                     src(`${templateDir}/pages/**`).pipe(dest(path.join(outputDir, 'pages'))),
                     src(`${templateDir}/@tarojs/**`).pipe(dest(path.join(outputDir, '@tarojs'))),
+                    src(`${templateDir}/next.config.js`).pipe(dest(outputDir)),
                     src(`${templateDir}/postcss.config.js`).pipe(dest(outputDir)),
                     src(`${templateDir}/.babelrc`).pipe(dest(outputDir)),
                     src(`${templateDir}/package.json`)
