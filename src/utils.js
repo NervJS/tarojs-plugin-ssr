@@ -41,6 +41,13 @@ function getPkgManager() {
     }
 }
 
+function flattenDeps(deps) {
+    if (!deps) {
+        return
+    }
+    return Object.keys(deps).map(key => `${key}@${deps[key]}`)
+}
+
 /**
  * Spawn a package manager installation with either Yarn or NPM.
  *
@@ -48,11 +55,14 @@ function getPkgManager() {
  */
 exports.install = function ({
     cwd,
-    dependencies,
-    devDependencies,
+    dependencies: originDependencies,
+    devDependencies: originDevDependencies,
     packageManager = getPkgManager()
 }) {
     return new Promise((resolve, reject) => {
+        const dependencies = flattenDeps(originDependencies)
+        const devDependencies = flattenDeps(originDevDependencies)
+
         let args
         let command = packageManager
         const useYarn = packageManager === 'yarn'

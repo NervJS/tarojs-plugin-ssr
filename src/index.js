@@ -58,6 +58,8 @@ module.exports = ctx => {
                 }
             }
 
+            const taroPkg = require(`${appPath}/package.json`)
+
             function scaffold() {
                 return es.merge(
                     src(`${sourceDir}/**`)
@@ -98,12 +100,7 @@ module.exports = ctx => {
                     src(`${templateDir}/.babelrc`).pipe(dest(outputDir)),
                     src(`${templateDir}/package.json`)
                         .pipe(replace('@@NAME@@', () => {
-                            let name
-                            const taroPakcageJsonPath = `${appPath}/package.json`
-                            if (fs.existsSync(taroPakcageJsonPath)) {
-                                const pkg = JSON.parse(fs.readFileSync(taroPakcageJsonPath, 'utf-8'))
-                                name = pkg.name
-                            }
+                            const name = taroPkg.name
                             return name || 'tarojs-to-nextjs'
                         }))
                         .pipe(dest(outputDir)),
@@ -124,8 +121,15 @@ module.exports = ctx => {
                         .pipe(dest(outputDir))
                 )
             }
-            scaffold().on('end', () => {
-                install({cwd: outputDir})
+            scaffold().on('end', async () => {
+                await install({
+                    cwd: outputDir,
+                    dependencies: taroPkg.dependencies
+                })
+                await install({
+                    cwd: outputDir,
+                    devDependencies: taroPkg.devDependencies
+                })
             })
 
             function createNextjsPages() {
