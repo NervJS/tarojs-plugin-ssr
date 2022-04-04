@@ -1,12 +1,13 @@
 const path = require('path')
 const fs = require('fs')
-const {src, dest} = require('gulp')
+const {src, dest, watch} = require('gulp')
 const replace = require('gulp-replace')
 const rename = require('gulp-rename')
 const filter = require('gulp-filter')
 const es = require('event-stream')
 const {merge} = require('lodash')
 const ejs = require('ejs')
+const chalk = require('chalk')
 const {ensureLeadingSlash, install} = require('./utils')
 
 module.exports = ctx => {
@@ -17,7 +18,7 @@ module.exports = ctx => {
         name: 'nextjs',
         useConfigName: 'h5',
         async fn({config}) {
-            const {sourceRoot, outputRoot, router, env} = config
+            const {sourceRoot, outputRoot, router, env, isWatch} = config
 
             if (router.mode !== 'browser') {
                 throw new Error('Next.js only support `browser` router mode.')
@@ -130,6 +131,28 @@ module.exports = ctx => {
                     cwd: outputDir,
                     devDependencies: taroPkg.devDependencies
                 })
+
+                if (isWatch) {
+                    const watcher = watch(`${sourceDir}/**`)
+                    watcher.on('change', filePath => {
+                        const relativePath = filePath.substring(appPath.length + 1)
+                        const outputPath = path.join(outputDir, relativePath)
+                        console.log(`${chalk.green('File was changed')} ${relativePath}`)
+                        fs.copyFileSync(filePath, outputPath)
+                    })
+                    watcher.on('add', filePath => {
+                        const relativePath = filePath.substring(appPath.length + 1)
+                        const outputPath = path.join(outputDir, relativePath)
+                        console.log(`${chalk.green('File was added')} ${relativePath}`)
+                        fs.copyFileSync(filePath, outputPath)
+                    })
+                    watcher.on('unlink', filePath => {
+                        const relativePath = filePath.substring(appPath.length + 1)
+                        const outputPath = path.join(outputDir, relativePath)
+                        console.log(`${chalk.green('File was removed')} ${relativePath}`)
+                        fs.rmSync(outputPath)
+                    })
+                }
             })
 
             function createNextjsPages() {
