@@ -27,6 +27,8 @@ import {
 
 import {useDidShow, useDidHide} from './hooks'
 
+import {onNetworkStatusChange, getNetworkType} from './network'
+
 import getCurrentInstance from './getCurrentInstance'
 
 export {
@@ -53,6 +55,9 @@ export {
     redirectTo,
     navigateTo,
     navigateBack,
+
+    onNetworkStatusChange,
+    getNetworkType,
 
     getCurrentInstance
 }
@@ -81,6 +86,9 @@ export default {
     redirectTo,
     navigateTo,
     navigateBack,
+
+    onNetworkStatusChange,
+    getNetworkType,
 
     getCurrentInstance
 }
