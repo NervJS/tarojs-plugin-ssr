@@ -78,7 +78,7 @@ namespace getNetworkType {
   export type ParamPropComplete = () => any
 }
 
-export function getNetworkType({success, fail, complete}: getNetworkType.Param): void {
+export function getNetworkType({success, complete}: getNetworkType.Param): void {
   const connection = navigator.connection
   let networkType = 'unknown'
   if (connection) {

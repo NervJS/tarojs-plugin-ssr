@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@babel/core': ^7.17.7
   '@babel/helper-split-export-declaration': ^7.16.7
+  '@babel/plugin-syntax-jsx': ^7.16.7
   '@types/react': ^17.0.43
   babel-plugin-tester: ^10.1.0
   chalk: ^4.1.2
@@ -32,6 +33,7 @@ dependencies:
   lodash: 4.17.21
 
 devDependencies:
+  '@babel/plugin-syntax-jsx': 7.16.7_@babel+core@7.17.7
   babel-plugin-tester: 10.1.0_@babel+core@7.17.7
   jest: 27.5.1
   next: 12.1.4_@babel+core@7.17.7
@@ -229,6 +231,16 @@ packages:
 
   /@babel/plugin-syntax-json-strings/7.8.3_@babel+core@7.17.7:
     resolution: {integrity: sha512-lY6kdGpWHvjoe2vk4WrAapEuBR69EMxZl+RoGRhrFGNYVK8mOPAW8VfbT/ZgrFbXlDNiiaxQnAtgVCZ6jv30EA==}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    dependencies:
+      '@babel/core': 7.17.7
+      '@babel/helper-plugin-utils': 7.16.7
+    dev: true
+
+  /@babel/plugin-syntax-jsx/7.16.7_@babel+core@7.17.7:
+    resolution: {integrity: sha512-Esxmk7YjA8QysKeT3VhTXvF6y77f/a91SIs4pWb4H2eWGQkCKFgQaG6hdoEVZtGsrAcb2K5BW66XsOErD4WU3Q==}
+    engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:

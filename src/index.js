@@ -28,11 +28,14 @@ module.exports = ctx => {
             const outputDir = path.resolve(appPath, outputRoot)
 
             const appConfigFilePath = helper.resolveScriptPath(path.join(sourceDir, `${helper.ENTRY}.config`))
+            const appConfig = helper.readConfig(appConfigFilePath)
+            const appFilePath = helper.resolveScriptPath(path.join(sourceDir, helper.ENTRY))
 
             const outputSourceDir = path.join(outputDir, sourceRoot)
-            const templateDir = path.resolve(__dirname, '../template')
+            const outputAppFilePath = path.join(outputSourceDir, helper.ENTRY) + path.extname(appFilePath)
+            const nextAppFilePath = path.join(outputDir, 'pages/_app.tsx')
 
-            const appConfig = helper.readConfig(appConfigFilePath)
+            const templateDir = path.resolve(__dirname, '../template')
 
             const taroPages = []
             if (Array.isArray(appConfig.pages)) {
@@ -88,7 +91,10 @@ module.exports = ctx => {
                         }))
                         .pipe(dest(outputSourceDir)),
                     src(`${templateDir}/pages/**`).pipe(dest(path.join(outputDir, 'pages'))),
-                    src(`${templateDir}/@tarojs/**`).pipe(dest(path.join(outputDir, '@tarojs'))),
+                    src(`${templateDir}/@tarojs/**`)
+                        .pipe(replace('@@OUTPUT_TARO_APP_FILE_PATH@@', outputAppFilePath))
+                        .pipe(replace('@@NEXT_APP_FILE_PATH@@', nextAppFilePath))
+                        .pipe(dest(path.join(outputDir, '@tarojs'))),
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
                             const result = ejs.render(data.contents.toString(), {env})
