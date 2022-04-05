@@ -64,3 +64,11 @@ interface TaroPage {
 export function getCurrentPages(): TaroPage[] {
     return []
 }
+
+export enum ENV_TYPE {
+    WEB = 'WEB'
+}
+
+export function getEnv(): ENV_TYPE {
+    return ENV_TYPE.WEB
+}

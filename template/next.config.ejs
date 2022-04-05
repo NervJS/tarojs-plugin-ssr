@@ -6,6 +6,9 @@ const nextConfig = {
         <%- key %>: <%- env[key] %>,
         <%_ } _%>
     <%_ }) _%>
+    },
+    sassOptions: {
+        prependData: <%- prependData %>
     }
 }
   

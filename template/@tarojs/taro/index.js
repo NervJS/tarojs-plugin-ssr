@@ -29,7 +29,12 @@ import {useDidShow, useDidHide, usePageScroll} from './hooks'
 
 import {onNetworkStatusChange, getNetworkType} from './network'
 
-import {getCurrentInstance, getCurrentPages} from './host'
+import {
+    getCurrentInstance,
+    getCurrentPages,
+    getEnv,
+    ENV_TYPE
+} from './host'
 
 export {
     setStorage,
@@ -93,5 +98,7 @@ export default {
     getNetworkType,
 
     getCurrentInstance,
-    getCurrentPages
+    getCurrentPages,
+    getEnv,
+    ENV_TYPE
 }

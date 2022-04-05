@@ -35,7 +35,8 @@ module.exports = ctx => {
                 env = {},
                 isWatch,
                 mode,
-                alias = {}
+                alias = {},
+                sass = {}
             } = config
 
             if (router.mode !== 'browser') {
@@ -115,7 +116,8 @@ module.exports = ctx => {
                         .pipe(dest(path.join(outputDir, '@tarojs'))),
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
-                            const result = ejs.render(data.contents.toString(), {env})
+                            const prependData = JSON.stringify(sass.data)
+                            const result = ejs.render(data.contents.toString(), {env, prependData})
                             data.contents = Buffer.from(result)
                             this.emit('data', data)
                         }))

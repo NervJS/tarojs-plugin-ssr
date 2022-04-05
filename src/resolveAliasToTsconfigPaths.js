@@ -1,6 +1,4 @@
 const path = require('path')
-const fs = require('fs')
-const ts = require('typescript')
 const {parseJson} = require('./utils')
 
 function resolveAliasToTsconfigPaths(alias, tsconfigPath) {
