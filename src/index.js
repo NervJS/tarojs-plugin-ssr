@@ -8,6 +8,8 @@ const es = require('event-stream')
 const {merge} = require('lodash')
 const ejs = require('ejs')
 const chalk = require('chalk')
+const spawn = require('cross-spawn')
+const getNextExportedFunctions = require('./getNextExportedFunctions')
 const {ensureLeadingSlash, install} = require('./utils')
 
 module.exports = ctx => {
@@ -18,7 +20,7 @@ module.exports = ctx => {
         name: 'nextjs',
         useConfigName: 'h5',
         async fn({config}) {
-            const {sourceRoot, outputRoot, router, env, isWatch} = config
+            const {sourceRoot, outputRoot, router, env, isWatch, mode} = config
 
             if (router.mode !== 'browser') {
                 throw new Error('Next.js only support `browser` router mode.')
@@ -138,6 +140,13 @@ module.exports = ctx => {
                     devDependencies: taroPkg.devDependencies
                 })
 
+                if (mode === 'development') {
+                    spawn('npm', ['run', 'dev'], {
+                        cwd: outputDir,
+                        stdio: 'inherit'
+                    })
+                }
+
                 if (isWatch) {
                     const watcher = watch(`${sourceDir}/**`)
                     watcher.on('change', filePath => {
@@ -175,9 +184,13 @@ module.exports = ctx => {
                         fs.mkdirSync(fileDir, {recursive: true})
                     }
 
-                    const outputSourcePage = `${outputDir}/${sourceRoot}${taroPage}`
-                    const modulePath = path.relative(fileDir, outputSourcePage)
-                    const contents = `export {default} from '${modulePath}'`
+                    const pageFilePath = helper.resolveScriptPath(path.join(sourceDir, taroPage))
+                    const exportedFunctions = getNextExportedFunctions(pageFilePath)
+
+                    const exportedNames = ['default', ...exportedFunctions]
+                    const request = `${outputDir}/${sourceRoot}${taroPage}`
+                    const modulePath = path.relative(fileDir, request)
+                    const contents = `export {${exportedNames.join(', ')}} from '${modulePath}'`
                     fs.writeFileSync(filePath, contents, {encoding: 'utf-8'})
                 }
             }

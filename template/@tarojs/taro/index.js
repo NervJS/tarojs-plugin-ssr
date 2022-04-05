@@ -25,11 +25,11 @@ import {
     navigateBack
 } from './router'
 
-import {useDidShow, useDidHide} from './hooks'
+import {useDidShow, useDidHide, usePageScroll} from './hooks'
 
 import {onNetworkStatusChange, getNetworkType} from './network'
 
-import getCurrentInstance from './getCurrentInstance'
+import {getCurrentInstance, getCurrentPages} from './host'
 
 export {
     setStorage,
@@ -49,6 +49,7 @@ export {
 
     useDidShow,
     useDidHide,
+    usePageScroll,
 
     switchTab,
     reLaunch,
@@ -59,7 +60,8 @@ export {
     onNetworkStatusChange,
     getNetworkType,
 
-    getCurrentInstance
+    getCurrentInstance,
+    getCurrentPages
 }
 
 export default {
@@ -90,5 +92,6 @@ export default {
     onNetworkStatusChange,
     getNetworkType,
 
-    getCurrentInstance
+    getCurrentInstance,
+    getCurrentPages
 }

@@ -1,4 +1,3 @@
-const chalk = require('chalk')
 const spawn = require('cross-spawn')
 
 exports.unIndent = function (strings, ...values) {
