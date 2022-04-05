@@ -2,6 +2,7 @@ import {FC} from 'react'
 import {AppProps} from 'next/app'
 import Head from 'next/head'
 import TaroApp from '../src/app'
+import '../@tarojs/global.scss'
 
 const MyApp: FC<AppProps> = ({Component, pageProps}) => (
   <>
