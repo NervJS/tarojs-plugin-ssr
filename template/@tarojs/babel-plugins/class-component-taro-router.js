@@ -123,6 +123,10 @@ module.exports = function (babel) {
                 splitExportDeclaration(path)
             },
             CallExpression(path) {
+                if (!isInClassComponent) {
+                    return
+                }
+
                 if (
                     t.isIdentifier(path.node.callee, {
                         type: 'Identifier',
