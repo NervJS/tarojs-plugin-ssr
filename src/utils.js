@@ -1,4 +1,7 @@
-const spawn = require('cross-spawn')
+const path = require('path')
+const fs = require('fs')
+const ts = require('typescript')
+const {SCRIPT_EXT} = require('./constants')
 
 exports.unIndent = function (strings, ...values) {
     const text = strings
@@ -13,99 +16,38 @@ exports.unIndent = function (strings, ...values) {
 
 exports.ensureLeadingSlash = function (path) {
     if (path == null) {
-      return ''
+        return ''
     }
     return path.charAt(0) === '/' ? path : '/' + path
 }
 
-function getPkgManager() {
-    try {
-        const userAgent = process.env.npm_config_user_agent
-        if (userAgent) {
-            if (userAgent.startsWith('yarn')) {
-                return 'yarn'
-            } else if (userAgent.startsWith('pnpm')) {
-                return 'pnpm'
+exports.resolveScriptPath = function (filePath, extArrs = SCRIPT_EXT) {
+    const taroEnv = 'h5'
+    for (let i = 0; i < extArrs.length; i++) {
+        const item = extArrs[i]
+        if (taroEnv) {
+            if (fs.existsSync(`${filePath}.${taroEnv}${item}`)) {
+                return `${filePath}.${taroEnv}${item}`
+            }
+            if (fs.existsSync(`${filePath}${path.sep}index.${taroEnv}${item}`)) {
+                return `${filePath}${path.sep}index.${taroEnv}${item}`
+            }
+            if (fs.existsSync(`${filePath.replace(/\/index$/, `.${taroEnv}/index`)}${item}`)) {
+                return `${filePath.replace(/\/index$/, `.${taroEnv}/index`)}${item}`
             }
         }
-        try {
-            execSync('yarn --version', { stdio: 'ignore' })
-            return 'yarn'
-        } catch {
-            execSync('pnpm --version', { stdio: 'ignore' })
-            return 'pnpm'
+        if (fs.existsSync(`${filePath}${item}`)) {
+            return `${filePath}${item}`
         }
-    } catch {
-        return 'npm'
+        if (fs.existsSync(`${filePath}${path.sep}index${item}`)) {
+            return `${filePath}${path.sep}index${item}`
+        }
     }
+    return realPath
 }
 
-function flattenDeps(deps) {
-    if (!deps) {
-        return
-    }
-    return Object.keys(deps).map(key => `${key}@${deps[key]}`)
-}
-
-/**
- * Spawn a package manager installation with either Yarn or NPM.
- *
- * @returns A Promise that resolves once the installation is finished.
- */
-exports.install = function ({
-    cwd,
-    dependencies: originDependencies,
-    devDependencies: originDevDependencies,
-    packageManager = getPkgManager()
-}) {
-    return new Promise((resolve, reject) => {
-        const dependencies = flattenDeps(originDependencies)
-        const devDependencies = flattenDeps(originDevDependencies)
-
-        let args
-        let command = packageManager
-        const useYarn = packageManager === 'yarn'
-
-        if (dependencies && dependencies.length) {
-            /**
-             * If there are dependencies, run a variation of `{packageManager} add`.
-             */
-            if (useYarn) {
-                /**
-                 * Call `yarn add --exact (--offline)? (-D)? ...`.
-                 */
-                args = ['add', '--exact']
-                if (devDependencies) args.push('--dev')
-                args.push(...dependencies)
-            } else {
-                /**
-                 * Call `(p)npm install [--save|--save-dev] ...`.
-                 */
-                args = ['install', '--save-exact']
-                args.push(devDependencies ? '--save-dev' : '--save')
-                args.push(...dependencies)
-            }
-        } else {
-            /**
-             * If there are no dependencies, run a variation of `{packageManager} install`.
-             */
-            args = ['install']
-        }
-
-        /**
-         * Spawn the installation process.
-         */
-        const child = spawn(command, args, {
-            cwd,
-            stdio: 'inherit',
-            env: { ...process.env, ADBLOCK: '1', DISABLE_OPENCOLLECTIVE: '1' },
-        })
-        child.on('close', (code) => {
-            if (code !== 0) {
-                reject({ command: `${command} ${args.join(' ')}` })
-                return
-            }
-            resolve()
-        })
-    })
+exports.parseJson = function (filePath) {
+    const sourceText = fs.readFileSync(filePath, 'utf-8')
+    const jsonFile = ts.parseJsonText(filePath, sourceText)
+    return ts.convertToObject(jsonFile)
 }

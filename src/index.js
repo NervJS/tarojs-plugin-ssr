@@ -9,8 +9,16 @@ const {merge} = require('lodash')
 const ejs = require('ejs')
 const chalk = require('chalk')
 const spawn = require('cross-spawn')
+const ts = require('typescript')
 const getNextExportedFunctions = require('./getNextExportedFunctions')
-const {ensureLeadingSlash, install} = require('./utils')
+const resolveAliasToTsconfigPaths = require('./resolveAliasToTsconfigPaths')
+const install = require('./install')
+const {ensureLeadingSlash, resolveScriptPath, parseJson} = require('./utils')
+
+const DEFAULT_ROUTER_CONFIG = {
+    mode: 'browser',
+    customRoutes: {}
+}
 
 module.exports = ctx => {
     const {paths, helper} = ctx
@@ -20,7 +28,15 @@ module.exports = ctx => {
         name: 'nextjs',
         useConfigName: 'h5',
         async fn({config}) {
-            const {sourceRoot, outputRoot, router, env, isWatch, mode} = config
+            const {
+                sourceRoot = 'src',
+                outputRoot = 'dist',
+                router = DEFAULT_ROUTER_CONFIG,
+                env = {},
+                isWatch,
+                mode,
+                alias = {}
+            } = config
 
             if (router.mode !== 'browser') {
                 throw new Error('Next.js only support `browser` router mode.')
@@ -29,9 +45,9 @@ module.exports = ctx => {
             const sourceDir = path.resolve(appPath, sourceRoot)
             const outputDir = path.resolve(appPath, outputRoot)
 
-            const appConfigFilePath = helper.resolveScriptPath(path.join(sourceDir, `${helper.ENTRY}.config`))
+            const appConfigFilePath = resolveScriptPath(path.join(sourceDir, `${helper.ENTRY}.config`))
             const appConfig = helper.readConfig(appConfigFilePath)
-            const appFilePath = helper.resolveScriptPath(path.join(sourceDir, helper.ENTRY))
+            const appFilePath = resolveScriptPath(path.join(sourceDir, helper.ENTRY))
 
             const outputSourceDir = path.join(outputDir, sourceRoot)
             const outputAppFilePath = path.join(outputSourceDir, helper.ENTRY) + path.extname(appFilePath)
@@ -115,13 +131,15 @@ module.exports = ctx => {
                         .pipe(dest(outputDir)),
                     src(`${templateDir}/tsconfig.json`)
                         .pipe(es.through(function (data) {
-                            const taroTSConfigPath = `${appPath}/tsconfig.json`
-                            const taroTSConfig = JSON.parse(fs.readFileSync(taroTSConfigPath, 'utf-8'))
-                            const templateTSConfig = JSON.parse(data.contents.toString())
+                            const taroTSConfigPath = path.join(appPath, 'tsconfig.json')
+
+                            const taroTSConfig = parseJson(taroTSConfigPath)
+                            const templateTSConfig = parseJson(data.path)
 
                             let mergedTSConfig = templateTSConfig
                             if (fs.existsSync(taroTSConfigPath)) {
-                                mergedTSConfig = merge(taroTSConfig, templateTSConfig)
+                                const paths = resolveAliasToTsconfigPaths(alias, taroTSConfigPath)
+                                mergedTSConfig = merge(taroTSConfig, templateTSConfig, {compilerOptions: {paths}})
                             }
 
                             data.contents = Buffer.from(JSON.stringify(mergedTSConfig, null, '  '))
@@ -184,7 +202,7 @@ module.exports = ctx => {
                         fs.mkdirSync(fileDir, {recursive: true})
                     }
 
-                    const pageFilePath = helper.resolveScriptPath(path.join(sourceDir, taroPage))
+                    const pageFilePath = resolveScriptPath(path.join(sourceDir, taroPage))
                     const exportedFunctions = getNextExportedFunctions(pageFilePath)
 
                     const exportedNames = ['default', ...exportedFunctions]
