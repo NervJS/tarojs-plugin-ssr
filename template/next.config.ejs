@@ -8,7 +8,12 @@ const nextConfig = {
     <%_ }) _%>
     },
     sassOptions: {
-        prependData: <%- prependData %>
+        <%_ if (prependData) { _%>
+        prependData: <%- prependData %>,
+        <%_ } _%>
+        <%_ if (includePaths) { _%>
+        includePaths: <%- includePaths %>
+        <%_ } _%>
     }
 }
   

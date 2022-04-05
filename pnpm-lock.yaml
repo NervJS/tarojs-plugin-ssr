@@ -7,6 +7,7 @@ specifiers:
   '@types/react': ^17.0.43
   babel-plugin-tester: ^10.1.0
   chalk: ^4.1.2
+  classnames: ^2.3.1
   cross-spawn: ^7.0.3
   ejs: ^3.1.6
   event-stream: ^4.0.1
@@ -17,6 +18,7 @@ specifiers:
   jest: ^27.5.1
   lodash: ^4.17.21
   next: ^12.1.4
+  omit.js: ^2.0.2
   typescript: ^4.6.3
 
 dependencies:
@@ -24,6 +26,7 @@ dependencies:
   '@babel/helper-split-export-declaration': 7.16.7
   '@types/react': 17.0.43
   chalk: 4.1.2
+  classnames: 2.3.1
   cross-spawn: 7.0.3
   ejs: 3.1.6
   event-stream: 4.0.1
@@ -32,6 +35,7 @@ dependencies:
   gulp-rename: 2.0.0
   gulp-replace: 1.1.3
   lodash: 4.17.21
+  omit.js: 2.0.2
   typescript: 4.6.3
 
 devDependencies:
@@ -1360,6 +1364,10 @@ packages:
       define-property: 0.2.5
       isobject: 3.0.1
       static-extend: 0.1.2
+    dev: false
+
+  /classnames/2.3.1:
+    resolution: {integrity: sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==}
     dev: false
 
   /cliui/3.2.0:
@@ -3670,6 +3678,10 @@ packages:
     dependencies:
       for-own: 1.0.0
       make-iterator: 1.0.1
+    dev: false
+
+  /omit.js/2.0.2:
+    resolution: {integrity: sha512-hJmu9D+bNB40YpL9jYebQl4lsTW6yEHRTroJzNLqQJYHm7c+NQnJGfZmIWh8S3q3KoaxV1aLhV6B3+0N0/kyJg==}
     dev: false
 
   /once/1.4.0:

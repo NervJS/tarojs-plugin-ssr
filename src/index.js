@@ -9,7 +9,6 @@ const {merge} = require('lodash')
 const ejs = require('ejs')
 const chalk = require('chalk')
 const spawn = require('cross-spawn')
-const ts = require('typescript')
 const getNextExportedFunctions = require('./getNextExportedFunctions')
 const resolveAliasToTsconfigPaths = require('./resolveAliasToTsconfigPaths')
 const install = require('./install')
@@ -117,8 +116,16 @@ module.exports = ctx => {
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
                             const prependData = JSON.stringify(sass.data)
-                            const result = ejs.render(data.contents.toString(), {env, prependData})
+                            const includePaths = JSON.stringify(sass.includePaths)
+
+                            const ejsData = {
+                                env,
+                                prependData,
+                                includePaths
+                            }
+                            const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)
+
                             this.emit('data', data)
                         }))
                         .pipe(rename('next.config.js'))
@@ -151,6 +158,7 @@ module.exports = ctx => {
                 )
             }
             scaffold().on('end', async () => {
+                await install({cwd: outputDir})
                 await install({
                     cwd: outputDir,
                     dependencies: taroPkg.dependencies
