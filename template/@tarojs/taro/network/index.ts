@@ -92,4 +92,5 @@ export function getNetworkType({ success, complete }: getNetworkType.Param): voi
     success({ networkType })
     complete?.()
 }
-  
+
+export {default as request} from './request'

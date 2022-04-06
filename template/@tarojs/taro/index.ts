@@ -29,7 +29,7 @@ import {
 
 import {useDidShow, useDidHide, usePageScroll} from './hooks'
 
-import {onNetworkStatusChange, getNetworkType} from './network'
+import {request, onNetworkStatusChange, getNetworkType} from './network'
 
 import {
     getCurrentInstance,
@@ -66,6 +66,7 @@ export {
     navigateTo,
     navigateBack,
 
+    request,
     onNetworkStatusChange,
     getNetworkType,
 
@@ -100,6 +101,7 @@ export default {
     navigateTo,
     navigateBack,
 
+    request,
     onNetworkStatusChange,
     getNetworkType,
 

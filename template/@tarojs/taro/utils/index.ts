@@ -58,17 +58,17 @@ function upperCaseFirstLetter(str: string): string {
 //     el.style.transform = val
 // }
 
-// export function serializeParams(params) {
-//     if (!params) {
-//         return ''
-//     }
-//     return Object.keys(params)
-//         .map(key => (
-//             `${encodeURIComponent(key)}=${typeof (params[key]) === 'object'
-//                 ? encodeURIComponent(JSON.stringify(params[key]))
-//                 : encodeURIComponent(params[key])}`))
-//         .join('&')
-// }
+export function serializeParams(params?: Record<string, any>) {
+    if (!params) {
+        return ''
+    }
+    return Object.keys(params)
+        .map(key => (
+            `${encodeURIComponent(key)}=${typeof (params[key]) === 'object'
+                ? encodeURIComponent(JSON.stringify(params[key]))
+                : encodeURIComponent(params[key])}`))
+        .join('&')
+}
 
 export function temporarilyNotSupport(apiName: string): () => void {
     return () => {
