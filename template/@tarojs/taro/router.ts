@@ -1,7 +1,7 @@
 import Router from 'next/router'
+import {customRoutes} from './constants'
 
 export function switchTab() {
-
 }
 
 export function reLaunch() {
@@ -45,8 +45,23 @@ namespace navigateTo {
     export type ParamPropComplete = () => any
 }
 
+export function isAbsoluteUrl(url?: string): boolean {
+    if (!url) {
+        return false;
+    }
+    return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+}
+
 export function navigateTo({url, success, fail, complete}: navigateTo.Param): void {
-    Router.router?.push(url)
+    const base = isAbsoluteUrl(url) ?  undefined : location.origin
+    const urlObj = new URL(url, base)
+
+    const customRoute = customRoutes[urlObj.pathname]
+    if (customRoute) {
+        urlObj.pathname = customRoute
+    }
+
+    Router.router?.push(urlObj.toString())
         .then(success)
         .catch(fail)
         .finally(complete)

@@ -113,6 +113,13 @@ module.exports = ctx => {
                     src(`${templateDir}/@tarojs/**`)
                         .pipe(replace('@@OUTPUT_TARO_APP_FILE_PATH@@', outputAppFilePath))
                         .pipe(replace('@@NEXT_APP_FILE_PATH@@', nextAppFilePath))
+                        .pipe(es.through(function (data) {
+                            if (data.path === `${templateDir}/@tarojs/taro/constants.ts`) {
+                                const code = `export const customRoutes: Record<string, string> = ${JSON.stringify(customRoutes)}`
+                                data.contents = Buffer.from(code)
+                            }
+                            this.emit('data', data)
+                        }))
                         .pipe(dest(path.join(outputDir, '@tarojs'))),
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
