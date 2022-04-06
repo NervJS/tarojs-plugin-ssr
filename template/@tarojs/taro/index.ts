@@ -211,6 +211,8 @@ import {
     getBackgroundFetchData
 } from '@tarojs/taro-h5/src/api/storage'
 
+import {getMenuButtonBoundingClientRect} from '@tarojs/taro-h5/src/api/ui/menu'
+
 import {request} from './network'
 
 import {
@@ -423,6 +425,8 @@ export {
     getBackgroundFetchToken,
     getBackgroundFetchData,
 
+    getMenuButtonBoundingClientRect,
+
     setNavigationBarColor,
     showNavigationBarLoading,
     hideNavigationBarLoading,
@@ -441,7 +445,9 @@ export {
     request,
 
     getCurrentInstance,
-    getCurrentPages
+    getCurrentPages,
+    getEnv,
+    ENV_TYPE
 }
 
 export default {
@@ -628,6 +634,8 @@ export default {
     onBackgroundFetchData,
     getBackgroundFetchToken,
     getBackgroundFetchData,
+
+    getMenuButtonBoundingClientRect,
 
     setNavigationBarColor,
     showNavigationBarLoading,

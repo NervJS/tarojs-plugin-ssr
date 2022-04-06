@@ -1,8 +1,6 @@
-import 'weui'
 import React from 'react'
+import ReactDOM from 'react-dom'
 import classNames from 'classnames'
-
-require('intersection-observer')
 
 class Image extends React.Component {
     constructor(props) {
@@ -10,17 +8,17 @@ class Image extends React.Component {
         this.state = {
             isLoaded: false
         }
-        this.imageOnLoad = this.imageOnLoad.bind(this)
-        this.observer = {}
+        this.observer = null
     }
 
     componentDidMount() {
-        if (this.props.lazyLoad) {
+        const {lazyLoad, src} = this.props;
+        if (lazyLoad) {
             this.observer = new IntersectionObserver(entries => {
                 // 异步 api 关系
                 if (entries[entries.length - 1].isIntersecting) {
                     this.setState({ isLoaded: true }, () => {
-                        React.findDOMNode(this).children[0].src = this.props.src
+                        ReactDOM.findDOMNode(this).children[0].src = src
                     })
                 }
             }, {
@@ -31,12 +29,12 @@ class Image extends React.Component {
     }
 
     componentWillUnmount() {
-        this.observer.disconnect && this.observer.disconnect()
+        this.observer?.disconnect()
     }
 
-    imageOnLoad(e) {
-        const { onLoad } = this.props
-        Object.defineProperty(e, 'detail', {
+    imageOnLoad = event => {
+        const {onLoad} = this.props
+        Object.defineProperty(event, 'detail', {
             enumerable: true,
             writable: true,
             value: {
@@ -44,7 +42,7 @@ class Image extends React.Component {
                 height: this.imgRef.height
             }
         })
-        onLoad && onLoad(e)
+        onLoad?.(event)
     }
 
     render() {
