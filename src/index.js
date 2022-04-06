@@ -11,6 +11,7 @@ const chalk = require('chalk')
 const spawn = require('cross-spawn')
 const getNextExportedFunctions = require('./getNextExportedFunctions')
 const resolveAliasToTsconfigPaths = require('./resolveAliasToTsconfigPaths')
+const resolveCustomRoutesToRewrites = require('./resolveCustomRoutesToRewrites')
 const install = require('./install')
 const {ensureLeadingSlash, resolveScriptPath, parseJson} = require('./utils')
 
@@ -117,11 +118,13 @@ module.exports = ctx => {
                         .pipe(es.through(function (data) {
                             const prependData = JSON.stringify(sass.data)
                             const includePaths = JSON.stringify(sass.includePaths)
+                            const rewrites = resolveCustomRoutesToRewrites(customRoutes)
 
                             const ejsData = {
                                 env,
                                 prependData,
-                                includePaths
+                                includePaths,
+                                rewrites
                             }
                             const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)
@@ -202,10 +205,10 @@ module.exports = ctx => {
                 const nextjsPagesDir = `${outputDir}/pages`
 
                 for (const taroPage of taroPages) {
-                    let filePath = customRoutes[taroPage]
-                        ? path.join(nextjsPagesDir, customRoutes[taroPage]) + '.js'
-                        : path.join(nextjsPagesDir, taroPage) + '.js'
-
+                    // let filePath = customRoutes[taroPage]
+                    //     ? path.join(nextjsPagesDir, customRoutes[taroPage]) + '.js'
+                    //     : path.join(nextjsPagesDir, taroPage) + '.js'
+                    const filePath = path.join(nextjsPagesDir, taroPage) + '.js'
                     const fileDir = path.dirname(filePath)
 
                     if (!fs.existsSync(fileDir)) {

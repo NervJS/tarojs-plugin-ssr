@@ -4,7 +4,7 @@ const withTM = require('next-transpile-modules')(['@tarojs/taro-h5'])
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     env: {
-    <%_ Object.keys(env).forEach(function (key){ _%>
+    <%_ Object.keys(env).forEach(function (key) { _%>
         <%_ if (key !== 'NODE_ENV') { _%>
         <%- key %>: <%- env[key] %>,
         <%_ } _%>
@@ -43,7 +43,21 @@ const nextConfig = {
             )
         )
         return config
+    },
+    <%_ if (rewrites) { _%>
+    async rewrites() {
+        return {
+            beforeFiles:  [
+            <%_ rewrites.forEach(function (rewrite) { _%>
+                {
+                    source: '<%- rewrite.source %>',
+                    destination: '<%- rewrite.destination %>'
+                },
+            <%_ }) _%>
+            ]
+        }
     }
+    <%_ } _%>
 }
   
 module.exports = withTM(nextConfig)
