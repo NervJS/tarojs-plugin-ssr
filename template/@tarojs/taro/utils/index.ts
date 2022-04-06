@@ -44,21 +44,12 @@ function upperCaseFirstLetter(str: string): string {
     return str.replace(/^./, match => match.toUpperCase())
 }
 
-// export function inlineStyle(style: CSSProperties) {
-//     let res = ''
-//     for (const attr in style) res += `${attr}: ${style[attr]};`
-//     if (res.indexOf('display: flex;') >= 0) res += 'display: -webkit-box;display: -webkit-flex;'
-//     res = res.replace(/transform:(.+?);/g, (s, $1) => `${s}-webkit-transform:${$1};`)
-//     res = res.replace(/flex-direction:(.+?);/g, (s, $1) => `${s}-webkit-flex-direction:${$1};`)
-//     return res
-// }
+export function setTransform(el: HTMLElement, val: string): void {
+    el.style.webkitTransform = val
+    el.style.transform = val
+}
 
-// export function setTransform(el, val) {
-//     el.style.webkitTransform = val
-//     el.style.transform = val
-// }
-
-export function serializeParams(params?: Record<string, any>) {
+export function serializeParams(params?: Record<string, any>): string {
     if (!params) {
         return ''
     }
@@ -87,89 +78,86 @@ export function temporarilyNotSupport(apiName: string): () => void {
     }
 }
 
-// export function weixinCorpSupport(apiName) {
-//     return () => {
-//         const errMsg = `h5端仅在微信公众号中支持 API ${apiName}`
-//         if (process.env.NODE_ENV !== 'production') {
-//             console.error(errMsg)
-//             return Promise.reject({
-//                 errMsg
-//             })
-//         } else {
-//             console.warn(errMsg)
-//             return Promise.resolve({
-//                 errMsg
-//             })
-//         }
-//     }
-// }
+export function weixinCorpSupport(apiName: string) {
+    return () => {
+        const errMsg = `h5端仅在微信公众号中支持 API ${apiName}`
+        if (process.env.NODE_ENV !== 'production') {
+            console.error(errMsg)
+            return Promise.reject({
+                errMsg
+            })
+        } else {
+            console.warn(errMsg)
+            return Promise.resolve({
+                errMsg
+            })
+        }
+    }
+}
 
-// export function permanentlyNotSupport(apiName) {
-//     return () => {
-//         const errMsg = `不支持 API ${apiName}`
-//         if (process.env.NODE_ENV !== 'production') {
-//             console.error(errMsg)
-//             return Promise.reject({
-//                 errMsg
-//             })
-//         } else {
-//             console.warn(errMsg)
-//             return Promise.resolve({
-//                 errMsg
-//             })
-//         }
-//     }
-// }
+export function permanentlyNotSupport(apiName: string) {
+    return () => {
+        const errMsg = `不支持 API ${apiName}`
+        if (process.env.NODE_ENV !== 'production') {
+            console.error(errMsg)
+            return Promise.reject({
+                errMsg
+            })
+        } else {
+            console.warn(errMsg)
+            return Promise.resolve({
+                errMsg
+            })
+        }
+    }
+}
 
-// export function isFunction(obj) {
-//     return typeof obj === 'function'
-// }
+export function isFunction(obj: unknown): boolean {
+    return typeof obj === 'function'
+}
 
-// const VALID_COLOR_REG = /^#[0-9a-fA-F]{6}$/
+const VALID_COLOR_REG = /^#[0-9a-fA-F]{6}$/
 
-// export const isValidColor = (color) => {
-//     return VALID_COLOR_REG.test(color)
-// }
+export const isValidColor = (color: string): boolean => {
+    return VALID_COLOR_REG.test(color)
+}
 
-// export function processOpenApi(apiName: string, defaultOptions?: Record<string, unknown>, formatResult = res => res, formatParams = options => options) {
-//     // @ts-ignore
-//     if (!window.wx) {
-//         return weixinCorpSupport(apiName)
-//     }
-//     return options => {
-//         options = options || {}
-//         const obj = Object.assign({}, defaultOptions, options)
-//         const p = new Promise((resolve, reject) => {
-//             ['fail', 'success', 'complete'].forEach(k => {
-//                 obj[k] = oriRes => {
-//                     const res = formatResult(oriRes)
-//                     options[k] && options[k](res)
-//                     if (k === 'success') {
-//                         resolve(res)
-//                     } else if (k === 'fail') {
-//                         reject(res)
-//                     }
-//                 }
-//             })
-//             // @ts-ignore
-//             wx[apiName](formatParams(obj))
-//         })
-//         return p
-//     }
-// }
+export function processOpenApi(
+    apiName: string,
+    defaultOptions?: Record<string, unknown>,
+    formatResult = (x: any) => x,
+    formatParams = (x: any) => x,
+) {
+    return (options: Record<string, any>) => {
+        // @ts-ignore
+        if (typeof window.wx === 'undefined') {
+            return weixinCorpSupport(apiName)
+        }
 
-// /**
-//  * ease-in-out的函数
-//  * @param t 0-1的数字
-//  */
-// export const easeInOut = (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+        options = options || {}
+        const obj = Object.assign({}, defaultOptions, options)
+        const p = new Promise((resolve, reject) => {
+            ['fail', 'success', 'complete'].forEach(k => {
+                obj[k] = (oriRes: any) => {
+                    const res = formatResult(oriRes)
+                    options[k] && options[k](res)
+                    if (k === 'success') {
+                        resolve(res)
+                    } else if (k === 'fail') {
+                        reject(res)
+                    }
+                }
+            })
+            // @ts-ignore
+            wx[apiName](formatParams(obj))
+        })
+        return p
+    }
+}
 
-// export const getTimingFunc = (easeFunc, frameCnt) => {
-//     return x => {
-//         if (frameCnt <= 1) {
-//             return easeFunc(1)
-//         }
-//         const t = x / (frameCnt - 1)
-//         return easeFunc(t)
-//     }
-// }
+/**
+ * ease-in-out的函数
+ * @param t 0-1的数字
+ */
+export const easeInOut = (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+
