@@ -50,6 +50,7 @@
     "@types/react-dom": "^17.0.14",
     "babel-plugin-tester": "^10.1.0",
     "jest": "^27.5.1",
-    "next": "^12.1.4"
+    "next": "^12.1.4",
+    "swiper": "4.4.2"
   }
 }
