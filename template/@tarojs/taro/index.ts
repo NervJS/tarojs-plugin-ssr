@@ -1,3 +1,5 @@
+import {createSelectorQuery} from '@tarojs/taro-h5/src/api/wxml'
+
 import {
     setStorage,
     setStorageSync,
@@ -37,6 +39,8 @@ import {
 } from './host'
 
 export {
+    createSelectorQuery,
+
     setStorage,
     setStorageSync,
     getStorage,
@@ -70,6 +74,8 @@ export {
 }
 
 export default {
+    createSelectorQuery,
+
     setStorage,
     setStorageSync,
     getStorage,

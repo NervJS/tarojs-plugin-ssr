@@ -1,3 +1,6 @@
+const path = require('path')
+const withTM = require('next-transpile-modules')(['@tarojs/taro-h5'])
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     env: {
@@ -14,7 +17,33 @@ const nextConfig = {
         <%_ if (includePaths) { _%>
         includePaths: <%- includePaths %>
         <%_ } _%>
+    },
+    webpack(config, {webpack}) {
+        for (let i = 0; i < config.plugins.length; i++) {
+            const plugin = config.plugins[i]
+            if (plugin.constructor.name === 'DefinePlugin') {
+                config.plugins[i] = new webpack.DefinePlugin({
+                    ENABLE_INNER_HTML: JSON.stringify(true),
+                    ENABLE_ADJACENT_HTML: JSON.stringify(true),
+                    ENABLE_SIZE_APIS: JSON.stringify(true),
+                    ENABLE_TEMPLATE_CONTENT: JSON.stringify(true),
+                    ENABLE_MUTATION_OBSERVER: JSON.stringify(true),
+                    ENABLE_CLONE_NODE: JSON.stringify(true),
+                    ENABLE_CONTAINS: JSON.stringify(true),
+                    ...plugin.definitions
+                })
+            }
+        }
+
+        const targetPath = path.resolve(__dirname, './@tarojs/taro/utils/index.ts')
+        config.plugins.push(
+            new webpack.NormalModuleReplacementPlugin(
+                /@tarojs\/taro-h5\/src\/api\/utils\/index.ts/,
+                targetPath
+            )
+        )
+        return config
     }
 }
   
-module.exports = nextConfig
+module.exports = withTM(nextConfig)

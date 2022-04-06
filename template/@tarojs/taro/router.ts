@@ -87,7 +87,7 @@ namespace navigateBack {
     export type ParamPropComplete = () => any
 }
 
-export function navigateBack(param: navigateBack.Param): void {
+export function navigateBack(): void {
     // Next.js internal router apis aren't support to go back twice or many times.
     // https://github.com/vercel/next.js/discussions/18333
     Router.router?.back()
