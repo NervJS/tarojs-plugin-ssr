@@ -1,15 +1,11 @@
-import type {NextRouter} from 'next/router';
-
-interface TaroRouter {
-    params: Record<string, string>
-    path: string
-}
+import type {NextRouter} from 'next/router'
+import type {TaroRouter} from './typings'
 
 interface TaroInstance {
-    router: TaroRouter | null
+    router: TaroRouter
 }
 
-export function getCurrentInstance(nextRouter?: NextRouter): TaroInstance {
+export function getCurrentInstance(nextRouter: NextRouter): TaroInstance {
     if (typeof window !== 'undefined') {
         const obj = new URLSearchParams(location.search)
         const params: Record<string, string> = Array.from(obj.entries())
