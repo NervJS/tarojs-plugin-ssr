@@ -10,8 +10,8 @@ const ejs = require('ejs')
 const chalk = require('chalk')
 const spawn = require('cross-spawn')
 const getNextExportedFunctions = require('./getNextExportedFunctions')
-const resolveAliasToTsconfigPaths = require('./resolveAliasToTsconfigPaths')
-const resolveCustomRoutesToRewrites = require('./resolveCustomRoutesToRewrites')
+const resolveAliasToTSConfigPaths = require('./resolveAliasToTSConfigPaths')
+// const resolveTaroPagesToRewrites = require('./resolveTaroPagesToRewrites')
 const install = require('./install')
 const {ensureLeadingSlash, resolveScriptPath, parseJson} = require('./utils')
 
@@ -125,13 +125,13 @@ module.exports = ctx => {
                         .pipe(es.through(function (data) {
                             const prependData = JSON.stringify(sass.data)
                             const includePaths = JSON.stringify(sass.includePaths)
-                            const rewrites = resolveCustomRoutesToRewrites(customRoutes)
+                            // const rewrites = resolveTaroPagesToRewrites(taroPages, customRoutes)
 
                             const ejsData = {
                                 env,
                                 prependData,
                                 includePaths,
-                                rewrites
+                                rewrites: undefined
                             }
                             const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)
@@ -157,7 +157,7 @@ module.exports = ctx => {
 
                             let mergedTSConfig = templateTSConfig
                             if (fs.existsSync(taroTSConfigPath)) {
-                                const paths = resolveAliasToTsconfigPaths(alias, taroTSConfigPath)
+                                const paths = resolveAliasToTSConfigPaths(alias, taroTSConfigPath)
                                 mergedTSConfig = merge(taroTSConfig, templateTSConfig, {compilerOptions: {paths}})
                             }
 
@@ -212,10 +212,8 @@ module.exports = ctx => {
                 const nextjsPagesDir = `${outputDir}/pages`
 
                 for (const taroPage of taroPages) {
-                    // let filePath = customRoutes[taroPage]
-                    //     ? path.join(nextjsPagesDir, customRoutes[taroPage]) + '.js'
-                    //     : path.join(nextjsPagesDir, taroPage) + '.js'
-                    const filePath = path.join(nextjsPagesDir, taroPage) + '.js'
+                    const taroRoute = customRoutes[taroPage] || taroPage
+                    const filePath = path.join(nextjsPagesDir, taroRoute, 'index.js')
                     const fileDir = path.dirname(filePath)
 
                     if (!fs.existsSync(fileDir)) {

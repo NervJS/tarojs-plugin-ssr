@@ -1,7 +1,7 @@
 const path = require('path')
 const {parseJson} = require('./utils')
 
-function resolveAliasToTsconfigPaths(alias, tsconfigPath) {
+function resolveAliasToTSConfigPaths(alias, tsconfigPath) {
     const {baseUrl = '.'} = parseJson(tsconfigPath).compilerOptions
     const pathsBaseUrl = path.resolve(path.dirname(tsconfigPath), baseUrl)
 
@@ -16,4 +16,4 @@ function resolveAliasToTsconfigPaths(alias, tsconfigPath) {
     return paths
 }
 
-module.exports = resolveAliasToTsconfigPaths
+module.exports = resolveAliasToTSConfigPaths
