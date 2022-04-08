@@ -18,7 +18,7 @@ const nextConfig = {
         includePaths: <%- includePaths %>
         <%_ } _%>
     },
-    webpack(config, {webpack}) {
+    webpack(config, {isServer, webpack}) {
         for (let i = 0; i < config.plugins.length; i++) {
             const plugin = config.plugins[i]
             if (plugin.constructor.name === 'DefinePlugin') {
@@ -38,10 +38,11 @@ const nextConfig = {
         const targetPath = path.resolve(__dirname, './@tarojs/taro/utils/index.ts')
         config.plugins.push(
             new webpack.NormalModuleReplacementPlugin(
-                /@tarojs\/taro-h5\/src\/api\/utils\/index.ts/,
+                /@tarojs\/taro-h5\/dist\/api\/utils\/index.ts/,
                 targetPath
             )
         )
+
         return config
     },
     <%_ if (rewrites) { _%>

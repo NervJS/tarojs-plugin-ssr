@@ -30,7 +30,7 @@ import {
     reportPerformance,
     getPerformance,
     getUserCryptoManager
-} from '@tarojs/taro-h5/src/api/base'
+} from '@tarojs/taro-h5/dist/api/base'
 
 import {
     createOffscreenCanvas,
@@ -38,18 +38,18 @@ import {
     canvasToTempFilePath,
     canvasPutImageData,
     canvasGetImageData
-} from '@tarojs/taro-h5/src/api/canvas'
+} from '@tarojs/taro-h5/dist/api/canvas'
 
 import {
     stopAccelerometer,
     startAccelerometer,
     onAccelerometerChange,
     offAccelerometerChange
-} from '@tarojs/taro-h5/src/api/device/accelerometer'
+} from '@tarojs/taro-h5/dist/api/device/accelerometer'
 
-import {checkIsOpenAccessibility} from '@tarojs/taro-h5/src/api/device/accessibility'
+import {checkIsOpenAccessibility} from '@tarojs/taro-h5/dist/api/device/accessibility'
 
-import {getBatteryInfoSync, getBatteryInfo} from '@tarojs/taro-h5/src/api/device/battery'
+import {getBatteryInfoSync, getBatteryInfo} from '@tarojs/taro-h5/dist/api/device/battery'
 
 import {
     stopBluetoothDevicesDiscovery,
@@ -65,7 +65,7 @@ import {
     getBluetoothDevices,
     getBluetoothAdapterState,
     closeBluetoothAdapter
-} from '@tarojs/taro-h5/src/api/device/bluetooth'
+} from '@tarojs/taro-h5/dist/api/device/bluetooth'
 
 import {
     writeBLECharacteristicValue,
@@ -84,35 +84,35 @@ import {
     getBLEDeviceCharacteristics,
     createBLEConnection,
     closeBLEConnection
-} from '@tarojs/taro-h5/src/api/device/bluetooth-ble'
+} from '@tarojs/taro-h5/dist/api/device/bluetooth-ble'
 
 import {
     onBLEPeripheralConnectionStateChanged,
     offBLEPeripheralConnectionStateChanged,
     createBLEPeripheralServer
-} from '@tarojs/taro-h5/src/api/device/bluetooth-peripheral'
+} from '@tarojs/taro-h5/dist/api/device/bluetooth-peripheral'
 
-import {addPhoneRepeatCalendar, addPhoneCalendar} from '@tarojs/taro-h5/src/api/device/calendar'
+import {addPhoneRepeatCalendar, addPhoneCalendar} from '@tarojs/taro-h5/dist/api/device/calendar'
 
-// import {setClipboardData, getClipboardData} from '@tarojs/taro-h5/src/api/device/clipboard'
+// import {setClipboardData, getClipboardData} from '@tarojs/taro-h5/dist/api/device/clipboard'
 
 import {
     stopCompass,
     startCompass,
     onCompassChange,
     offCompassChange
-} from '@tarojs/taro-h5/src/api/device/compass'
+} from '@tarojs/taro-h5/dist/api/device/compass'
 
-import {chooseContact, addPhoneContact} from '@tarojs/taro-h5/src/api/device/contact'
+import {chooseContact, addPhoneContact} from '@tarojs/taro-h5/dist/api/device/contact'
 
-import {getRandomValues} from '@tarojs/taro-h5/src/api/device/crypto'
+import {getRandomValues} from '@tarojs/taro-h5/dist/api/device/crypto'
 
 import {
     stopGyroscope,
     startGyroscope,
     onGyroscopeChange,
     offGyroscopeChange
-} from '@tarojs/taro-h5/src/api/device/gyroscope'
+} from '@tarojs/taro-h5/dist/api/device/gyroscope'
 
 import {
     stopBeaconDiscovery,
@@ -122,23 +122,23 @@ import {
     offBeaconUpdate,
     offBeaconServiceChange,
     getBeacons
-} from '@tarojs/taro-h5/src/api/device/iBeacon'
+} from '@tarojs/taro-h5/dist/api/device/iBeacon'
 
 import {
     onKeyboardHeightChange,
     offKeyboardHeightChange,
     hideKeyboard,
     getSelectedTextRange
-} from '@tarojs/taro-h5/src/api/device/keyboard'
+} from '@tarojs/taro-h5/dist/api/device/keyboard'
 
-import {onMemoryWarning, offMemoryWarning} from '@tarojs/taro-h5/src/api/device/memory'
+import {onMemoryWarning, offMemoryWarning} from '@tarojs/taro-h5/dist/api/device/memory'
 
 import {
     stopDeviceMotionListening,
     startDeviceMotionListening,
     onDeviceMotionChange,
     offDeviceMotionChange
-} from '@tarojs/taro-h5/src/api/device/motion'
+} from '@tarojs/taro-h5/dist/api/device/motion'
 
 import {
     stopHCE,
@@ -148,11 +148,11 @@ import {
     offHCEMessage,
     getNFCAdapter,
     getHCEState
-} from '@tarojs/taro-h5/src/api/device/nfc'
+} from '@tarojs/taro-h5/dist/api/device/nfc'
 
-import {makePhoneCall} from '@tarojs/taro-h5/src/api/device/phone'
+import {makePhoneCall} from '@tarojs/taro-h5/dist/api/device/phone'
 
-import {scanCode} from '@tarojs/taro-h5/src/api/device/scan'
+import {scanCode} from '@tarojs/taro-h5/dist/api/device/scan'
 
 import {
     setVisualEffectOnCapture,
@@ -161,9 +161,9 @@ import {
     onUserCaptureScreen,
     offUserCaptureScreen,
     getScreenBrightness
-} from '@tarojs/taro-h5/src/api/device/screen'
+} from '@tarojs/taro-h5/dist/api/device/screen'
 
-import {vibrateShort, vibrateLong} from '@tarojs/taro-h5/src/api/device/vibrate'
+import {vibrateShort, vibrateLong} from '@tarojs/taro-h5/dist/api/device/vibrate'
 
 import {
     stopWifi,
@@ -176,7 +176,7 @@ import {
     getWifiList,
     getConnectedWifi,
     connectWifi
-} from '@tarojs/taro-h5/src/api/device/wifi'
+} from '@tarojs/taro-h5/dist/api/device/wifi'
 
 import {
     getNetworkType,
@@ -185,12 +185,12 @@ import {
     offNetworkWeakChange,
     offNetworkStatusChange,
     getLocalIPAddress
-} from  '@tarojs/taro-h5/src/api/device/network'
+} from  '@tarojs/taro-h5/dist/api/device/network'
 
 import {
     createSelectorQuery,
     createIntersectionObserver
-} from '@tarojs/taro-h5/src/api/wxml'
+} from '@tarojs/taro-h5/dist/api/wxml'
 
 import {
     setStorageSync,
@@ -209,9 +209,9 @@ import {
     onBackgroundFetchData,
     getBackgroundFetchToken,
     getBackgroundFetchData
-} from '@tarojs/taro-h5/src/api/storage'
+} from '@tarojs/taro-h5/dist/api/storage'
 
-import {getMenuButtonBoundingClientRect} from '@tarojs/taro-h5/src/api/ui/menu'
+import {getMenuButtonBoundingClientRect} from '@tarojs/taro-h5/dist/api/ui/menu'
 
 import {request} from './network'
 

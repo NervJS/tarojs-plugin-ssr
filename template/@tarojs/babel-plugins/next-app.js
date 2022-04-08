@@ -67,7 +67,6 @@ module.exports = function (babel, {taroAppFilePath}) {
                             'body',
                             globalCss
                         )
-                        path.skip()
                     }
 
                     globalCss = []

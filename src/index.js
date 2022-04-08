@@ -187,7 +187,7 @@ module.exports = ctx => {
                         .pipe(rename('next.config.js'))
                         .pipe(dest(outputDir)),
                     src(`${templateDir}/postcss.config.js`).pipe(dest(outputDir)),
-                    src(`${templateDir}/.babelrc`).pipe(dest(outputDir)),
+                    src(`${templateDir}/babel.config.js`).pipe(dest(outputDir)),
                     src(`${templateDir}/package.json`)
                         .pipe(replace('@@NAME@@', () => {
                             const name = taroPkg.name

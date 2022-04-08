@@ -19,8 +19,8 @@
         "jsx": "preserve",
         "incremental": true,
         "paths": {
-            "@tarojs/*": [
-                "./@tarojs/*"
+            "@tarojs/taro/*": [
+                "./@tarojs/taro/*"
             ]
         }
     },

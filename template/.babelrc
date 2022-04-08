@@ -1,8 +1,0 @@
-{
-    "presets": ["next/babel"],
-    "plugins": [
-        "./@tarojs/babel-plugins/next-app",
-        "./@tarojs/babel-plugins/taro-app",
-        "./@tarojs/babel-plugins/class-component-taro-router"
-    ]
-}

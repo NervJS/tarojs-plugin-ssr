@@ -106,3 +106,7 @@ dist
 # other stuff
 .DS_Store
 Thumbs.db
+
+# components
+components/es
+components/lib
