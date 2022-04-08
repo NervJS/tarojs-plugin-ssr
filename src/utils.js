@@ -51,3 +51,10 @@ exports.parseJson = function (filePath) {
     const jsonFile = ts.parseJsonText(filePath, sourceText)
     return ts.convertToObject(jsonFile)
 }
+
+// Identify /[param]/ in route string
+const TEST_ROUTE_PATTERN = `\\[[^/]+?\\](${SCRIPT_EXT.join('|')})$`
+
+exports.isDynamicRoute = function (route) {
+    return new RegExp(TEST_ROUTE_PATTERN).test(route)
+}

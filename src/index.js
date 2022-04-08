@@ -9,11 +9,11 @@ const {merge} = require('lodash')
 const ejs = require('ejs')
 const chalk = require('chalk')
 const spawn = require('cross-spawn')
-const getNextExportedFunctions = require('./getNextExportedFunctions')
+const getNextjsExportedFunctions = require('./getNextjsExportedFunctions')
 const resolveAliasToTSConfigPaths = require('./resolveAliasToTSConfigPaths')
-// const resolveTaroPagesToRewrites = require('./resolveTaroPagesToRewrites')
+const resolveDynamicPagesToRewrites = require('./resolveDynamicPagesToRewrites')
 const install = require('./install')
-const {ensureLeadingSlash, resolveScriptPath, parseJson} = require('./utils')
+const {ensureLeadingSlash, resolveScriptPath, parseJson, isDynamicRoute} = require('./utils')
 
 const DEFAULT_ROUTER_CONFIG = {
     mode: 'browser',
@@ -83,6 +83,52 @@ module.exports = ctx => {
 
             const taroPkg = require(`${appPath}/package.json`)
 
+            function createNextjsPages() {
+                const result = []
+
+                const nextjsPagesDir = `${outputDir}/pages`
+
+                for (const taroPage of taroPages) {
+                    const taroPageFilePath = resolveScriptPath(path.join(sourceDir, taroPage))
+                    const taroPageDir = path.dirname(taroPageFilePath)
+                    const taroRoute = customRoutes[taroPage] || taroPage
+
+                    const files = fs.readdirSync(taroPageDir)
+                    const dynamicPageFileName = files.find(name => isDynamicRoute(name))
+                    const dynamicPageFileExt = path.extname(dynamicPageFileName)
+                    const dynamicPageFileBaseName = path.basename(dynamicPageFileName, dynamicPageFileExt)
+                    if (dynamicPageFileBaseName) {
+                        result.push(`${taroRoute}/${dynamicPageFileBaseName}`)
+                    }
+
+                    const targetPageFile = dynamicPageFileName || 'index.js'
+                    const targetPageFilePath = dynamicPageFileName
+                        ? path.join(taroPageDir, dynamicPageFileName)
+                        : taroPageFilePath
+                    const nextjsPageFilePath = path.join(nextjsPagesDir, taroRoute, targetPageFile)
+
+                    const nextjsPageDir = path.dirname(nextjsPageFilePath)
+                    if (!fs.existsSync(nextjsPageDir)) {
+                        fs.mkdirSync(nextjsPageDir, {recursive: true})
+                    }
+
+                    const exportedFunctions = getNextjsExportedFunctions(targetPageFilePath)
+
+                    const exportedNames = ['default', ...exportedFunctions]
+                    let request = `${outputDir}/${sourceRoot}${taroPage}`
+                    if (dynamicPageFileBaseName) {
+                        request = path.join(path.dirname(request), dynamicPageFileBaseName)
+                    }
+                    const modulePath = path.relative(nextjsPageDir, request)
+                    const contents = `export {${exportedNames.join(', ')}} from '${modulePath}'`
+                    fs.writeFileSync(nextjsPageFilePath, contents, {encoding: 'utf-8'})
+                }
+
+                return result
+            }
+
+            const dynamicPages = createNextjsPages()
+
             function scaffold() {
                 return es.merge(
                     src(`${sourceDir}/**`)
@@ -125,13 +171,13 @@ module.exports = ctx => {
                         .pipe(es.through(function (data) {
                             const prependData = JSON.stringify(sass.data)
                             const includePaths = JSON.stringify(sass.includePaths)
-                            // const rewrites = resolveTaroPagesToRewrites(taroPages, customRoutes)
+                            const rewrites = resolveDynamicPagesToRewrites(dynamicPages)
 
                             const ejsData = {
                                 env,
                                 prependData,
                                 includePaths,
-                                rewrites: undefined
+                                rewrites
                             }
                             const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)
@@ -207,30 +253,6 @@ module.exports = ctx => {
                     })
                 }
             })
-
-            function createNextjsPages() {
-                const nextjsPagesDir = `${outputDir}/pages`
-
-                for (const taroPage of taroPages) {
-                    const taroRoute = customRoutes[taroPage] || taroPage
-                    const filePath = path.join(nextjsPagesDir, taroRoute, 'index.js')
-                    const fileDir = path.dirname(filePath)
-
-                    if (!fs.existsSync(fileDir)) {
-                        fs.mkdirSync(fileDir, {recursive: true})
-                    }
-
-                    const pageFilePath = resolveScriptPath(path.join(sourceDir, taroPage))
-                    const exportedFunctions = getNextExportedFunctions(pageFilePath)
-
-                    const exportedNames = ['default', ...exportedFunctions]
-                    const request = `${outputDir}/${sourceRoot}${taroPage}`
-                    const modulePath = path.relative(fileDir, request)
-                    const contents = `export {${exportedNames.join(', ')}} from '${modulePath}'`
-                    fs.writeFileSync(filePath, contents, {encoding: 'utf-8'})
-                }
-            }
-            createNextjsPages()
         }
     })
 }

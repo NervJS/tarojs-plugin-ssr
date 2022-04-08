@@ -21,7 +21,7 @@ function getNextExportedFunctions(filename) {
                     result.push(name)
                 }
             }
-            if (declaration.isVariableDeclarator()) {
+            if (declaration.isVariableDeclaration()) {
                 for (const declarator of declaration.node.declarations) {
                     const name = declarator.id.name
                     if (NEXT_EXPORT_FUNCTIONS.includes(name)) {

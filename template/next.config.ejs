@@ -51,6 +51,17 @@ const nextConfig = {
             <%_ rewrites.forEach(function (rewrite) { _%>
                 {
                     source: '<%- rewrite.source %>',
+                    <%_ if (rewrite.has) { _%>
+                    has: [
+                        <%_ rewrite.has.forEach(function (item) { _%>
+                        {
+                            type: '<%- item.type %>',
+                            key: '<%- item.key %>',
+                            value: '<%- item.value %>'
+                        },
+                        <%_ }) _%>
+                    ],
+                    <%_ } _%>
                     destination: '<%- rewrite.destination %>'
                 },
             <%_ }) _%>
