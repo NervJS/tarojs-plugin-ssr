@@ -1,6 +1,6 @@
 {
     "name": "tarojs-plugin-platform-nextjs",
-    "version": "0.0.2-alpha.7",
+    "version": "0.0.3-alpha.1",
     "description": "Taro 插件，用于编译为 Next.js 应用。",
     "main": "src/index.js",
     "scripts": {
@@ -38,7 +38,6 @@
     "dependencies": {
         "@babel/core": "^7.17.7",
         "@babel/helper-split-export-declaration": "^7.16.7",
-        "@tarojs/taro-h5": "3.4.4",
         "base64-js": "^1.5.1",
         "chalk": "^4.1.2",
         "classnames": "^2.3.1",
@@ -46,10 +45,12 @@
         "ejs": "^3.1.6",
         "event-stream": "^4.0.1",
         "gulp": "^4.0.2",
+        "gulp-clean": "^0.4.0",
         "gulp-filter": "^7.0.0",
         "gulp-rename": "^2.0.0",
         "jsonp-retry": "^1.0.3",
         "lodash": "^4.17.21",
+        "mobile-detect": "^1.4.5",
         "next-transpile-modules": "^9.0.0",
         "omit.js": "^2.0.2",
         "postcss-pxtorem": "^6.0.0",

@@ -17,33 +17,6 @@ const nextConfig = {
         includePaths: <%- includePaths %>
         <%_ } _%>
     },
-    webpack(config, {isServer, webpack}) {
-        for (let i = 0; i < config.plugins.length; i++) {
-            const plugin = config.plugins[i]
-            if (plugin.constructor.name === 'DefinePlugin') {
-                config.plugins[i] = new webpack.DefinePlugin({
-                    ENABLE_INNER_HTML: JSON.stringify(true),
-                    ENABLE_ADJACENT_HTML: JSON.stringify(true),
-                    ENABLE_SIZE_APIS: JSON.stringify(true),
-                    ENABLE_TEMPLATE_CONTENT: JSON.stringify(true),
-                    ENABLE_MUTATION_OBSERVER: JSON.stringify(true),
-                    ENABLE_CLONE_NODE: JSON.stringify(true),
-                    ENABLE_CONTAINS: JSON.stringify(true),
-                    ...plugin.definitions
-                })
-            }
-        }
-
-        const utils = require.resolve('tarojs-plugin-platform-nextjs/taro/lib/utils/index.js')
-        config.plugins.push(
-            new webpack.NormalModuleReplacementPlugin(
-                /@tarojs\/taro-h5\/dist\/api\/utils\/index.js/,
-                utils
-            )
-        )
-
-        return config
-    },
     <%_ if (rewrites) { _%>
     async rewrites() {
         return {

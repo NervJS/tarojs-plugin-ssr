@@ -1,5 +1,6 @@
 const gulp = require('gulp')
 const babel = require('gulp-babel')
+const clean = require('gulp-clean')
 const through2 = require('through2')
 const merge2 = require('merge2')
 const webpack = require('webpack')
@@ -116,6 +117,15 @@ function compileTaro() {
     return babelify(sourceStream, false).pipe(gulp.dest(libDir))
 }
 
+function cleanComponents() {
+    const lib = getComponentsProjectPath('lib')
+    const dist = getComponentsProjectPath('dist')
+    return gulp.src([lib, dist], {
+        allowEmpty: true,
+        read: false
+    }).pipe(clean())
+}
+
 function compileWithLib(done) {
     compile(false).on('finish', done)
 }
@@ -124,13 +134,23 @@ function compileWithDist(done) {
     dist(done)
 }
 
-gulp.task('build:components', gulp.parallel(
-    compileWithLib,
-    compileWithDist
-))
+gulp.task('build:components', gulp.series(
+    cleanComponents,
+    gulp.parallel(
+        compileWithLib,
+        compileWithDist
+    ))
+)
 
-function compileTaroWithLib(done) {
-    compileTaro().on('finish', done)
+function cleanTaro() {
+    const lib = getTaroProjectPath('lib')
+    return gulp.src(lib, {
+        allowEmpty: true,
+        read: false
+    }).pipe(clean())
 }
 
-gulp.task('build:taro', compileTaroWithLib)
+gulp.task('build:taro', gulp.series(
+    cleanTaro,
+    compileTaro
+))
