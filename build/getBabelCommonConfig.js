@@ -21,7 +21,7 @@ module.exports = useESModules => {
 
     return {
         presets: [
-            resolve('@babel/preset-react'),
+            [resolve('@babel/preset-react'), {runtime: 'automatic'}],
             [
                 resolve('@babel/preset-env'),
                 {

@@ -58,6 +58,13 @@ import {
 import {request} from './network'
 
 import {
+    showToast,
+    hideToat,
+    showLoading,
+    hideLoading
+} from './ui/interaction'
+
+import {
     setNavigationBarColor,
     showNavigationBarLoading,
     hideNavigationBarLoading,
@@ -129,6 +136,11 @@ export {
     clearStorageSync,
     clearStorage,
 
+    showToast,
+    hideToat,
+    showLoading,
+    hideLoading,
+
     setNavigationBarColor,
     showNavigationBarLoading,
     hideNavigationBarLoading,
@@ -199,6 +211,11 @@ export default {
     createBufferURL,
     clearStorageSync,
     clearStorage,
+
+    showToast,
+    hideToat,
+    showLoading,
+    hideLoading,
 
     setNavigationBarColor,
     showNavigationBarLoading,
