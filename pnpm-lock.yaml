@@ -49,6 +49,7 @@ specifiers:
   through2: ^4.0.2
   typescript: ^4.6.3
   webpack: ^5.72.0
+  weui: ^1.1.2
 
 dependencies:
   '@babel/core': 7.17.7
@@ -71,6 +72,7 @@ dependencies:
   postcss-pxtorem: 6.0.0_postcss@8.4.12
   swiper: 4.4.2
   typescript: 4.6.3
+  weui: 1.1.3
 
 devDependencies:
   '@babel/plugin-syntax-jsx': 7.16.7_@babel+core@7.17.7
@@ -8022,6 +8024,10 @@ packages:
       - esbuild
       - uglify-js
     dev: true
+
+  /weui/1.1.3:
+    resolution: {integrity: sha512-vC6eWUvG1MYoE8yLsvBBmLB2+4DZWynQOL47MUscHMwPVltOZPGsiRb2PE7y3z+w3ElF1SsmJsyhr40wiXgP5A==}
+    dev: false
 
   /whatwg-encoding/1.0.5:
     resolution: {integrity: sha512-b5lim54JOPN9HtzvK9HFXvBma/rnfFeqsic0hSpjtDbVxR3dJKLc+KB4V6GgiGOvl7CY/KNh8rxSo9DKQrnUEw==}

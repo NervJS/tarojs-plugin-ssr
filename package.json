@@ -55,7 +55,8 @@
         "omit.js": "^2.0.2",
         "postcss-pxtorem": "^6.0.0",
         "swiper": "^4.4.2",
-        "typescript": "^4.6.3"
+        "typescript": "^4.6.3",
+        "weui": "^1.1.2"
     },
     "devDependencies": {
         "@babel/plugin-syntax-jsx": "^7.16.7",
