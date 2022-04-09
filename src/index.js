@@ -227,20 +227,28 @@ module.exports = ctx => {
                 }
 
                 if (isWatch) {
-                    function haveSpecifiedFile(dir) {
+                    function hasSpecifiedFile(filePath) {
+                        const dir = path.dirname(filePath)
+                        const ext = path.extname(filePath)
+                        const base = path.basename(filePath, ext)
+
                         const files = fs.readdirSync(dir)
                         return files.some(name => {
                             const ext = path.extname(name)
                             if (!helper.SCRIPT_EXT.includes(ext)) {
                                 return false
                             }
-                            const base = path.basename(name, ext)
-                            const secondaryExt = path.extname(base)
-                            return secondaryExt === '.h5'
+                            const primaryBase = path.basename(name, ext)
+                            const secondaryExt = path.extname(primaryBase)
+                            if (secondaryExt !== '.h5') {
+                                return false
+                            }
+                            const secondaryBase = path.basename(primaryBase, secondaryExt)
+                            return secondaryBase === base
                         })
                     }
 
-                    function getOutputPath(filePath) {
+                    function getOutputFilePath(filePath) {
                         const relativePath = filePath.substring(appPath.length + 1)
 
                         const ext = path.extname(filePath)
@@ -258,15 +266,16 @@ module.exports = ctx => {
                             )
                         }
 
-                        const dir = path.dirname(filePath)
-                        if (haveSpecifiedFile(dir)) {
+                        if (hasSpecifiedFile(filePath)) {
                             return null
                         }
+
+                        return path.join(outputDir, relativePath)
                     }
 
                     const watcher = watch(`${sourceDir}/**`)
                     watcher.on('change', filePath => {
-                        const outputPath = getOutputPath(filePath)
+                        const outputPath = getOutputFilePath(filePath)
                         if (!outputPath) {
                             return
                         }
@@ -276,7 +285,7 @@ module.exports = ctx => {
                         fs.copyFileSync(filePath, outputPath)
                     })
                     watcher.on('add', filePath => {
-                        const outputPath = getOutputPath(filePath)
+                        const outputPath = getOutputFilePath(filePath)
                         if (!outputPath) {
                             return
                         }
@@ -286,7 +295,7 @@ module.exports = ctx => {
                         fs.copyFileSync(filePath, outputPath)
                     })
                     watcher.on('unlink', filePath => {
-                        const outputPath = getOutputPath(filePath)
+                        const outputPath = getOutputFilePath(filePath)
                         if (!outputPath) {
                             return
                         }
