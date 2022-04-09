@@ -3,7 +3,7 @@ const fs = require('fs')
 const ts = require('typescript')
 const {SCRIPT_EXT} = require('./constants')
 
-exports.unIndent = function (strings, ...values) {
+function unIndent(strings, ...values) {
     const text = strings
         .map((s, i) => (i === 0 ? s : values[i - 1]))
         .join('')
@@ -14,14 +14,14 @@ exports.unIndent = function (strings, ...values) {
     return lines.map(line => line.slice(minLineIndent)).join('\n')
 }
 
-exports.ensureLeadingSlash = function (path) {
+function ensureLeadingSlash(path) {
     if (path == null) {
         return ''
     }
     return path.charAt(0) === '/' ? path : '/' + path
 }
 
-exports.resolveScriptPath = function (filePath, extArrs = SCRIPT_EXT) {
+function resolveScriptPath(filePath, extArrs = SCRIPT_EXT) {
     const taroEnv = 'h5'
     for (let i = 0; i < extArrs.length; i++) {
         const item = extArrs[i]
@@ -46,7 +46,7 @@ exports.resolveScriptPath = function (filePath, extArrs = SCRIPT_EXT) {
     return realPath
 }
 
-exports.parseJson = function (filePath) {
+function parseJson(filePath) {
     const sourceText = fs.readFileSync(filePath, 'utf-8')
     const jsonFile = ts.parseJsonText(filePath, sourceText)
     return ts.convertToObject(jsonFile)
@@ -55,6 +55,14 @@ exports.parseJson = function (filePath) {
 // Identify /[param]/ in route string
 const TEST_ROUTE_PATTERN = `\\[[^/]+?\\](${SCRIPT_EXT.join('|')})$`
 
-exports.isDynamicRoute = function (route) {
+function isDynamicRoute(route) {
     return new RegExp(TEST_ROUTE_PATTERN).test(route)
+}
+
+module.exports = {
+    unIndent,
+    ensureLeadingSlash,
+    resolveScriptPath,
+    parseJson,
+    isDynamicRoute
 }

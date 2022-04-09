@@ -1,6 +1,6 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const {getProjectPath} = require('./projectHelper')
+const {getComponentsProjectPath} = require('./projectHelper')
 
 function getWebpackConfig(useESModules) {
     const babelConfig = require('./getBabelCommonConfig')(useESModules)
@@ -15,7 +15,7 @@ function getWebpackConfig(useESModules) {
         devtool: 'source-map',
 
         output: {
-            path: getProjectPath('./dist/'),
+            path: getComponentsProjectPath('./dist/'),
             filename: '[name].js',
             library: 'lilin',
             libraryTarget: 'umd'

@@ -1,20 +1,16 @@
 const gulp = require('gulp')
 const babel = require('gulp-babel')
-const ts = require('gulp-typescript')
 const through2 = require('through2')
 const merge2 = require('merge2')
 const webpack = require('webpack')
 const path = require('path')
-const {getProjectPath, getTaroPath} = require('./build/projectHelper')
+const {getComponentsProjectPath, getTaroProjectPath} = require('./build/projectHelper')
 const getBabelCommonConfig = require('./build/getBabelCommonConfig')
 const getWebpackConfig = require('./build/getWebpackConfig')
-const tsConfig = require('./build/getTSCommonConfig')()
 const renderSass = require('./build/renderSass')
 
-const libDir = getProjectPath('lib')
-const esDir = getProjectPath('es')
-
-const tsDefaultReporter = ts.reporter.defaultReporter()
+const libDir = getComponentsProjectPath('lib')
+const esDir = getComponentsProjectPath('es')
 
 function dist(done) {
     const webpackConfig = getWebpackConfig(false)
@@ -93,80 +89,31 @@ function compile(useESModules) {
         )
         .pipe(gulp.dest(useESModules ? esDir : libDir))
 
-    let error = 0
-
     const source = [
         'components/src/**/*.jsx',
         'components/src/**/*.js',
         'components/src/**/*.tsx',
         'components/src/**/*.ts',
-        'components/typings/**/*.d.ts',
         '!components/src/**/__tests__/**'
     ]
-
-    let sourceStream = gulp.src(source)
-
-    const tsResult = sourceStream.pipe(
-        ts(tsConfig, {
-            error(e) {
-                tsDefaultReporter.error(e)
-                error = 1
-            },
-            finish: tsDefaultReporter.finish
-        })
-    )
-
-    function check() {
-        if (error) {
-            process.exit(1)
-        }
-    }
-
-    tsResult.on('finish', check)
-    tsResult.on('end', check)
+    const sourceStream = gulp.src(source)
 
     const destDir = useESModules ? esDir : libDir
-    const tsFilesStream = babelify(tsResult.js, useESModules)
-    const tsd = tsResult.dts
-    return merge2([fonts, sass, tsFilesStream, tsd]).pipe(gulp.dest(destDir))
+    const filesStream = babelify(sourceStream, useESModules)
+    return merge2([fonts, sass, filesStream]).pipe(gulp.dest(destDir))
 }
 
 function compileTaro() {
-    const libDir = getTaroPath('lib')
-
-    let error = 0
-
     const source = [
         'taro/src/**/*.jsx',
         'taro/src/**/*.js',
         'taro/src/**/*.tsx',
         'taro/src/**/*.ts'
     ]
+    const sourceStream = gulp.src(source)
 
-    let sourceStream = gulp.src(source)
-
-    const tsResult = sourceStream.pipe(
-        ts(tsConfig, {
-            error(e) {
-                tsDefaultReporter.error(e)
-                error = 1
-            },
-            finish: tsDefaultReporter.finish
-        })
-    )
-
-    function check() {
-        if (error) {
-            process.exit(1)
-        }
-    }
-
-    tsResult.on('finish', check)
-    tsResult.on('end', check)
-
-    const tsFilesStream = babelify(tsResult.js, false)
-    const tsd = tsResult.dts
-    return merge2([tsFilesStream, tsd]).pipe(gulp.dest(libDir))
+    const libDir = getTaroProjectPath('lib')
+    return babelify(sourceStream, false).pipe(gulp.dest(libDir))
 }
 
 function compileWithLib(done) {
