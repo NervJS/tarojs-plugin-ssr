@@ -14,7 +14,7 @@ Taro 插件，用于编译为 Next.js 应用。
 
 ```bash
 # 安装插件
-npm install tarojs-plugin-platform-nextjs
+pnpm install tarojs-plugin-platform-nextjs
 
 # 安装 next.js
 pnpm install next

@@ -30,11 +30,13 @@ module.exports = ctx => {
                 sourceRoot = 'src',
                 outputRoot = 'dist',
                 router = DEFAULT_ROUTER_CONFIG,
-                env = {},
-                isWatch,
+                env,
+                defineConstants,
                 mode,
                 alias = {},
-                sass = {}
+                sass = {},
+                designWidth,
+                isWatch
             } = config
 
             if (router.mode !== 'browser') {
@@ -163,6 +165,7 @@ module.exports = ctx => {
 
                             const ejsData = {
                                 env,
+                                defineConstants,
                                 prependData,
                                 includePaths,
                                 rewrites
@@ -174,12 +177,20 @@ module.exports = ctx => {
                         }))
                         .pipe(rename('next.config.js'))
                         .pipe(dest(outputDir)),
-                    src(`${templateDir}/postcss.config.js`).pipe(dest(outputDir)),
+                    src(`${templateDir}/postcss.config.ejs`)
+                        .pipe(es.through(function (data) {
+                            const result = ejs.render(data.contents.toString(), {designWidth})
+                            data.contents = Buffer.from(result)
+
+                            this.emit('data', data)
+                        }))
+                        .pipe(rename('postcss.config.js'))
+                        .pipe(dest(outputDir)),
                     src(`${templateDir}/babel.config.ejs`)
                         .pipe(es.through(function (data) {
                             const ejsData = {
                                 nextAppFilePath: JSON.stringify(nextAppFilePath),
-                                outputAppFilePath: JSON.stringify(outputAppFilePath),
+                                outputAppFilePath: JSON.stringify(outputAppFilePath)
                             }
                             const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)
@@ -216,22 +227,71 @@ module.exports = ctx => {
                 }
 
                 if (isWatch) {
+                    function haveSpecifiedFile(dir) {
+                        const files = fs.readdirSync(dir)
+                        return files.some(name => {
+                            const ext = path.extname(name)
+                            if (!helper.SCRIPT_EXT.includes(ext)) {
+                                return false
+                            }
+                            const base = path.basename(name, ext)
+                            const secondaryExt = path.extname(base)
+                            return secondaryExt === '.h5'
+                        })
+                    }
+
+                    function getOutputPath(filePath) {
+                        const relativePath = filePath.substring(appPath.length + 1)
+
+                        const ext = path.extname(filePath)
+                        if (!helper.SCRIPT_EXT.includes(ext)) {
+                            return path.join(outputDir, relativePath)
+                        }
+
+                        const base = path.basename(relativePath, ext)
+                        const secondaryExt = path.extname(base)
+                        if (secondaryExt === '.h5') {
+                            return path.join(
+                                outputDir,
+                                path.dirname(relativePath),
+                                path.basename(base, secondaryExt) + ext
+                            )
+                        }
+
+                        const dir = path.dirname(filePath)
+                        if (haveSpecifiedFile(dir)) {
+                            return null
+                        }
+                    }
+
                     const watcher = watch(`${sourceDir}/**`)
                     watcher.on('change', filePath => {
+                        const outputPath = getOutputPath(filePath)
+                        if (!outputPath) {
+                            return
+                        }
+
                         const relativePath = filePath.substring(appPath.length + 1)
-                        const outputPath = path.join(outputDir, relativePath)
                         console.log(`${chalk.green('File was changed')} ${relativePath}`)
                         fs.copyFileSync(filePath, outputPath)
                     })
                     watcher.on('add', filePath => {
+                        const outputPath = getOutputPath(filePath)
+                        if (!outputPath) {
+                            return
+                        }
+
                         const relativePath = filePath.substring(appPath.length + 1)
-                        const outputPath = path.join(outputDir, relativePath)
                         console.log(`${chalk.green('File was added')} ${relativePath}`)
                         fs.copyFileSync(filePath, outputPath)
                     })
                     watcher.on('unlink', filePath => {
+                        const outputPath = getOutputPath(filePath)
+                        if (!outputPath) {
+                            return
+                        }
+
                         const relativePath = filePath.substring(appPath.length + 1)
-                        const outputPath = path.join(outputDir, relativePath)
                         console.log(`${chalk.green('File was removed')} ${relativePath}`)
                         fs.rmSync(outputPath)
                     })

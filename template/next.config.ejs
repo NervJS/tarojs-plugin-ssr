@@ -2,6 +2,7 @@ const path = require('path')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    <%_ if (env) { _%>
     env: {
     <%_ Object.keys(env).forEach(function (key) { _%>
         <%_ if (key !== 'NODE_ENV') { _%>
@@ -9,6 +10,7 @@ const nextConfig = {
         <%_ } _%>
     <%_ }) _%>
     },
+    <%_ } _%>
     sassOptions: {
         <%_ if (prependData) { _%>
         prependData: <%- prependData %>,
@@ -16,6 +18,22 @@ const nextConfig = {
         <%_ if (includePaths) { _%>
         includePaths: <%- includePaths %>
         <%_ } _%>
+    },
+    webpack(config, {isServer, webpack}) {
+        <%_ if (defineConstants) { _%>
+        for (let i = 0; i < config.plugins.length; i++) {
+            const plugin = config.plugins[i]
+            if (plugin.constructor.name === 'DefinePlugin') {
+                config.plugins[i] = new webpack.DefinePlugin({
+                    <%_ Object.keys(defineConstants).forEach(function (key) { _%>
+                        <%- key %>: <%- defineConstants[key] %>,
+                    <%_ }) _%>
+                    ...plugin.definitions
+                })
+            }
+        }
+        <%_ } _%>
+        return config
     },
     <%_ if (rewrites) { _%>
     async rewrites() {
