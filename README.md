@@ -10,14 +10,19 @@ Taro 插件，用于编译为 Next.js 应用。
 
 ## 使用
 
+### 安装
+
 ```bash
-# 安装
+# 安装插件
 npm install tarojs-plugin-platform-nextjs
-# 执行
-taro build --type nextjs
+
+# 安装 next.js
+pnpm install next
 ```
 
-taro 项目配置中添加插件：
+### 配置
+
+在 Taro 项目配置中添加插件。
 
 ```javascript
 const config = {
@@ -25,6 +30,16 @@ const config = {
         'tarojs-plugin-platform-nextjs'
     ]
 }
+```
+
+### 执行
+
+```bash
+# 开发
+npx taro build --type nextjs --watch
+
+# 打包
+npx taro build --type nextjs
 ```
 
 ## 注意
