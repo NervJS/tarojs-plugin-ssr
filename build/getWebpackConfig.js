@@ -8,6 +8,8 @@ function getWebpackConfig(useESModules) {
     const config = {
         mode: 'production',
 
+        context: path.resolve(__dirname, 'components'),
+
         entry: {
             lilin: [path.resolve(__dirname, './webpackEntry.js')]
         },

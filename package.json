@@ -1,6 +1,6 @@
 {
     "name": "tarojs-plugin-platform-nextjs",
-    "version": "0.0.2-alpha.6",
+    "version": "0.0.2-alpha.7",
     "description": "Taro 插件，用于编译为 Next.js 应用。",
     "main": "src/index.js",
     "scripts": {
