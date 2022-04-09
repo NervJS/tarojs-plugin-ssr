@@ -6,7 +6,8 @@ pluginTester({
     plugin: nextAppPlugin,
     pluginName: 'next-app-plugin',
     pluginOptions: {
-        taroAppFilePath: path.join(__dirname, 'app.js')
+        outputAppFilePath: path.join(__dirname, 'app.js'),
+        nextAppFilePath: path.join(__dirname, '__fixtures__/basic/code.js')
     },
     babelOptions: {
         plugins: ['@babel/plugin-syntax-jsx']

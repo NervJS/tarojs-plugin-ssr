@@ -1,7 +1,6 @@
 const path = require('path')
 const fs = require('fs')
 const {src, dest, watch} = require('gulp')
-const replace = require('gulp-replace')
 const rename = require('gulp-rename')
 const filter = require('gulp-filter')
 const es = require('event-stream')
@@ -156,17 +155,6 @@ module.exports = ctx => {
                         }))
                         .pipe(dest(outputSourceDir)),
                     src(`${templateDir}/pages/**`).pipe(dest(path.join(outputDir, 'pages'))),
-                    src(`${templateDir}/@tarojs/**`)
-                        .pipe(replace('@@OUTPUT_TARO_APP_FILE_PATH@@', outputAppFilePath))
-                        .pipe(replace('@@NEXT_APP_FILE_PATH@@', nextAppFilePath))
-                        .pipe(es.through(function (data) {
-                            if (data.path === `${templateDir}/@tarojs/taro/constants.ts`) {
-                                const code = `export const customRoutes: Record<string, string> = ${JSON.stringify(customRoutes)}`
-                                data.contents = Buffer.from(code)
-                            }
-                            this.emit('data', data)
-                        }))
-                        .pipe(dest(path.join(outputDir, '@tarojs'))),
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
                             const prependData = JSON.stringify(sass.data)
@@ -187,7 +175,19 @@ module.exports = ctx => {
                         .pipe(rename('next.config.js'))
                         .pipe(dest(outputDir)),
                     src(`${templateDir}/postcss.config.js`).pipe(dest(outputDir)),
-                    src(`${templateDir}/babel.config.js`).pipe(dest(outputDir)),
+                    src(`${templateDir}/babel.config.ejs`)
+                        .pipe(es.through(function (data) {
+                            const ejsData = {
+                                nextAppFilePath: JSON.stringify(nextAppFilePath),
+                                outputAppFilePath: JSON.stringify(outputAppFilePath),
+                            }
+                            const result = ejs.render(data.contents.toString(), ejsData)
+                            data.contents = Buffer.from(result)
+
+                            this.emit('data', data)
+                        }))
+                        .pipe(rename('babel.config.js'))
+                        .pipe(dest(outputDir)),
                     src(`${templateDir}/tsconfig.json`)
                         .pipe(es.through(function (data) {
                             const taroTSConfigPath = path.join(appPath, 'tsconfig.json')

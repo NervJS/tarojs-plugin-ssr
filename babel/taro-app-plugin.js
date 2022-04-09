@@ -1,7 +1,7 @@
 
 const regexLikeCssGlobal = /((?<!\.module)\.css)|((?<!\.module)\.(scss|sass))$/
 
-module.exports = function (babel) {
+module.exports = function (babel, {outputAppFilePath}) {
     const t = babel.types
 
     return {
@@ -9,10 +9,7 @@ module.exports = function (babel) {
         visitor: {
             Program: {
                 enter(programPath, state) {
-                    if (
-                        process.env.NODE_ENV !== 'test' &&
-                        state.file.opts.filename !== '@@OUTPUT_TARO_APP_FILE_PATH@@'
-                    ) {
+                    if (state.file.opts.filename !== outputAppFilePath) {
                         return
                     }
 

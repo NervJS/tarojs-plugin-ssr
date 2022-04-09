@@ -1,0 +1,26 @@
+module.exports = {
+    presets: ['next/babel'],
+    plugins: [
+        [
+            require.resolve('tarojs-plugin-platform-nextjs/babel/next-app-plugin'),
+            {
+                <%_ if (nextAppFilePath) { _%>
+                nextAppFilePath: <%- nextAppFilePath %>,
+                <%_ } _%>
+                <%_ if (outputAppFilePath) { _%>
+                outputAppFilePath: <%- outputAppFilePath %>
+                <%_ } _%>
+            }
+        ],
+        [
+            require.resolve('tarojs-plugin-platform-nextjs/babel/taro-app-plugin'),
+            {
+                <%_ if (outputAppFilePath) { _%>
+                outputAppFilePath: <%- outputAppFilePath %>,
+                <%_ } _%>
+            }
+        ],
+        require.resolve('tarojs-plugin-platform-nextjs/babel/taro-import-plugin'),
+        require.resolve('tarojs-plugin-platform-nextjs/babel/class-component-taro-router-plugin')
+    ]
+}

@@ -5,13 +5,12 @@ const regexLikeCssGlobal = /((?<!\.module)\.css)|((?<!\.module)\.(scss|sass))$/
 
 const isWindows = process.platform === 'win32'
 
-module.exports = function (babel, {taroAppFilePath}) {
+module.exports = function (babel, {outputAppFilePath, nextAppFilePath}) {
     const t = babel.types
 
     function getGlobalCss(nextAppPath) {
-        const outputTaroAppFilePath = taroAppFilePath || '@@OUTPUT_TARO_APP_FILE_PATH@@'
-        const code = fs.readFileSync(outputTaroAppFilePath, 'utf-8')
-        const ast = babel.parse(code, {filename: outputTaroAppFilePath})
+        const code = fs.readFileSync(outputAppFilePath, 'utf-8')
+        const ast = babel.parse(code, {filename: outputAppFilePath})
 
         const result = []
         babel.traverse(ast, {
@@ -32,7 +31,7 @@ module.exports = function (babel, {taroAppFilePath}) {
 
                 const node = t.cloneNode(path.node)
                 if (isRelative) {
-                    const absolutePath = nodePath.resolve(nodePath.dirname(outputTaroAppFilePath), request)
+                    const absolutePath = nodePath.resolve(nodePath.dirname(outputAppFilePath), request)
                     const relativePath = nodePath.relative(nodePath.dirname(nextAppPath), absolutePath)
                     node.source.value = relativePath
                     result.push(node)
@@ -52,10 +51,7 @@ module.exports = function (babel, {taroAppFilePath}) {
             Program: {
                 enter(path, state) {
                     const filename = state.file.opts.filename
-                    if (
-                        process.env.NODE_ENV !== 'test' &&
-                        state.file.opts.filename !== '@@NEXT_APP_FILE_PATH@@'
-                    ) {
+                    if (state.file.opts.filename !== nextAppFilePath) {
                         return
                     }
 
