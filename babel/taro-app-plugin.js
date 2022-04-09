@@ -1,3 +1,4 @@
+
 const regexLikeCssGlobal = /((?<!\.module)\.css)|((?<!\.module)\.(scss|sass))$/
 
 module.exports = function (babel) {

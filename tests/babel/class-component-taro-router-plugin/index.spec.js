@@ -1,6 +1,6 @@
 const path = require('path')
 const pluginTester = require('babel-plugin-tester').default
-const taroRouterPlugin = require('../../../template/@tarojs/babel-plugins/class-component-taro-router')
+const taroRouterPlugin = require('../../../babel/class-component-taro-router-plugin')
 
 pluginTester({
     plugin: taroRouterPlugin,
