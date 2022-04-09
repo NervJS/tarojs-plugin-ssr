@@ -34,10 +34,11 @@ const nextConfig = {
             }
         }
 
+        const utils = require.resolve('tarojs-plugin-platform-nextjs/taro/lib/utils/index.js')
         config.plugins.push(
             new webpack.NormalModuleReplacementPlugin(
                 /@tarojs\/taro-h5\/dist\/api\/utils\/index.js/,
-                'tarojs-plugin-platform-nextjs/taro/lib/utils/index.js'
+                utils
             )
         )
 
