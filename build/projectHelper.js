@@ -5,6 +5,12 @@ function getProjectPath(...filePath) {
     return path.join(root, ...filePath)
 }
 
+function getTaroPath(...filePath) {
+    const root = path.resolve(__dirname, '../taro')
+    return path.join(root, ...filePath)
+}
+
 module.exports = {
-    getProjectPath
+    getProjectPath,
+    getTaroPath
 }

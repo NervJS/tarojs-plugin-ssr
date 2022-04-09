@@ -12,7 +12,6 @@ const spawn = require('cross-spawn')
 const getNextjsExportedFunctions = require('./getNextjsExportedFunctions')
 const resolveAliasToTSConfigPaths = require('./resolveAliasToTSConfigPaths')
 const resolveDynamicPagesToRewrites = require('./resolveDynamicPagesToRewrites')
-const install = require('./install')
 const {ensureLeadingSlash, resolveScriptPath, parseJson, isDynamicRoute} = require('./utils')
 
 const DEFAULT_ROUTER_CONFIG = {
@@ -95,9 +94,10 @@ module.exports = ctx => {
 
                     const files = fs.readdirSync(taroPageDir)
                     const dynamicPageFileName = files.find(name => isDynamicRoute(name))
-                    const dynamicPageFileExt = path.extname(dynamicPageFileName)
-                    const dynamicPageFileBaseName = path.basename(dynamicPageFileName, dynamicPageFileExt)
-                    if (dynamicPageFileBaseName) {
+                    let dynamicPageFileBaseName
+                    if (dynamicPageFileName) {
+                        const dynamicPageFileExt = path.extname(dynamicPageFileName)
+                        dynamicPageFileBaseName = path.basename(dynamicPageFileName, dynamicPageFileExt)
                         result.push(`${taroRoute}/${dynamicPageFileBaseName}`)
                     }
 
@@ -188,12 +188,6 @@ module.exports = ctx => {
                         .pipe(dest(outputDir)),
                     src(`${templateDir}/postcss.config.js`).pipe(dest(outputDir)),
                     src(`${templateDir}/babel.config.js`).pipe(dest(outputDir)),
-                    src(`${templateDir}/package.json`)
-                        .pipe(replace('@@NAME@@', () => {
-                            const name = taroPkg.name
-                            return name || 'tarojs-to-nextjs'
-                        }))
-                        .pipe(dest(outputDir)),
                     src(`${templateDir}/tsconfig.json`)
                         .pipe(es.through(function (data) {
                             const taroTSConfigPath = path.join(appPath, 'tsconfig.json')
@@ -214,18 +208,8 @@ module.exports = ctx => {
                 )
             }
             scaffold().on('end', async () => {
-                await install({cwd: outputDir})
-                await install({
-                    cwd: outputDir,
-                    dependencies: taroPkg.dependencies
-                })
-                await install({
-                    cwd: outputDir,
-                    devDependencies: taroPkg.devDependencies
-                })
-
                 if (mode === 'development') {
-                    spawn('npm', ['run', 'dev'], {
+                    spawn('next', ['dev'], {
                         cwd: outputDir,
                         stdio: 'inherit'
                     })

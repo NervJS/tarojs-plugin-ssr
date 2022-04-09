@@ -10,6 +10,10 @@ module.exports = function (babel) {
                         source.replaceWith(
                             t.stringLiteral('tarojs-plugin-platform-nextjs/components')
                         )
+                    } else if (source.node.value === '@tarojs/taro') {
+                        source.replaceWith(
+                            t.stringLiteral('tarojs-plugin-platform-nextjs/taro')
+                        )
                     }
                 }
             }

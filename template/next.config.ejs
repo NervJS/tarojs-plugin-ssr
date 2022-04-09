@@ -1,5 +1,4 @@
 const path = require('path')
-const withTM = require('next-transpile-modules')(['@tarojs/taro-h5'])
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -35,11 +34,10 @@ const nextConfig = {
             }
         }
 
-        const targetPath = path.resolve(__dirname, './@tarojs/taro/utils/index.ts')
         config.plugins.push(
             new webpack.NormalModuleReplacementPlugin(
-                /@tarojs\/taro-h5\/dist\/api\/utils\/index.ts/,
-                targetPath
+                /@tarojs\/taro-h5\/dist\/api\/utils\/index.js/,
+                'tarojs-plugin-platform-nextjs/taro/lib/utils/index.js'
             )
         )
 
@@ -72,4 +70,4 @@ const nextConfig = {
     <%_ } _%>
 }
   
-module.exports = withTM(nextConfig)
+module.exports = nextConfig

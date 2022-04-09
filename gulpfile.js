@@ -5,7 +5,7 @@ const through2 = require('through2')
 const merge2 = require('merge2')
 const webpack = require('webpack')
 const path = require('path')
-const {getProjectPath} = require('./build/projectHelper')
+const {getProjectPath, getTaroPath} = require('./build/projectHelper')
 const getBabelCommonConfig = require('./build/getBabelCommonConfig')
 const getWebpackConfig = require('./build/getWebpackConfig')
 const tsConfig = require('./build/getTSCommonConfig')()
@@ -57,8 +57,7 @@ function babelify(js, useESModules) {
     const babelConfig = getBabelCommonConfig(useESModules)
     delete babelConfig.cacheDirectory
 
-    const stream = js.pipe(babel(babelConfig))
-    return stream.pipe(gulp.dest(useESModules ? esDir : libDir))
+    return js.pipe(babel(babelConfig))
 }
 
 function compile(useESModules) {
@@ -126,9 +125,48 @@ function compile(useESModules) {
     tsResult.on('finish', check)
     tsResult.on('end', check)
 
+    const destDir = useESModules ? esDir : libDir
     const tsFilesStream = babelify(tsResult.js, useESModules)
-    const tsd = tsResult.dts.pipe(gulp.dest(useESModules ? esDir : libDir))
-    return merge2([fonts, sass, tsFilesStream, tsd])
+    const tsd = tsResult.dts
+    return merge2([fonts, sass, tsFilesStream, tsd]).pipe(gulp.dest(destDir))
+}
+
+function compileTaro() {
+    const libDir = getTaroPath('lib')
+
+    let error = 0
+
+    const source = [
+        'taro/src/**/*.jsx',
+        'taro/src/**/*.js',
+        'taro/src/**/*.tsx',
+        'taro/src/**/*.ts'
+    ]
+
+    let sourceStream = gulp.src(source)
+
+    const tsResult = sourceStream.pipe(
+        ts(tsConfig, {
+            error(e) {
+                tsDefaultReporter.error(e)
+                error = 1
+            },
+            finish: tsDefaultReporter.finish
+        })
+    )
+
+    function check() {
+        if (error) {
+            process.exit(1)
+        }
+    }
+
+    tsResult.on('finish', check)
+    tsResult.on('end', check)
+
+    const tsFilesStream = babelify(tsResult.js, false)
+    const tsd = tsResult.dts
+    return merge2([tsFilesStream, tsd]).pipe(gulp.dest(libDir))
 }
 
 function compileWithLib(done) {
@@ -143,3 +181,9 @@ gulp.task('build:components', gulp.parallel(
     compileWithLib,
     compileWithDist
 ))
+
+function compileTaroWithLib(done) {
+    compileTaro().on('finish', done)
+}
+
+gulp.task('build:taro', compileTaroWithLib)

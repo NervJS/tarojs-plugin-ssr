@@ -1,8 +1,3 @@
-module.exports = {
-    plugins: [
-        ['postcss-pxtorem', {
-            rootValue: 20 / 320 * 414 * 3,
-            propWhiteList: []
-        }]
-    ]
-}
+const withPXToREM = require('tarojs-plugin-platform-nextjs/pxtorem')
+
+module.exports = withPXToREM({})

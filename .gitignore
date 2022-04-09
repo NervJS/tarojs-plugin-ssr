@@ -107,6 +107,9 @@ dist
 .DS_Store
 Thumbs.db
 
+# taro
+taro/lib
+
 # components
 components/es
 components/lib
