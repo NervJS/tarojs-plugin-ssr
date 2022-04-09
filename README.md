@@ -46,6 +46,10 @@ npx taro build --type nextjs
 
 Next.js 中组件样式必须使用 CSS Module。
 
+## 示例
+
+[房贷计算器](https://github.com/SyMind/Taro-Mortgage-Calculator)
+
 ## License
 
 [MIT](https://github.com/SyMind/tarojs-plugin-platform-nextjs/blob/main/LICENSE)

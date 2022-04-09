@@ -2,15 +2,16 @@ const path = require('path')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    <%_ if (env) { _%>
     env: {
+        TARO_ENV: 'h5',
+    <%_ if (env) { _%>
     <%_ Object.keys(env).forEach(function (key) { _%>
         <%_ if (key !== 'NODE_ENV') { _%>
         <%- key %>: <%- env[key] %>,
         <%_ } _%>
     <%_ }) _%>
-    },
     <%_ } _%>
+    },
     sassOptions: {
         <%_ if (prependData) { _%>
         prependData: <%- prependData %>,

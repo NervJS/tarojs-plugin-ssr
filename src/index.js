@@ -219,12 +219,14 @@ module.exports = ctx => {
                 )
             }
             scaffold().on('end', async () => {
-                if (mode === 'development') {
-                    spawn('next', ['dev'], {
+                spawn(
+                    'next',
+                    mode === 'development' ? ['dev'] : ['build'],
+                    {
                         cwd: outputDir,
                         stdio: 'inherit'
-                    })
-                }
+                    }
+                )
 
                 if (isWatch) {
                     function hasSpecifiedFile(filePath) {
