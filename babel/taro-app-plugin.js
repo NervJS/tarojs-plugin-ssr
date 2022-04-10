@@ -1,8 +1,13 @@
+const nodePath = require('path')
 
 const regexLikeCssGlobal = /((?<!\.module)\.css)|((?<!\.module)\.(scss|sass))$/
 
-module.exports = function (babel, {outputAppFilePath}) {
+module.exports = function (babel, options, dirname) {
     const t = babel.types
+
+    const outputAppFilePath = nodePath.isAbsolute(options.outputAppFilePath)
+        ? options.outputAppFilePath
+        : nodePath.resolve(dirname, options.outputAppFilePath)
 
     return {
         name: 'taro-app-plugin',

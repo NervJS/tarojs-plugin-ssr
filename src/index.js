@@ -188,8 +188,8 @@ module.exports = ctx => {
                     src(`${templateDir}/babel.config.ejs`)
                         .pipe(es.through(function (data) {
                             const ejsData = {
-                                nextAppFilePath: JSON.stringify(nextAppFilePath),
-                                outputAppFilePath: JSON.stringify(outputAppFilePath)
+                                nextAppFilePath: JSON.stringify(path.relative(outputDir, nextAppFilePath)),
+                                outputAppFilePath: JSON.stringify(path.relative(outputDir, outputAppFilePath))
                             }
                             const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)

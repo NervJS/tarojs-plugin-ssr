@@ -5,8 +5,16 @@ const regexLikeCssGlobal = /((?<!\.module)\.css)|((?<!\.module)\.(scss|sass))$/
 
 const isWindows = process.platform === 'win32'
 
-module.exports = function (babel, {outputAppFilePath, nextAppFilePath}) {
+module.exports = function (babel, options, dirname) {
     const t = babel.types
+
+    const outputAppFilePath = nodePath.isAbsolute(options.outputAppFilePath)
+        ? options.outputAppFilePath
+        : nodePath.resolve(dirname, options.outputAppFilePath)
+
+    const nextAppFilePath = nodePath.isAbsolute(options.nextAppFilePath)
+        ? options.nextAppFilePath
+        : nodePath.resolve(dirname, options.nextAppFilePath)
 
     function getGlobalCss(nextAppPath) {
         const code = fs.readFileSync(outputAppFilePath, 'utf-8')
