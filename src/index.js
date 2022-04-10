@@ -81,8 +81,6 @@ module.exports = ctx => {
                 }
             }
 
-            const taroPkg = require(`${appPath}/package.json`)
-
             function createNextjsPages() {
                 const result = []
 
@@ -132,6 +130,7 @@ module.exports = ctx => {
 
             function scaffold() {
                 return es.merge(
+                    src(`${appPath}/*.d.ts`).pipe(dest(outputDir)),
                     src(`${sourceDir}/**`)
                         .pipe(filter(file => {
                             const stat = fs.statSync(file.path)
