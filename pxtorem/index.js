@@ -8,7 +8,8 @@ const withPXToREM = (designWidth = 750) => config => {
         plugins: [
             [require.resolve('postcss-pxtorem'), {
                 rootValue: BASE_FONT_SIZE * designWidth / 640,
-                propWhiteList: []
+                propWhiteList: [],
+                exclude: /node_modules/
             }],
             ...plugins
         ]
