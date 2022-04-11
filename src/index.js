@@ -123,6 +123,9 @@ module.exports = ctx => {
                     fs.writeFileSync(nextjsPageFilePath, contents, {encoding: 'utf-8'})
                 }
 
+                const customRoutesFilePath = path.join(outputDir, 'customRoutes.json')
+                fs.writeFileSync(customRoutesFilePath, JSON.stringify(customRoutes, null, '  '), {encoding: 'utf-8'})
+
                 return result
             }
 

@@ -72,6 +72,7 @@ import {
 } from './ui/navigation-bar'
 
 import {
+    setCustomRoutes,
     switchTab,
     reLaunch,
     redirectTo,
@@ -150,6 +151,7 @@ export {
     useDidHide,
     usePageScroll,
 
+    setCustomRoutes,
     switchTab,
     reLaunch,
     redirectTo,

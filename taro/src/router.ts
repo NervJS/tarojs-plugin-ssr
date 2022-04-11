@@ -1,5 +1,10 @@
 import Router from 'next/router'
-import {customRoutes} from './constants'
+
+let customRoutes: Record<string, string> = {}
+
+export function setCustomRoutes(routes: Record<string, string> = {}) {
+    customRoutes = routes
+}
 
 export function switchTab() {
 }
