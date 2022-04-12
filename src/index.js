@@ -8,6 +8,7 @@ const {merge} = require('lodash')
 const ejs = require('ejs')
 const chalk = require('chalk')
 const spawn = require('cross-spawn')
+const open = require('open')
 const getNextjsExportedFunctions = require('./getNextjsExportedFunctions')
 const resolveAliasToTSConfigPaths = require('./resolveAliasToTSConfigPaths')
 const resolveDynamicPagesToRewrites = require('./resolveDynamicPagesToRewrites')
@@ -36,7 +37,8 @@ module.exports = ctx => {
                 alias = {},
                 sass = {},
                 designWidth,
-                isWatch
+                isWatch,
+                devServer = {}
             } = config
 
             if (router.mode !== 'browser') {
@@ -221,16 +223,26 @@ module.exports = ctx => {
                 )
             }
             scaffold().on('end', async () => {
-                spawn(
-                    'next',
-                    mode === 'development' ? ['dev'] : ['build'],
-                    {
-                        cwd: outputDir,
-                        stdio: 'inherit'
-                    }
-                )
+                const port = devServer.port || 10086
+                const args = []
+                if (mode === 'development') {
+                    args.push('dev')
+                } else {
+                    args.push('build')
+                }
+                args.push('-p', port)
+
+                spawn('next', args, {
+                    cwd: outputDir,
+                    stdio: 'inherit'
+                })
 
                 if (isWatch) {
+                    const indexRoute = customRoutes[taroPages[0]] || taroPages[0]
+                    if (indexRoute) {
+                        open(`http://127.0.0.1:${port}${indexRoute}`)
+                    }
+
                     function hasSpecifiedFile(filePath) {
                         const dir = path.dirname(filePath)
                         const ext = path.extname(filePath)
