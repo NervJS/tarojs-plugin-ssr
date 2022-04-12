@@ -69,7 +69,9 @@ import {
     showNavigationBarLoading,
     hideNavigationBarLoading,
     setNavigationBarTitle
-} from './ui/navigation-bar'
+} from './ui/navigationBar'
+
+import pageScrollTo from './ui/pageScrollTo'
 
 import {
     setCustomRoutes,
@@ -147,6 +149,8 @@ export {
     hideNavigationBarLoading,
     setNavigationBarTitle,
 
+    pageScrollTo,
+
     useDidShow,
     useDidHide,
     usePageScroll,
@@ -223,6 +227,8 @@ export default {
     showNavigationBarLoading,
     hideNavigationBarLoading,
     setNavigationBarTitle,
+
+    pageScrollTo,
 
     useDidShow,
     useDidHide,
