@@ -1,6 +1,35 @@
 import ReactDOM from 'react-dom'
 import {Toast} from '../../../components'
 
+let toastContainer: HTMLDivElement | null = null
+
+let toastTimer: ReturnType<typeof setTimeout> | null = null
+
+function destroyToast() {
+    if (toastTimer) {
+        clearTimeout(toastTimer)
+        toastTimer = null
+    }
+    if (toastContainer) {
+        ReactDOM.unmountComponentAtNode(toastContainer)
+        toastContainer = null
+    }
+}
+
+function newToast(options) {
+    destroyToast()
+
+    toastContainer = document.createElement('div')
+    document.body.appendChild(toastContainer)
+    ReactDOM.render(
+        <Toast
+            show
+            {...options}
+        />,
+        toastContainer
+    )
+}
+
 namespace showToast {
     export type Param = {
         /**
@@ -58,13 +87,16 @@ namespace showToast {
     export type ParamPropComplete = () => any
 }
 
-export function showToast() {
+export function showToast({title, icon, duration = 1500}) {
+    newToast({
+        icon,
+        children: title
+    })
 
+    setTimeout(destroyToast, duration)
 }
 
-export function hideToat() {
-
-}
+export const hideToat = destroyToast
 
 namespace showLoading {
     export type Param = {
@@ -103,29 +135,11 @@ namespace showLoading {
     export type ParamPropComplete = () => any
 }
 
-let toastContainer: HTMLDivElement | null = null
-
 export function showLoading({title = '正在加载...'}: showLoading.Param) {
-    if (toastContainer) {
-        return
-    }
-    toastContainer = document.createElement('div')
-    document.body.appendChild(toastContainer)
-    ReactDOM.render(
-        <Toast
-            show
-            icon='loading'
-            iconSize='large'
-        >
-            {title}
-        </Toast>,
-        toastContainer
-    )
+    newToast({
+        icon: 'loading',
+        children: title
+    })
 }
 
-export function hideLoading() {
-    if (toastContainer) {
-        ReactDOM.unmountComponentAtNode(toastContainer)
-        toastContainer = null
-    }
-}
+export const hideLoading = destroyToast
