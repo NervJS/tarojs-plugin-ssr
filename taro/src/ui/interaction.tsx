@@ -16,7 +16,7 @@ function destroyToast() {
     }
 }
 
-function newToast(options) {
+function newToast(options: any) {
     destroyToast()
 
     toastContainer = document.createElement('div')
@@ -87,7 +87,7 @@ namespace showToast {
     export type ParamPropComplete = () => any
 }
 
-export function showToast({title, icon, duration = 1500}) {
+export function showToast({title, icon, duration = 1500}: showToast.Param) {
     newToast({
         icon,
         children: title
