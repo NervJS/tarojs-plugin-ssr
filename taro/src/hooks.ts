@@ -1,13 +1,27 @@
-import {useEffect} from 'react'
+import {useEffect, useRef} from 'react'
 import {useRouter as useNextRouter} from 'next/router'
 import {getCurrentInstance} from './framework'
 import type {TaroRouter} from './typings'
 
-export function useDidShow(callback: () => void): void {
+function useDepRef<T = any>(prop: T) {
+    const ref = useRef(prop)
+
+    useEffect(() => {
+        ref.current = prop
+    }, [prop])
+
+    return ref
+}
+
+type DidShowCallback = () => void
+
+export function useDidShow(callback: DidShowCallback): void {
+    const ref = useDepRef<DidShowCallback>(callback)
+
     useEffect(() => {
         function handleVisibilityChanged() {
             if (document.visibilityState === 'visible') {
-                callback()
+                ref.current()
             }
         }
 
@@ -19,11 +33,15 @@ export function useDidShow(callback: () => void): void {
     }, [])
 }
 
-export function useDidHide(callback: () => void): void {
+type DidHideCallback = () => void
+
+export function useDidHide(callback: DidHideCallback): void {
+    const ref = useDepRef<DidHideCallback>(callback)
+
     useEffect(() => {
         function handleVisibilityChanged() {
             if (document.visibilityState !== 'visible') {
-                callback()
+                ref.current()
             }
         }
 
@@ -38,15 +56,18 @@ export function useDidHide(callback: () => void): void {
 // export function usePullDownRefresh(callback: () => void): void {
 // }
 
-export function useReachBottom(callback: () => void): void {
+type ReachBottomCallback = () => void
+
+export function useReachBottom(callback: ReachBottomCallback): void {
+    const ref = useDepRef<ReachBottomCallback>(callback)
+
     useEffect(() => {
         function handleScroll() {
             const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
             const clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight, document.body.clientHeight)
-
             if (scrollTop >= scrollHeight - clientHeight - 60) {
-                callback()
+                ref.current()
             }
         }
 
@@ -58,11 +79,15 @@ export function useReachBottom(callback: () => void): void {
     }, [])
 }
 
-export function useResize(callback: () => void): void {
+type ResizeCallback = () => void
+
+export function useResize(callback: ResizeCallback): void {
+    const ref = useDepRef<ResizeCallback>(callback)
+
     useEffect(() => {
         function handleResized() {
             if (document.visibilityState !== 'visible') {
-                callback()
+                ref.current()
             }
         }
 
@@ -92,12 +117,16 @@ type onPageScrollParam = {
     scrollTop: number
 }
 
-export function usePageScroll(callback: (res: onPageScrollParam) => void): void {
+type PageScrollCallback = (res: onPageScrollParam) => void
+
+export function usePageScroll(callback: PageScrollCallback): void {
+    const ref = useDepRef<PageScrollCallback>(callback)
+
     useEffect(() => {
         function handleScroll() {
             const scrollingElement = document.scrollingElement || document.documentElement
             const scrollTop = scrollingElement.scrollTop
-            callback({scrollTop})
+            ref.current({scrollTop})
         }
 
         document.addEventListener('scroll', handleScroll)
