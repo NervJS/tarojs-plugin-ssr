@@ -256,6 +256,10 @@ module.exports = ctx => {
                         const ext = path.extname(filePath)
                         const base = path.basename(filePath, ext)
 
+                        if (!fs.existsSync(dir)) {
+                            return false
+                        }
+
                         const files = fs.readdirSync(dir)
                         return files.some(name => {
                             const ext = path.extname(name)
@@ -297,37 +301,32 @@ module.exports = ctx => {
                         return path.join(outputDir, relativePath)
                     }
 
-                    const watcher = watch(`${sourceDir}/**`)
-                    watcher.on('change', filePath => {
+                    function handleWatch(operation, filePath) {
                         const outputPath = getOutputFilePath(filePath)
                         if (!outputPath) {
                             return
                         }
 
                         const relativePath = filePath.substring(appPath.length + 1)
-                        console.log(`${chalk.green('File was changed')} ${relativePath}`)
-                        fs.copyFileSync(filePath, outputPath)
-                    })
-                    watcher.on('add', filePath => {
-                        const outputPath = getOutputFilePath(filePath)
-                        if (!outputPath) {
-                            return
+                        console.log(`${chalk.green(`File was ${operation}`)} ${relativePath}`)
+
+                        if (['changed', 'added'].includes(operation)) {
+                            const outputDir = path.dirname(outputPath)
+                            if (!fs.existsSync(outputDir)) {
+                                fs.mkdirSync(outputDir, {recursive: true})
+                            }
+                            fs.copyFileSync(filePath, outputPath)
                         }
 
-                        const relativePath = filePath.substring(appPath.length + 1)
-                        console.log(`${chalk.green('File was added')} ${relativePath}`)
-                        fs.copyFileSync(filePath, outputPath)
-                    })
-                    watcher.on('unlink', filePath => {
-                        const outputPath = getOutputFilePath(filePath)
-                        if (!outputPath) {
-                            return
+                        if (operation === 'removed') {
+                            fs.rmSync(outputPath)
                         }
+                    }
 
-                        const relativePath = filePath.substring(appPath.length + 1)
-                        console.log(`${chalk.green('File was removed')} ${relativePath}`)
-                        fs.rmSync(outputPath)
-                    })
+                    const watcher = watch(`${sourceDir}/**`, {readDelay: 200})
+                    watcher.on('change', filePath => handleWatch('changed', filePath))
+                    watcher.on('add', filePath => handleWatch('added', filePath))
+                    watcher.on('unlink', filePath => handleWatch('removed', filePath))
                 }
             })
         }
