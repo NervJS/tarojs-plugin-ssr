@@ -82,13 +82,22 @@ import {
     navigateBack
 } from './router'
 
-import {useDidShow, useDidHide, usePageScroll} from './hooks'
+import {
+    useDidShow,
+    useDidHide,
+    useReachBottom,
+    useResize,
+    useReady,
+    useRouter,
+    usePageScroll
+} from './hooks'
 
 import {
     getCurrentInstance,
     getCurrentPages,
     getEnv,
-    ENV_TYPE
+    ENV_TYPE,
+    TaroPageWrapper
 } from './framework'
 
 export {
@@ -153,6 +162,10 @@ export {
 
     useDidShow,
     useDidHide,
+    useReachBottom,
+    useResize,
+    useReady,
+    useRouter,
     usePageScroll,
 
     setCustomRoutes,
@@ -167,7 +180,8 @@ export {
     getCurrentInstance,
     getCurrentPages,
     getEnv,
-    ENV_TYPE
+    ENV_TYPE,
+    TaroPageWrapper
 }
 
 export default {
@@ -232,6 +246,11 @@ export default {
 
     useDidShow,
     useDidHide,
+    useReachBottom,
+    useResize,
+    useReady,
+    useRouter,
+    usePageScroll,
 
     switchTab,
     reLaunch,
@@ -244,5 +263,6 @@ export default {
     getCurrentInstance,
     getCurrentPages,
     getEnv,
-    ENV_TYPE
+    ENV_TYPE,
+    TaroPageWrapper
 }

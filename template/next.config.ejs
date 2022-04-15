@@ -12,10 +12,7 @@ const nextConfig = {
     },
     sassOptions: {
         <%_ if (additionalData) { _%>
-        additionalData: <%- additionalData %>,
-        <%_ } _%>
-        <%_ if (includePaths) { _%>
-        includePaths: <%- includePaths %>
+        additionalData: <%- additionalData %>
         <%_ } _%>
     },
     images: {

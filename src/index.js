@@ -12,7 +12,7 @@ const open = require('open')
 const getNextjsExportedFunctions = require('./getNextjsExportedFunctions')
 const resolveAliasToTSConfigPaths = require('./resolveAliasToTSConfigPaths')
 const resolveDynamicPagesToRewrites = require('./resolveDynamicPagesToRewrites')
-const {ensureLeadingSlash, resolveScriptPath, parseJson, isDynamicRoute} = require('./utils')
+const {ensureLeadingSlash, resolveScriptPath, parseJson, isDynamicRoute, unIndent} = require('./utils')
 
 const DEFAULT_ROUTER_CONFIG = {
     mode: 'browser',
@@ -115,13 +115,23 @@ module.exports = ctx => {
 
                     const exportedFunctions = getNextjsExportedFunctions(targetPageFilePath)
 
-                    const exportedNames = ['default', ...exportedFunctions]
                     let request = `${outputDir}/${sourceRoot}${taroPage}`
                     if (dynamicPageFileBaseName) {
                         request = path.join(path.dirname(request), dynamicPageFileBaseName)
                     }
                     const modulePath = path.relative(nextjsPageDir, request)
-                    const contents = `export {${exportedNames.join(', ')}} from '${modulePath}'`
+
+                    const contents = unIndent`
+                        import {TaroPageWrapper} from 'tarojs-plugin-platform-nextjs/taro'
+                        import TaroPage from '${modulePath}'
+
+                        export default function NextPage(props) {
+                            return <TaroPageWrapper TaroPage={TaroPage} {...props} />
+                        }
+                    `
+                    if (exportedFunctions.length) {
+                        contents.push(`\nexport {${exportedFunctions.join(', ')}} from '${modulePath}'`)
+                    }
                     fs.writeFileSync(nextjsPageFilePath, contents, {encoding: 'utf-8'})
                 }
 
@@ -164,14 +174,12 @@ module.exports = ctx => {
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
                             const additionalData = JSON.stringify(sass.data)
-                            const includePaths = JSON.stringify(sass.includePaths)
                             const rewrites = resolveDynamicPagesToRewrites(dynamicPages)
 
                             const ejsData = {
                                 env,
                                 defineConstants,
                                 additionalData,
-                                includePaths,
                                 rewrites
                             }
                             const result = ejs.render(data.contents.toString(), ejsData)
