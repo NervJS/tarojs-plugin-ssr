@@ -121,7 +121,7 @@ module.exports = ctx => {
                     }
                     const modulePath = path.relative(nextjsPageDir, request)
 
-                    const contents = unIndent`
+                    let contents = unIndent`
                         import {TaroPageWrapper} from 'tarojs-plugin-platform-nextjs/taro'
                         import TaroPage from '${modulePath}'
 
@@ -130,7 +130,7 @@ module.exports = ctx => {
                         }
                     `
                     if (exportedFunctions.length) {
-                        contents.push(`\nexport {${exportedFunctions.join(', ')}} from '${modulePath}'`)
+                        contents += `\nexport {${exportedFunctions.join(', ')}} from '${modulePath}'`
                     }
                     fs.writeFileSync(nextjsPageFilePath, contents, {encoding: 'utf-8'})
                 }
