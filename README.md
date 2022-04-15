@@ -6,11 +6,13 @@ Taro 插件，用于编译为 Next.js 应用。
 
 ## 动机
 
-让 Taro3 在 Web 端支持 [SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，以提升页面首屏速度。
+让 Taro 在 Web 端支持 [SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，以提升页面首屏速度。
 
-## 使用
+## 安装与使用
 
 ### 安装
+
+你需要先拥有一个 Taro 项目，如果你还不知该如何创建一个 Taro 项目，那么请先从这里开始：[Taro 安装及使用](https://taro-docs.jd.com/taro/docs/)。
 
 ```bash
 # 安装插件
@@ -22,7 +24,7 @@ pnpm install next
 
 ### 配置
 
-在 Taro 项目配置中添加插件。
+在 Taro 项目的[编译配置](https://taro-docs.jd.com/taro/docs/config)中添加本插件。
 
 ```javascript
 const config = {
@@ -42,10 +44,28 @@ npx taro build --type nextjs --watch
 npx taro build --type nextjs
 ```
 
-## 注意
+## 基础教程
 
-1. Next.js 不支持 `hash` 路由模式。
+### 编译配置
+
+本插件使用 Taro 项目中 h5 端的编译配置，但有以下限制。
+
+1. Next.js 仅支持 `browser` 路由模式。
 2. Next.js 中组件级样式必须使用 CSS Module。
+
+### 页面如何进行 SSR
+
+在页面中导出 `getServerSideProps` 函数，Next.js 将对每个请求使用 `getServerSideProps` 返回的数据预先渲染该页面。
+
+阅读 Next.js 文档了解更多：[getServerSideProps](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props)。
+
+```javascript
+export async function getServerSideProps(context) {
+    return {
+        props: {} // 将作为页面组件的属性
+    }
+}
+```
 
 ## 示例
 
