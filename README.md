@@ -57,7 +57,7 @@ npx taro build --type nextjs
 
 在页面中导出 `getServerSideProps` 函数，Next.js 将对每个请求使用 `getServerSideProps` 返回的数据预先渲染该页面。
 
-阅读 Next.js 文档了解更多：[getServerSideProps](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props)。
+阅读 Next.js 文档了解更多：[getServerSideProps](https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props)。
 
 ```javascript
 export async function getServerSideProps(context) {

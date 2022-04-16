@@ -1,4 +1,12 @@
-import {useRef, useEffect, FC, FunctionComponent, ComponentClass} from 'react'
+import {
+    useRef,
+    useEffect,
+    Component,
+    PureComponent,
+    FC,
+    FunctionComponent,
+    ComponentClass
+} from 'react'
 import type {NextRouter} from 'next/router'
 import type {TaroRouter} from './typings'
 
@@ -120,5 +128,9 @@ export const TaroPageWrapper: FC<TaroPageWrapperProps> = ({TaroPage, ...rest}) =
         }
     }, [])
 
-    return <TaroPage ref={ref} {...rest} />
+    if (TaroPage instanceof Component || TaroPage instanceof PureComponent) {
+        return <TaroPage ref={ref} {...rest} />
+    }
+
+    return <TaroPage {...rest} />
 }
