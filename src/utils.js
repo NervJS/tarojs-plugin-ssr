@@ -41,7 +41,7 @@ function resolveScriptPath(filePath, extArrs = SCRIPT_EXT) {
             return `${filePath}${path.sep}index${item}`
         }
     }
-    return realPath
+    return filePath
 }
 
 function parseJson(filePath) {
