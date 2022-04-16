@@ -1,0 +1,50 @@
+.main {
+    padding: 48px 16px;
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: 19px;
+}
+
+.h2 {
+    margin: 20px 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.h3 {
+    margin: 19px 0;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.line {
+    font-size: 24px;
+    text-align: center;
+}
+
+.emoji {
+    display: inline;
+    font-size: 32px;
+    vertical-align: middle;
+}
+
+.strong {
+    display: inline;
+    font-weight: bold;
+}
+
+.ol {
+    margin: 16px 0;
+}
+
+.li {
+    position: relative;
+    padding-left: 40px;
+    margin: 8px 0;
+}
+
+.marker {
+    position: absolute;
+    left: 10px;
+    top: 0;
+}
