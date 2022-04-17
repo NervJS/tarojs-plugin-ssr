@@ -19,6 +19,15 @@ const DEFAULT_ROUTER_CONFIG = {
     customRoutes: {}
 }
 
+const DEFAULT_POSTCSS_OPTIONS = ['autoprefixer', 'pxtransform', 'cssModules', 'url', 'htmltransform']
+
+const DEFAULT_AUTOPREFIXER_OPTION = {
+    enable: true,
+    config: {
+        flexbox: 'no-2009'
+    }
+}
+
 module.exports = ctx => {
     const {paths, helper} = ctx
     const {appPath} = paths
@@ -37,6 +46,7 @@ module.exports = ctx => {
                 alias = {},
                 sass = {},
                 designWidth,
+                postcss = {},
                 isWatch,
                 devServer = {}
             } = config
@@ -191,7 +201,14 @@ module.exports = ctx => {
                         .pipe(dest(outputDir)),
                     src(`${templateDir}/postcss.config.ejs`)
                         .pipe(es.through(function (data) {
-                            const result = ejs.render(data.contents.toString(), {designWidth})
+                            const autoprefixerOption = merge({}, DEFAULT_AUTOPREFIXER_OPTION, postcss.autoprefixer)
+                            const ejsData = {
+                                designWidth,
+                                autoprefixerOption: autoprefixerOption.enable
+                                    ? JSON.stringify(autoprefixerOption.config)
+                                    : null
+                            }
+                            const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)
 
                             this.emit('data', data)
