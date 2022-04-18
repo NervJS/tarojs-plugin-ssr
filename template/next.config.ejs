@@ -2,18 +2,18 @@
 const nextConfig = {
     env: {
         TARO_ENV: 'h5',
-    <% if (env) {
+    <%_ if (env) {
         Object.keys(env).forEach(function (key) {
-            if (key !== 'NODE_ENV') { %>
+            if (key !== 'NODE_ENV') { _%>
         <%- JSON.stringify(key) %>: <%- env[key] %>,
-    <%      }
+    <%_     }
         })
-    } %>
+    } _%>
     },
     sassOptions: {
-        <% if (additionalData) { %>
+        <%_ if (additionalData) { _%>
         additionalData: <%- JSON.stringify(additionalData) %>
-        <% } %>
+        <%_ } _%>
     },
     images: {
         disableStaticImages: true
@@ -32,29 +32,29 @@ const nextConfig = {
                 }
             }
         })
-        <% if (defineConstants) { %>
+        <%_ if (defineConstants) { _%>
         for (let i = 0; i < config.plugins.length; i++) {
             const plugin = config.plugins[i]
             if (plugin.constructor.name === 'DefinePlugin') {
                 config.plugins[i] = new webpack.DefinePlugin({
-                    <% Object.keys(defineConstants).forEach(function (key) { %>
-                        <%- JSON.stringify(key) -%>: <%- defineConstants[key] %>,
-                    <% }) %>
+                    <%_ Object.keys(defineConstants).forEach(function (key) { _%>
+                    <%- JSON.stringify(key) -%>: <%- defineConstants[key] %>,
+                    <%_ }) _%>
                     ...plugin.definitions
                 })
             }
         }
-        <% } %>
+        <%_ } _%>
         return config
     },
     <%_ if (rewrites) { _%>
     async rewrites() {
         return {
             beforeFiles:  [
-            <% rewrites.forEach(function (rewrite) { %>
+            <%_ rewrites.forEach(function (rewrite) { _%>
                 {
                     source: <%- JSON.stringify(rewrite.source) %>,
-                    <% if (rewrite.has) { %>
+                    <%_ if (rewrite.has) { _%>
                     has: [
                         <% rewrite.has.forEach(function (item) { %>
                         {
@@ -64,14 +64,14 @@ const nextConfig = {
                         },
                         <% }) %>
                     ],
-                    <% } %>
+                    <%_ } _%>
                     destination: <%- JSON.stringify(rewrite.destination) %>
                 },
-            <% }) %>
+            <%_ }) _%>
             ]
         }
     }
     <%_ } _%>
 }
-  
+
 module.exports = nextConfig
