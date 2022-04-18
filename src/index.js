@@ -183,7 +183,7 @@ module.exports = ctx => {
                     src(`${templateDir}/pages/**`).pipe(dest(path.join(outputDir, 'pages'))),
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
-                            const additionalData = JSON.stringify(sass.data)
+                            const additionalData = sass.data
                             const rewrites = resolveDynamicPagesToRewrites(dynamicPages)
 
                             const ejsData = {

@@ -12,8 +12,8 @@ const config = {
   plugins: [
     'tarojs-plugin-platform-nextjs'
   ],
-  defineConstants: {
-      'process.env.GITHUB_TOKEN': JSON.stringify(process.env.GITHUB_TOKEN)
+  env: {
+    GITHUB_TOKEN: JSON.stringify(process.env.GITHUB_TOKEN)
   },
   copy: {
     patterns: [

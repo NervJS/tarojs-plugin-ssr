@@ -2,18 +2,18 @@
 const nextConfig = {
     env: {
         TARO_ENV: 'h5',
-    <%_ if (env) { _%>
-    <%_ Object.keys(env).forEach(function (key) { _%>
-        <%_ if (key !== 'NODE_ENV') { _%>
-        <%- key %>: <%- env[key] %>,
-        <%_ } _%>
-    <%_ }) _%>
-    <%_ } _%>
+    <% if (env) {
+        Object.keys(env).forEach(function (key) {
+            if (key !== 'NODE_ENV') { %>
+        <%- JSON.stringify(key) %>: <%- env[key] %>,
+    <%      }
+        })
+    } %>
     },
     sassOptions: {
-        <%_ if (additionalData) { _%>
-        additionalData: <%- additionalData %>
-        <%_ } _%>
+        <% if (additionalData) { %>
+        additionalData: <%- JSON.stringify(additionalData) %>
+        <% } %>
     },
     images: {
         disableStaticImages: true
@@ -32,42 +32,42 @@ const nextConfig = {
                 }
             }
         })
-        <%_ if (defineConstants) { _%>
+        <% if (defineConstants) { %>
         for (let i = 0; i < config.plugins.length; i++) {
             const plugin = config.plugins[i]
             if (plugin.constructor.name === 'DefinePlugin') {
                 config.plugins[i] = new webpack.DefinePlugin({
-                    <%_ Object.keys(defineConstants).forEach(function (key) { _%>
-                        <%- key %>: <%- defineConstants[key] %>,
-                    <%_ }) _%>
+                    <% Object.keys(defineConstants).forEach(function (key) { %>
+                        <%- JSON.stringify(key) -%>: <%- defineConstants[key] %>,
+                    <% }) %>
                     ...plugin.definitions
                 })
             }
         }
-        <%_ } _%>
+        <% } %>
         return config
     },
     <%_ if (rewrites) { _%>
     async rewrites() {
         return {
             beforeFiles:  [
-            <%_ rewrites.forEach(function (rewrite) { _%>
+            <% rewrites.forEach(function (rewrite) { %>
                 {
-                    source: '<%- rewrite.source %>',
-                    <%_ if (rewrite.has) { _%>
+                    source: <%- JSON.stringify(rewrite.source) %>,
+                    <% if (rewrite.has) { %>
                     has: [
-                        <%_ rewrite.has.forEach(function (item) { _%>
+                        <% rewrite.has.forEach(function (item) { %>
                         {
-                            type: '<%- item.type %>',
-                            key: '<%- item.key %>',
-                            value: '<%- item.value %>'
+                            type: <%- JSON.stringify(item.type) %>,
+                            key: <%- JSON.stringify(item.key) %>,
+                            value: <%- JSON.stringify(item.value) %>
                         },
-                        <%_ }) _%>
+                        <% }) %>
                     ],
-                    <%_ } _%>
-                    destination: '<%- rewrite.destination %>'
+                    <% } %>
+                    destination: <%- JSON.stringify(rewrite.destination) %>
                 },
-            <%_ }) _%>
+            <% }) %>
             ]
         }
     }
