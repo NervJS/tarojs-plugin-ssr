@@ -14,12 +14,14 @@ const resolveAliasToTSConfigPaths = require('./resolveAliasToTSConfigPaths')
 const resolveDynamicPagesToRewrites = require('./resolveDynamicPagesToRewrites')
 const {ensureLeadingSlash, resolveScriptPath, parseJson, isDynamicRoute, unIndent} = require('./utils')
 
+const isWindows = process.platform === 'win32';
+
 const DEFAULT_ROUTER_CONFIG = {
     mode: 'browser',
     customRoutes: {}
 }
 
-const DEFAULT_POSTCSS_OPTIONS = ['autoprefixer', 'pxtransform', 'cssModules', 'url', 'htmltransform']
+const DEFAULT_POSTCSS_OPTIONS = ['autoprefixer', 'pxtransform', 'cssModules']
 
 const DEFAULT_AUTOPREFIXER_OPTION = {
     enable: true,
@@ -201,12 +203,39 @@ module.exports = ctx => {
                         .pipe(dest(outputDir)),
                     src(`${templateDir}/postcss.config.ejs`)
                         .pipe(es.through(function (data) {
+                            const plugins = Object.entries(postcss).reduce((result, [pluginName, pluginOption]) => {
+                                if (
+                                    !DEFAULT_POSTCSS_OPTIONS.includes(pluginName) &&
+                                    pluginOption?.enable
+                                ) {
+                                    const isRelative = pluginName.startsWith('./') ||
+                                        pluginName.startsWith('../') ||
+                                        ((isWindows && pluginName.startsWith('.\\')) ||
+                                        pluginName.startsWith('..\\'))
+
+                                    let request = pluginName
+                                    if (isRelative) {
+                                        const absolutePath = path.join(appPath, pluginName)
+                                        request = path.relative(outputDir, absolutePath)
+                                    }
+
+                                    const plugin = {
+                                        request,
+                                        option: pluginOption
+                                    }
+                                    result.push(plugin)
+                                }
+
+                                return result
+                            }, [])
+
                             const autoprefixerOption = merge({}, DEFAULT_AUTOPREFIXER_OPTION, postcss.autoprefixer)
                             const ejsData = {
                                 designWidth,
                                 autoprefixerOption: autoprefixerOption.enable
                                     ? JSON.stringify(autoprefixerOption.config)
-                                    : null
+                                    : null,
+                                plugins
                             }
                             const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)

@@ -34,14 +34,25 @@ const config = {
 }
 ```
 
-### 执行
+### 开发环境
 
 ```bash
-# 开发
 npx taro build --type nextjs --watch
+```
 
-# 打包
+### 生产环境
+
+项目必须先使用以下命令进行编译：
+
+```bash
 npx taro build --type nextjs
+```
+
+产出目录下将编译出一个完整的 Next.js 应用，可使用 next 命令运行它：
+
+```bash
+# dist 为编译配置中项目的产出目录
+cd dist && npx next start
 ```
 
 ## 基础教程

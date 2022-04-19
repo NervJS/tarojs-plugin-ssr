@@ -1,3 +1,9 @@
 const withTaro = require('tarojs-plugin-platform-nextjs/postcss')
 
-module.exports = withTaro(<%- designWidth %>, <%- autoprefixerOption %>)({})
+module.exports = withTaro(<%- designWidth %>, <%- autoprefixerOption %>)({
+    plugins: [
+        <%_ for (const {request, option} of plugins) { _%>
+        [require.resolve(<%- JSON.stringify(request) -%>), <%- JSON.stringify(option) -%>],
+        <%_ } _%>
+    ]
+})
