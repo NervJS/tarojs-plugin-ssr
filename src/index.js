@@ -252,10 +252,10 @@ module.exports = ctx => {
                 const args = []
                 if (mode === 'development') {
                     args.push('dev')
+                    args.push('-p', port)
                 } else {
                     args.push('build')
                 }
-                args.push('-p', port)
 
                 spawn('next', args, {
                     cwd: outputDir,
