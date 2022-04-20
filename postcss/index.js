@@ -1,6 +1,6 @@
 const BASE_FONT_SIZE = 40
 
-const withTaro = (designWidth = 750, autoprefixerOption) => config => {
+const withTaro = (designWidth, autoprefixerOption) => config => {
     const plugins = config.plugins || []
 
     plugins.push(

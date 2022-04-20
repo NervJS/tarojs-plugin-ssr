@@ -47,7 +47,7 @@ module.exports = ctx => {
                 mode,
                 alias = {},
                 sass = {},
-                designWidth,
+                designWidth = 750,
                 postcss = {},
                 isWatch,
                 devServer = {}
@@ -260,17 +260,16 @@ module.exports = ctx => {
                     src(`${templateDir}/tsconfig.json`)
                         .pipe(es.through(function (data) {
                             const taroTSConfigPath = path.join(appPath, 'tsconfig.json')
-
-                            const taroTSConfig = parseJson(taroTSConfigPath)
-                            const templateTSConfig = parseJson(data.path)
-
-                            let mergedTSConfig = templateTSConfig
                             if (fs.existsSync(taroTSConfigPath)) {
+                                const taroTSConfig = parseJson(taroTSConfigPath)
+                                const templateTSConfig = parseJson(data.path)
+
+                                let mergedTSConfig = templateTSConfig
                                 const paths = resolveAliasToTSConfigPaths(alias, taroTSConfigPath)
                                 mergedTSConfig = merge(taroTSConfig, templateTSConfig, {compilerOptions: {paths}})
-                            }
 
-                            data.contents = Buffer.from(JSON.stringify(mergedTSConfig, null, '  '))
+                                data.contents = Buffer.from(JSON.stringify(mergedTSConfig, null, '  '))
+                            }
                             this.emit('data', data)
                         }))
                         .pipe(dest(outputDir))
@@ -284,6 +283,11 @@ module.exports = ctx => {
                     args.push('-p', port)
                 } else {
                     args.push('build')
+                }
+
+                // Jest 测试时暂不执行以下逻辑
+                if (process.env.NODE_ENV === 'test') {
+                    return
                 }
 
                 spawn('next', args, {

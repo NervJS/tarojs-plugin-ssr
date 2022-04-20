@@ -1,6 +1,6 @@
 {
     "name": "tarojs-plugin-platform-nextjs",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "Taro 插件，用于编译为 Next.js 应用。",
     "main": "src/index.js",
     "scripts": {
@@ -69,6 +69,8 @@
         "@babel/preset-env": "^7.16.11",
         "@babel/preset-react": "^7.16.7",
         "@babel/runtime": "^7.17.9",
+        "@tarojs/cli": "3.4.7",
+        "@tarojs/plugin-framework-react": "3.4.7",
         "@types/node": "^17.0.23",
         "@types/react": "^17.0.43",
         "@types/react-dom": "^17.0.14",
