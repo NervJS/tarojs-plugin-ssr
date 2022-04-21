@@ -67,7 +67,7 @@ export const startAccelerometer = ({ interval = 'normal', success, fail, complet
         }
         return handle.success()
     } catch (e) {
-        return handle.fail({ errMsg: e.message })
+        return handle.fail({ errMsg: (e as any).message })
     }
 }
 

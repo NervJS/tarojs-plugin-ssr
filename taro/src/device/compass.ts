@@ -12,7 +12,7 @@ export const stopCompass = ({ success, fail, complete } = {} as any) => {
         window.removeEventListener('deviceorientation', compassListener, true)
         return handle.success()
     } catch (e) {
-        return handle.fail({ errMsg: e.message })
+        return handle.fail({ errMsg: (e as any).message })
     }
 }
 
@@ -47,7 +47,7 @@ export const startCompass = ({ success, fail, complete } = {} as any) => {
         }
         return handle.success()
     } catch (e) {
-        return handle.fail({ errMsg: e.message })
+        return handle.fail({ errMsg: (e as any).message })
     }
 }
 

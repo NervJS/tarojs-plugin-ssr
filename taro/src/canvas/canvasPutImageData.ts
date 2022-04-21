@@ -17,7 +17,7 @@ export const canvasPutImageData = ({ canvasId, data, x, y, success, fail, comple
         return handle.success()
     } catch (e) {
         return handle.fail({
-            errMsg: e.message
+            errMsg: (e as any).message
         })
     }
 }

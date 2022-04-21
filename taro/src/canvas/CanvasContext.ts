@@ -11,7 +11,7 @@ const TextBaseLineMap: Record<string, CanvasTextBaseline> = {
 }
 
 export class CanvasContext {
-    __raw__: CanvasRenderingContext2D
+    __raw__?: CanvasRenderingContext2D
     actions: IAction[] = []
 
     constructor(canvas, ctx) {
@@ -100,6 +100,17 @@ export class CanvasContext {
      * @todo 每次 draw 都会读取 width 和 height
      */
     async draw(reserve?: boolean, callback?: (...args: any[]) => any): Promise<void> {
+        if (!reserve) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        }
+
+        // 部分 action 是异步的
+        for (const { func, args } of this.actions) {
+            await func.apply(this.ctx, args)
+        }
+
+        this.emptyActions()
+        callback && callback()
         try {
             if (!reserve) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -113,9 +124,8 @@ export class CanvasContext {
             this.emptyActions()
             callback && callback()
         } catch (e) {
-            /* eslint-disable no-throw-literal */
             throw {
-                errMsg: e.message
+                errMsg: (e as any).message
             }
         }
     }

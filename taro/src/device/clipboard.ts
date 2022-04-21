@@ -50,7 +50,7 @@ export const setClipboardData = async ({ data, success, fail, complete }) => {
         }
         return handle.success()
     } catch (e) {
-        return handle.fail({ errMsg: e.message })
+        return handle.fail({ errMsg: (e as any).message })
     }
 }
 
@@ -63,6 +63,6 @@ export const getClipboardData = async ({ success, fail, complete } = {} as any) 
         const data: string = getStorageSync(CLIPBOARD_STORAGE_NAME)
         return handle.success({ data })
     } catch (e) {
-        return handle.fail({ errMsg: e.message })
+        return handle.fail({ errMsg: (e as any).message })
     }
 }

@@ -27,7 +27,7 @@ export const stopDeviceMotionListening = ({ success, fail, complete } = {} as an
         window.removeEventListener('deviceorientation', deviceMotionListener, true)
         return handle.success()
     } catch (e) {
-        return handle.fail({ errMsg: e.message })
+        return handle.fail({ errMsg: (e as any).message })
     }
 }
 
@@ -65,7 +65,7 @@ export const startDeviceMotionListening = ({ interval = 'normal', success, fail,
         }
         return handle.success()
     } catch (e) {
-        return handle.fail({ errMsg: e.message })
+        return handle.fail({ errMsg: (e as any).message })
     }
 }
 

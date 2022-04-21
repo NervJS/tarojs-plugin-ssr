@@ -17,7 +17,7 @@ export const canvasToTempFilePath = ({ canvasId, fileType, quality, success, fai
         })
     } catch (e) {
         return handle.fail({
-            errMsg: e.message
+            errMsg: (e as any).message
         })
     }
 }

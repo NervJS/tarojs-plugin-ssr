@@ -1,6 +1,7 @@
 import {
     useRef,
     useEffect,
+    createElement,
     Component,
     PureComponent,
     FC,
@@ -112,8 +113,8 @@ export const TaroPageWrapper: FC<TaroPageWrapperProps> = ({TaroPage, ...rest}) =
         }
 
         if (
-            typeof pageInstance.onPageScroll !== 'function'
-            || typeof pageInstance.onReachBottom !== 'function'
+            typeof pageInstance.onPageScroll !== 'function' ||
+            typeof pageInstance.onReachBottom !== 'function'
         ) {
             document.addEventListener('scroll', handleScroll)
         }
@@ -128,9 +129,10 @@ export const TaroPageWrapper: FC<TaroPageWrapperProps> = ({TaroPage, ...rest}) =
         }
     }, [])
 
-    if (TaroPage instanceof Component || TaroPage instanceof PureComponent) {
-        return <TaroPage ref={ref} {...rest} />
-    }
+    const isClassComponent = TaroPage instanceof Component || TaroPage instanceof PureComponent
 
-    return <TaroPage {...rest} />
+    return createElement(TaroPage, {
+        ref: isClassComponent ? ref : undefined,
+        ...rest
+    })
 }

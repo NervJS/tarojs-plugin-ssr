@@ -30,9 +30,27 @@ const DEFAULT_AUTOPREFIXER_OPTION = {
     }
 }
 
+const DEFAULT_PORT = '10086'
+
 module.exports = ctx => {
-    const {paths, helper} = ctx
-    const {appPath} = paths
+    const {paths, helper, runOpts} = ctx
+    const {appPath, outputPath, sourcePath} = paths
+
+    ctx.registerCommand({
+        name: 'start',
+        optionsMap: {
+            '-p, --port': 'A port number on which to start the application'
+        },
+        synopsisList: [
+            'taro start -p <port>'
+        ],
+        async fn () {
+            const port = runOpts.port || runOpts.p || DEFAULT_PORT
+            spawn('next', ['start', outputPath, '-p', port], {
+                stdio: 'inherit'
+            })
+        }
+    })
 
     ctx.registerPlatform({
         name: 'nextjs',
@@ -57,16 +75,13 @@ module.exports = ctx => {
                 throw new Error('Next.js only support `browser` router mode.')
             }
 
-            const sourceDir = path.resolve(appPath, sourceRoot)
-            const outputDir = path.resolve(appPath, outputRoot)
-
-            const appConfigFilePath = resolveScriptPath(path.join(sourceDir, `${helper.ENTRY}.config`))
+            const appConfigFilePath = resolveScriptPath(path.join(sourcePath, `${helper.ENTRY}.config`))
             const appConfig = helper.readConfig(appConfigFilePath)
-            const appFilePath = resolveScriptPath(path.join(sourceDir, helper.ENTRY))
+            const appFilePath = resolveScriptPath(path.join(sourcePath, helper.ENTRY))
 
-            const outputSourceDir = path.join(outputDir, sourceRoot)
-            const outputAppFilePath = path.join(outputSourceDir, helper.ENTRY) + path.extname(appFilePath)
-            const nextAppFilePath = path.join(outputDir, 'pages/_app.tsx')
+            const outputsourcePath = path.join(outputPath, sourceRoot)
+            const outputAppFilePath = path.join(outputsourcePath, helper.ENTRY) + path.extname(appFilePath)
+            const nextAppFilePath = path.join(outputPath, 'pages/_app.tsx')
 
             const templateDir = path.resolve(__dirname, '../template')
 
@@ -98,10 +113,10 @@ module.exports = ctx => {
             function createNextjsPages() {
                 const result = []
 
-                const nextjsPagesDir = `${outputDir}/pages`
+                const nextjsPagesDir = `${outputPath}/pages`
 
                 for (const taroPage of taroPages) {
-                    const taroPageFilePath = resolveScriptPath(path.join(sourceDir, taroPage))
+                    const taroPageFilePath = resolveScriptPath(path.join(sourcePath, taroPage))
                     const taroPageDir = path.dirname(taroPageFilePath)
                     const taroRoute = customRoutes[taroPage] || taroPage
 
@@ -127,7 +142,7 @@ module.exports = ctx => {
 
                     const exportedFunctions = getNextjsExportedFunctions(targetPageFilePath)
 
-                    let request = `${outputDir}/${sourceRoot}${taroPage}`
+                    let request = `${outputPath}/${sourceRoot}${taroPage}`
                     if (dynamicPageFileBaseName) {
                         request = path.join(path.dirname(request), dynamicPageFileBaseName)
                     }
@@ -147,7 +162,7 @@ module.exports = ctx => {
                     fs.writeFileSync(nextjsPageFilePath, contents, {encoding: 'utf-8'})
                 }
 
-                const customRoutesFilePath = path.join(outputDir, 'customRoutes.json')
+                const customRoutesFilePath = path.join(outputPath, 'customRoutes.json')
                 fs.writeFileSync(customRoutesFilePath, JSON.stringify(customRoutes, null, '  '), {encoding: 'utf-8'})
 
                 return result
@@ -157,8 +172,8 @@ module.exports = ctx => {
 
             function scaffold() {
                 return es.merge(
-                    src(`${appPath}/*.d.ts`).pipe(dest(outputDir)),
-                    src(`${sourceDir}/**`)
+                    src(`${appPath}/*.d.ts`).pipe(dest(outputPath)),
+                    src(`${sourcePath}/**`)
                         .pipe(filter(file => {
                             const stat = fs.statSync(file.path)
                             if (stat.isDirectory()) {
@@ -181,8 +196,8 @@ module.exports = ctx => {
                                 p.basename = path.basename(p.basename, secondaryExt)
                             }
                         }))
-                        .pipe(dest(outputSourceDir)),
-                    src(`${templateDir}/pages/**`).pipe(dest(path.join(outputDir, 'pages'))),
+                        .pipe(dest(outputsourcePath)),
+                    src(`${templateDir}/pages/**`).pipe(dest(path.join(outputPath, 'pages'))),
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
                             const additionalData = sass.data
@@ -200,7 +215,7 @@ module.exports = ctx => {
                             this.emit('data', data)
                         }))
                         .pipe(rename('next.config.js'))
-                        .pipe(dest(outputDir)),
+                        .pipe(dest(outputPath)),
                     src(`${templateDir}/postcss.config.ejs`)
                         .pipe(es.through(function (data) {
                             const plugins = Object.entries(postcss).reduce((result, [pluginName, pluginOption]) => {
@@ -216,7 +231,7 @@ module.exports = ctx => {
                                     let request = pluginName
                                     if (isRelative) {
                                         const absolutePath = path.join(appPath, pluginName)
-                                        request = path.relative(outputDir, absolutePath)
+                                        request = path.relative(outputPath, absolutePath)
                                     }
 
                                     const plugin = {
@@ -243,12 +258,12 @@ module.exports = ctx => {
                             this.emit('data', data)
                         }))
                         .pipe(rename('postcss.config.js'))
-                        .pipe(dest(outputDir)),
+                        .pipe(dest(outputPath)),
                     src(`${templateDir}/babel.config.ejs`)
                         .pipe(es.through(function (data) {
                             const ejsData = {
-                                nextAppFilePath: JSON.stringify(path.relative(outputDir, nextAppFilePath)),
-                                outputAppFilePath: JSON.stringify(path.relative(outputDir, outputAppFilePath))
+                                nextAppFilePath: JSON.stringify(path.relative(outputPath, nextAppFilePath)),
+                                outputAppFilePath: JSON.stringify(path.relative(outputPath, outputAppFilePath))
                             }
                             const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)
@@ -256,7 +271,7 @@ module.exports = ctx => {
                             this.emit('data', data)
                         }))
                         .pipe(rename('babel.config.js'))
-                        .pipe(dest(outputDir)),
+                        .pipe(dest(outputPath)),
                     src(`${templateDir}/tsconfig.json`)
                         .pipe(es.through(function (data) {
                             const taroTSConfigPath = path.join(appPath, 'tsconfig.json')
@@ -272,11 +287,11 @@ module.exports = ctx => {
                             }
                             this.emit('data', data)
                         }))
-                        .pipe(dest(outputDir))
+                        .pipe(dest(outputPath))
                 )
             }
             scaffold().on('end', async () => {
-                const port = devServer.port || 10086
+                const port = devServer.port || DEFAULT_PORT
                 const args = []
                 if (mode === 'development') {
                     args.push('dev')
@@ -291,7 +306,7 @@ module.exports = ctx => {
                 }
 
                 spawn('next', args, {
-                    cwd: outputDir,
+                    cwd: outputPath,
                     stdio: 'inherit'
                 })
 
@@ -331,14 +346,14 @@ module.exports = ctx => {
 
                         const ext = path.extname(filePath)
                         if (!helper.SCRIPT_EXT.includes(ext)) {
-                            return path.join(outputDir, relativePath)
+                            return path.join(outputPath, relativePath)
                         }
 
                         const base = path.basename(relativePath, ext)
                         const secondaryExt = path.extname(base)
                         if (secondaryExt === '.h5') {
                             return path.join(
-                                outputDir,
+                                outputPath,
                                 path.dirname(relativePath),
                                 path.basename(base, secondaryExt) + ext
                             )
@@ -348,7 +363,7 @@ module.exports = ctx => {
                             return null
                         }
 
-                        return path.join(outputDir, relativePath)
+                        return path.join(outputPath, relativePath)
                     }
 
                     function handleWatch(operation, filePath) {
@@ -361,9 +376,9 @@ module.exports = ctx => {
                         console.log(`${chalk.green(`File was ${operation}`)} ${relativePath}`)
 
                         if (['changed', 'added'].includes(operation)) {
-                            const outputDir = path.dirname(outputPath)
-                            if (!fs.existsSync(outputDir)) {
-                                fs.mkdirSync(outputDir, {recursive: true})
+                            const outputPath = path.dirname(outputPath)
+                            if (!fs.existsSync(outputPath)) {
+                                fs.mkdirSync(outputPath, {recursive: true})
                             }
                             fs.copyFileSync(filePath, outputPath)
                         }
@@ -373,7 +388,7 @@ module.exports = ctx => {
                         }
                     }
 
-                    const watcher = watch(`${sourceDir}/**`, {readDelay: 200})
+                    const watcher = watch(`${sourcePath}/**`, {readDelay: 200})
                     watcher.on('change', filePath => handleWatch('changed', filePath))
                     watcher.on('add', filePath => handleWatch('added', filePath))
                     watcher.on('unlink', filePath => handleWatch('removed', filePath))

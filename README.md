@@ -48,11 +48,16 @@ npx taro build --type nextjs --watch
 npx taro build --type nextjs
 ```
 
-产出目录下将编译出一个完整的 Next.js 应用，可使用 next 命令运行它：
+启动应用：
 
 ```bash
-# dist 为编译配置中项目的产出目录
-cd dist && npx next start
+npx taro start -p 10086
+```
+
+产出目录下是一个完整的 Next.js 应用，也可直接使用 next 命令启动它：
+
+```bash
+npx next start dist -p 10086
 ```
 
 ## 基础教程
