@@ -15,11 +15,11 @@ Taro 插件，用于编译为 Next.js 应用。
 你需要先拥有一个 Taro 项目，如果你还不知该如何创建一个 Taro 项目，那么请先从这里开始：[Taro 安装及使用](https://taro-docs.jd.com/taro/docs/)。
 
 ```bash
-# 安装插件
-pnpm install tarojs-plugin-platform-nextjs
+# 使用 npm 安装插件与 next.js
+npm install tarojs-plugin-platform-nextjs next
 
-# 安装 next.js
-pnpm install next
+# 使用 pnpm 安装插件与 next.js
+pnpm install tarojs-plugin-platform-nextjs next
 ```
 
 ### 配置
@@ -69,7 +69,7 @@ npx next start dist -p 10086
 1. Next.js 仅支持 `browser` 路由模式。
 2. Next.js 中组件级样式必须使用 CSS Module。
 
-### 页面如何进行 SSR
+### SSR
 
 在页面中导出 `getServerSideProps` 函数，Next.js 将对每个请求使用 `getServerSideProps` 返回的数据预先渲染该页面。
 
@@ -80,6 +80,29 @@ export async function getServerSideProps(context) {
     return {
         props: {} // 将作为页面组件的属性
     }
+}
+```
+
+### ISR
+
+Next.js 的 Incremental Static Regeneration（ISR）功能允许你单独对某个页面使用静态生成，无需重建整个网站。使用 ISR，你可以在数百万页面的规模上同时保留静态的好处。
+
+在页面导出 `getStaticProps` 并对其添加 `revalidate` 属性来使用 ISR。
+
+```javascript
+export async function getStaticProps() {
+  const res = await fetch('https://.../posts')
+  const posts = await res.json()
+
+  return {
+    props: {
+      posts,
+    },
+    // Next.js 将尝试重新生成页面
+    // - 当接受到一个请求
+    // - 最多每 10 秒一次
+    revalidate: 10 // 单位为秒
+  }
 }
 ```
 
