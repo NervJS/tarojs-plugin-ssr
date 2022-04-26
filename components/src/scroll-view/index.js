@@ -206,9 +206,7 @@ class ScrollView extends React.Component {
                 onTouchMove={
                     _onTouchMove
                 }
-                onLoad={e => {
-                    console.log('onload', e)
-                }} >
+            >
                 {this.props.children}
             </div>
         )

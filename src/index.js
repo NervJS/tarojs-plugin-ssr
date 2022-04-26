@@ -367,8 +367,8 @@ module.exports = ctx => {
                     }
 
                     function handleWatch(operation, filePath) {
-                        const outputPath = getOutputFilePath(filePath)
-                        if (!outputPath) {
+                        const outputFilePath = getOutputFilePath(filePath)
+                        if (!outputFilePath) {
                             return
                         }
 
@@ -376,15 +376,15 @@ module.exports = ctx => {
                         console.log(`${chalk.green(`File was ${operation}`)} ${relativePath}`)
 
                         if (['changed', 'added'].includes(operation)) {
-                            const outputPath = path.dirname(outputPath)
-                            if (!fs.existsSync(outputPath)) {
-                                fs.mkdirSync(outputPath, {recursive: true})
+                            const outputDir = path.dirname(outputFilePath)
+                            if (!fs.existsSync(outputDir)) {
+                                fs.mkdirSync(outputDir, {recursive: true})
                             }
-                            fs.copyFileSync(filePath, outputPath)
+                            fs.copyFileSync(filePath, outputFilePath)
                         }
 
                         if (operation === 'removed') {
-                            fs.rmSync(outputPath)
+                            fs.rmSync(outputFilePath)
                         }
                     }
 

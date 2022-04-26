@@ -129,7 +129,8 @@ export const TaroPageWrapper: FC<TaroPageWrapperProps> = ({TaroPage, ...rest}) =
         }
     }, [])
 
-    const isClassComponent = TaroPage instanceof Component || TaroPage instanceof PureComponent
+    const isClassComponent = typeof TaroPage === 'function' && (
+        TaroPage.prototype instanceof Component || TaroPage.prototype instanceof PureComponent)
 
     return createElement(TaroPage, {
         ref: isClassComponent ? ref : undefined,
