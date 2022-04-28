@@ -15,7 +15,7 @@ const renderSass = require('./build/renderSass')
 const libDir = getComponentsProjectPath('lib')
 const esDir = getComponentsProjectPath('es')
 
-function dist(done) {
+function buildComponentsDist(done) {
     const webpackConfig = getWebpackConfig(false)
 
     webpack(webpackConfig, (err, stats) => {
@@ -59,7 +59,7 @@ function babelify(js, useESModules) {
     return js.pipe(babel(babelConfig))
 }
 
-function compile(useESModules) {
+function build(useESModules) {
     const fontsDestPath = path.join(useESModules ? esDir : libDir, 'style/fonts')
     const fonts = gulp
         .src('components/src/style/fonts/**/*')
@@ -106,7 +106,7 @@ function compile(useESModules) {
     return merge2([fonts, sass, filesStream]).pipe(gulp.dest(destDir))
 }
 
-function compileTaro() {
+function buildTaro() {
     const source = [
         'taro/src/**/*.jsx',
         'taro/src/**/*.js',
@@ -128,19 +128,15 @@ function cleanComponents() {
     }).pipe(clean())
 }
 
-function compileWithLib(done) {
-    compile(false).on('finish', done)
+function buildComponentsWithLib() {
+    return build(false)
 }
 
-function compileWithDist(done) {
-    dist(done)
-}
-
-gulp.task('build:components', gulp.series(
+gulp.task('components', gulp.series(
     cleanComponents,
     gulp.parallel(
-        compileWithLib,
-        compileWithDist
+        buildComponentsWithLib,
+        buildComponentsDist
     ))
 )
 
@@ -152,9 +148,9 @@ function cleanTaro() {
     }).pipe(clean())
 }
 
-gulp.task('build:taro', gulp.series(
+gulp.task('taro', gulp.series(
     cleanTaro,
-    compileTaro
+    buildTaro
 ))
 
 const buildPlugin = () => {
@@ -166,4 +162,4 @@ const buildPlugin = () => {
 
 gulp.task('plugin', buildPlugin)
 
-gulp.task('default', gulp.parallel('plugin'))
+gulp.task('default', gulp.parallel('plugin', 'taro', 'components'))

@@ -1,4 +1,15 @@
 import {
+    getWindowInfo,
+    getSystemSetting,
+    getDeviceInfo,
+    getAppBaseInfo,
+    getAppAuthorizeSetting,
+    getSystemInfoSync,
+    getSystemInfoAsync,
+    getSystemInfo
+} from './base'
+
+import {
     createOffscreenCanvas,
     createCanvasContext,
     canvasToTempFilePath,
@@ -101,6 +112,15 @@ import {
 } from './framework'
 
 export {
+    getWindowInfo,
+    getSystemSetting,
+    getDeviceInfo,
+    getAppBaseInfo,
+    getAppAuthorizeSetting,
+    getSystemInfoSync,
+    getSystemInfoAsync,
+    getSystemInfo,
+
     createOffscreenCanvas,
     createCanvasContext,
     canvasToTempFilePath,
@@ -185,6 +205,15 @@ export {
 }
 
 export default {
+    getWindowInfo,
+    getSystemSetting,
+    getDeviceInfo,
+    getAppBaseInfo,
+    getAppAuthorizeSetting,
+    getSystemInfoSync,
+    getSystemInfoAsync,
+    getSystemInfo,
+
     createOffscreenCanvas,
     createCanvasContext,
     canvasToTempFilePath,
