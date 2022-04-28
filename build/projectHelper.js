@@ -1,5 +1,10 @@
 const path = require('path')
 
+function getPluginProjectPath(...filePath) {
+    const root = path.resolve(__dirname, '..')
+    return path.join(root, ...filePath)
+}
+
 function getComponentsProjectPath(...filePath) {
     const root = path.resolve(__dirname, '../components')
     return path.join(root, ...filePath)
@@ -11,6 +16,7 @@ function getTaroProjectPath(...filePath) {
 }
 
 module.exports = {
+    getPluginProjectPath,
     getComponentsProjectPath,
     getTaroProjectPath
 }

@@ -2,10 +2,10 @@
     "name": "tarojs-plugin-platform-nextjs",
     "version": "0.0.8",
     "description": "Taro 插件，用于编译为 Next.js 应用。",
-    "main": "src/index.js",
+    "main": "lib/index.js",
     "scripts": {
-        "prepublishOnly": "gulp build:taro && gulp build:components",
-        "build": "gulp build:taro && gulp build:components",
+        "prepublishOnly": "gulp",
+        "build": "gulp",
         "test": "jest"
     },
     "files": [
@@ -14,7 +14,7 @@
         "components/lib",
         "components/index.js",
         "postcss",
-        "src",
+        "lib",
         "template",
         "taro/lib",
         "taro/index.js"
@@ -57,6 +57,7 @@
         "omit.js": "^2.0.2",
         "open": "^8.4.0",
         "postcss-pxtorem": "^6.0.0",
+        "scss-bundle": "^3.1.2",
         "swiper": "^4.4.2",
         "typescript": "^4.6.3",
         "url-loader": "^4.1.1",
@@ -78,6 +79,7 @@
         "babel-plugin-tester": "^10.1.0",
         "css-loader": "^6.7.1",
         "gulp-babel": "^8.0.0",
+        "gulp-typescript": "^6.0.0-alpha.1",
         "jest": "^27.5.1",
         "merge2": "^1.4.1",
         "mini-css-extract-plugin": "^2.6.0",

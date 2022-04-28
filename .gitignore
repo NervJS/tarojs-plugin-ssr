@@ -107,6 +107,9 @@ dist
 .DS_Store
 Thumbs.db
 
+# plugin
+lib
+
 # taro
 taro/lib
 

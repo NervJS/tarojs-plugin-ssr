@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "strictNullChecks": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "jsx": "react-jsx",
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "noImplicitAny": true,
+        "target": "es6",
+        "lib": [
+            "dom",
+            "es2017"
+        ],
+        "skipLibCheck": true,
+        "allowJs": true
+    },
+    "exclude": [
+        "node_modules",
+        "lib"
+    ]
+}

@@ -1,18 +1,19 @@
-const path = require('path')
-const fs = require('fs')
-const {src, dest, watch} = require('gulp')
-const rename = require('gulp-rename')
-const filter = require('gulp-filter')
-const es = require('event-stream')
-const {merge} = require('lodash')
-const ejs = require('ejs')
-const chalk = require('chalk')
-const spawn = require('cross-spawn')
-const open = require('open')
-const getNextjsExportedFunctions = require('./getNextjsExportedFunctions')
-const resolveAliasToTSConfigPaths = require('./resolveAliasToTSConfigPaths')
-const resolveDynamicPagesToRewrites = require('./resolveDynamicPagesToRewrites')
-const {ensureLeadingSlash, resolveScriptPath, parseJson, isDynamicRoute, unIndent} = require('./utils')
+import path from 'path'
+import fs from 'fs'
+import {src, dest, watch} from 'gulp'
+import rename from 'gulp-rename'
+import filter from 'gulp-filter'
+import es from 'event-stream'
+import {merge} from 'lodash'
+import ejs from 'ejs'
+import chalk from 'chalk'
+import spawn from 'cross-spawn'
+import open from 'open'
+import getNextjsExportedFunctions from './getNextjsExportedFunctions'
+import resolveAliasToTSConfigPaths from './resolveAliasToTSConfigPaths'
+import resolveDynamicPagesToRewrites from './resolveDynamicPagesToRewrites'
+import getNextjsSassOptions from './scssUtils'
+import {ensureLeadingSlash, resolveScriptPath, parseJson, isDynamicRoute, unIndent} from './utils'
 
 const isWindows = process.platform === 'win32';
 
@@ -57,8 +58,6 @@ module.exports = ctx => {
         useConfigName: 'h5',
         async fn({config}) {
             const {
-                sourceRoot = 'src',
-                outputRoot = 'dist',
                 router = DEFAULT_ROUTER_CONFIG,
                 env,
                 defineConstants,
@@ -79,8 +78,8 @@ module.exports = ctx => {
             const appConfig = helper.readConfig(appConfigFilePath)
             const appFilePath = resolveScriptPath(path.join(sourcePath, helper.ENTRY))
 
-            const outputsourcePath = path.join(outputPath, sourceRoot)
-            const outputAppFilePath = path.join(outputsourcePath, helper.ENTRY) + path.extname(appFilePath)
+            const outputSourcePath = path.join(outputPath, 'src')
+            const outputAppFilePath = path.join(outputSourcePath, helper.ENTRY) + path.extname(appFilePath)
             const nextAppFilePath = path.join(outputPath, 'pages/_app.tsx')
 
             const templateDir = path.resolve(__dirname, '../template')
@@ -92,13 +91,13 @@ module.exports = ctx => {
                 }
             }
             if (Array.isArray(appConfig.subPackages)) {
-                for (const package of appConfig.subPackages) {
-                    if (!Array.isArray(package.pages)) {
+                for (const pkg of appConfig.subPackages) {
+                    if (!Array.isArray(pkg.pages)) {
                         return
                     }
 
-                    for (const page of package.pages) {
-                        taroPages.push(ensureLeadingSlash(`${package.root}/${page}`))
+                    for (const page of pkg.pages) {
+                        taroPages.push(ensureLeadingSlash(`${pkg.root}/${page}`))
                     }
                 }
             }
@@ -109,6 +108,8 @@ module.exports = ctx => {
                     customRoutes[ensureLeadingSlash(key)] = router.customRoutes[key]
                 }
             }
+
+            const {additionalData} = await getNextjsSassOptions(sass)
 
             function createNextjsPages() {
                 const result = []
@@ -142,7 +143,7 @@ module.exports = ctx => {
 
                     const exportedFunctions = getNextjsExportedFunctions(targetPageFilePath)
 
-                    let request = `${outputPath}/${sourceRoot}${taroPage}`
+                    let request = path.join(outputSourcePath, taroPage)
                     if (dynamicPageFileBaseName) {
                         request = path.join(path.dirname(request), dynamicPageFileBaseName)
                     }
@@ -196,11 +197,10 @@ module.exports = ctx => {
                                 p.basename = path.basename(p.basename, secondaryExt)
                             }
                         }))
-                        .pipe(dest(outputsourcePath)),
+                        .pipe(dest(outputSourcePath)),
                     src(`${templateDir}/pages/**`).pipe(dest(path.join(outputPath, 'pages'))),
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
-                            const additionalData = sass.data
                             const rewrites = resolveDynamicPagesToRewrites(dynamicPages)
 
                             const ejsData = {

@@ -1,12 +1,14 @@
 const gulp = require('gulp')
 const babel = require('gulp-babel')
+const ts = require('gulp-typescript')
 const clean = require('gulp-clean')
 const through2 = require('through2')
 const merge2 = require('merge2')
 const webpack = require('webpack')
 const path = require('path')
-const {getComponentsProjectPath, getTaroProjectPath} = require('./build/projectHelper')
+const {getPluginProjectPath, getComponentsProjectPath, getTaroProjectPath} = require('./build/projectHelper')
 const getBabelCommonConfig = require('./build/getBabelCommonConfig')
+const getTSCommonConfig = require('./build/getTSCommonConfig')
 const getWebpackConfig = require('./build/getWebpackConfig')
 const renderSass = require('./build/renderSass')
 
@@ -154,3 +156,14 @@ gulp.task('build:taro', gulp.series(
     cleanTaro,
     compileTaro
 ))
+
+const buildPlugin = () => {
+    const tsConfig = getTSCommonConfig()
+    return gulp.src('src/**')
+        .pipe(ts(tsConfig))
+        .pipe(gulp.dest(getPluginProjectPath('lib')))
+}
+
+gulp.task('plugin', buildPlugin)
+
+gulp.task('default', gulp.parallel('plugin'))
