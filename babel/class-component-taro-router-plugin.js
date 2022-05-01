@@ -3,14 +3,7 @@ const splitExportDeclaration = require('@babel/helper-split-export-declaration')
 module.exports = function (babel) {
     const t = babel.types
 
-    /**
-     * Takes a class definition and replaces it with an equivalent class declaration
-     * which is then assigned to a local variable. This allows us to reassign the
-     * local variable with the decorated version of the class. The class definition
-     * retains its original name so that `toString` is not affected, other
-     * references to the class are renamed instead.
-     */
-     function replaceClassWithVar(path) {
+    function replaceClassWithVar(path) {
         if (path.type === 'ClassDeclaration') {
             const varId = path.scope.generateUidIdentifierBasedOnNode(path.node.id)
             const classId = t.identifier(path.node.id.name)
@@ -63,8 +56,31 @@ module.exports = function (babel) {
 
     let isCalledGetCurrentInstance = false
 
-    function transformProgram(programPath) {
-        programPath.traverse({
+    return {
+        name: 'class-component-taro-router-plugin',
+        visitor: {
+            Program: {
+                enter(path) {
+                    needsWithRouter = false
+                    isWithRouterImported = false
+                },
+                exit(path) {
+                    if (needsWithRouter && !isWithRouterImported) {
+                        path.unshiftContainer(
+                            'body',
+                            t.importDeclaration(
+                                [t.importSpecifier(
+                                    t.identifier('withRouter'),
+                                    t.identifier('withRouter')
+                                )],
+                                t.stringLiteral('next/router')
+                            )
+                        )
+                        path.skip()
+                    }
+                }
+            },
+
             ImportDeclaration(path) {
                 if (t.isStringLiteral(path.node.source, {value: 'next/router'})) {
                     if (path.node.specifiers.find(specifier => t.isIdentifier(specifier.imported, {name: 'withRouter'}))) {
@@ -72,6 +88,7 @@ module.exports = function (babel) {
                     }
                 }
             },
+
             ClassDeclaration: {
                 enter(path) {
                     if (
@@ -115,6 +132,7 @@ module.exports = function (babel) {
                     }
 
                     isInClassComponent = false
+                    isCalledGetCurrentInstance = false
                 }
             },
             'ExportNamedDeclaration|ExportDefaultDeclaration'(path) {
@@ -151,33 +169,6 @@ module.exports = function (babel) {
                             )
                         )
                         path.replaceWith(exp)
-                        path.skip()
-                    }
-                }
-            }
-        })
-    }
-
-    return {
-        name: 'class-component-taro-router-plugin',
-        visitor: {
-            Program: {
-                enter(path) {
-                    needsWithRouter = false
-                    transformProgram(path)
-                },
-                exit(path) {
-                    if (needsWithRouter && !isWithRouterImported) {
-                        path.unshiftContainer(
-                            'body',
-                            t.importDeclaration(
-                                [t.importSpecifier(
-                                    t.identifier('withRouter'),
-                                    t.identifier('withRouter')
-                                )],
-                                t.stringLiteral('next/router')
-                            )
-                        )
                         path.skip()
                     }
                 }
