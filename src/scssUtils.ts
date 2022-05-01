@@ -59,7 +59,7 @@ function checkPath(resource: string | string[], rootDir: string | undefined) {
 /**
  * Return the merged sass options.
  */
-async function getNextjsSassOptions(sass: TaroSassOptions): Promise<any> {
+async function getNextSassOptions(sass: TaroSassOptions): Promise<any> {
     const {data, resource, projectDirectory} = sass
 
     let additionalData = ''
@@ -77,4 +77,4 @@ async function getNextjsSassOptions(sass: TaroSassOptions): Promise<any> {
     }
 }
 
-export default getNextjsSassOptions
+export default getNextSassOptions

@@ -117,7 +117,7 @@ module.exports = (ctx: IPluginContext) => {
             const {additionalData} = await getNextSassOptions(sass)
 
             function createNextjsPages() {
-                const result = []
+                const result: string[] = []
 
                 const nextjsPagesDir = `${outputPath}/pages`
 
@@ -298,7 +298,7 @@ module.exports = (ctx: IPluginContext) => {
             }
             scaffold().on('end', async () => {
                 const port = devServer.port || DEFAULT_PORT
-                const args = []
+                const args: string[] = []
                 if (mode === 'development') {
                     args.push('dev')
                     args.push('-p', port)
