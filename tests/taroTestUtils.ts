@@ -1,7 +1,16 @@
-const path = require('path')
-const spawn = require('cross-spawn')
+import * as path from 'path'
+import spawn from 'cross-spawn'
 
-function runTaroCommand(argv, options = {}) {
+type CommandOptions = {
+    cwd?: string,
+    env?: NodeJS.ProcessEnv,
+    nodeArgs?: string[],
+    stderr?: string,
+    stdout?: string,
+    ignoreFail?: boolean,
+}
+
+export function runTaroCommand(argv: string[], options: CommandOptions = {}) {
     const taroDir = path.dirname(require.resolve('@tarojs/cli'))
     const taroBin = path.join(taroDir, 'bin/taro')
 
@@ -14,22 +23,17 @@ function runTaroCommand(argv, options = {}) {
             'node',
             [...(options.nodeArgs || []), '--no-deprecation', taroBin, ...argv],
             {
-                ...options.spawnOptions,
                 cwd,
                 env,
                 stdio: ['ignore', 'pipe', 'pipe']
             }
         )
 
-        if (typeof options.instance === 'function') {
-            options.instance(instance)
-        }
-
         let mergedStdio = ''
 
         let stderrOutput = ''
         if (options.stderr) {
-            instance.stderr.on('data', function (chunk) {
+            instance.stderr!.on('data', function (chunk) {
                 mergedStdio += chunk
                 stderrOutput += chunk
 
@@ -38,14 +42,14 @@ function runTaroCommand(argv, options = {}) {
                 }
             })
         } else {
-            instance.stderr.on('data', function (chunk) {
+            instance.stderr!.on('data', function (chunk) {
                 mergedStdio += chunk
             })
         }
 
         let stdoutOutput = ''
         if (options.stdout) {
-            instance.stdout.on('data', function (chunk) {
+            instance.stdout!.on('data', function (chunk) {
                 mergedStdio += chunk
                 stdoutOutput += chunk
 
@@ -54,7 +58,7 @@ function runTaroCommand(argv, options = {}) {
                 }
             })
         } else {
-            instance.stdout.on('data', function (chunk) {
+            instance.stdout!.on('data', function (chunk) {
                 mergedStdio += chunk
             })
         }
@@ -79,18 +83,14 @@ function runTaroCommand(argv, options = {}) {
             })
         })
 
-        instance.on('error', (err) => {
-            err.stdout = stdoutOutput
-            err.stderr = stderrOutput
+        instance.on('error', err => {
+            (err as any).stdout = stdoutOutput
+            ;(err as any).stderr = stderrOutput
             reject(err)
         })
     })
 }
 
-function taroBuild(opts = {}) {
+export function taroBuild(opts = {}) {
     return runTaroCommand(['build', '--type', 'nextjs'], opts)
-}
-
-module.exports = {
-    taroBuild
 }

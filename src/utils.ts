@@ -1,25 +1,24 @@
-const path = require('path')
-const fs = require('fs')
-const ts = require('typescript')
-const {SCRIPT_EXT} = require('./constants')
+import * as path from 'path'
+import * as fs from 'fs'
+import ts from 'typescript'
+import {SCRIPT_EXT} from './constants'
 
-function unIndent(strings, ...values) {
+export function unIndent(strings: { raw: readonly string[] | ArrayLike<string>}, ...values: any[]): string {
     const text = String.raw(strings, ...values)
     const lines = text.replace(/^\n/u, '').replace(/\n\s*$/u, '').split('\n')
-    const lineIndents = lines.filter(line => line.trim()).map(line => line.match(/ */u)[0].length)
+    const lineIndents = lines.filter(line => line.trim()).map(line => line.match(/ */u)![0].length)
     const minLineIndent = Math.min(...lineIndents)
-
     return lines.map(line => line.slice(minLineIndent)).join('\n')
 }
 
-function ensureLeadingSlash(path) {
+export function ensureLeadingSlash(path: string): string {
     if (path == null) {
         return ''
     }
     return path.charAt(0) === '/' ? path : '/' + path
 }
 
-function resolveScriptPath(filePath, extArrs = SCRIPT_EXT) {
+export function resolveScriptPath(filePath: string, extArrs = SCRIPT_EXT): string {
     const taroEnv = 'h5'
     for (let i = 0; i < extArrs.length; i++) {
         const item = extArrs[i]
@@ -44,23 +43,25 @@ function resolveScriptPath(filePath, extArrs = SCRIPT_EXT) {
     return filePath
 }
 
-function parseJson(filePath) {
+export function parseJson(filePath: string): any {
     const sourceText = fs.readFileSync(filePath, 'utf-8')
     const jsonFile = ts.parseJsonText(filePath, sourceText)
-    return ts.convertToObject(jsonFile)
+    const errors: ts.Diagnostic[] = []
+    const result = ts.convertToObject(jsonFile, errors)
+    return result;
 }
 
-// Identify /[param]/ in route string
-const TEST_ROUTE_PATTERN = `\\[[^/]+?\\](${SCRIPT_EXT.join('|')})$`
+export function resolveAliasToTSConfigPaths(alias: Record<string, string>, tsconfigPath: string): Record<string, string[]> {
+    const {baseUrl = '.'} = parseJson(tsconfigPath).compilerOptions
+    const pathsBaseUrl = path.resolve(path.dirname(tsconfigPath), baseUrl)
 
-function isDynamicRoute(route) {
-    return new RegExp(TEST_ROUTE_PATTERN).test(route)
-}
+    const paths: Record<string, string[]> = {}
 
-module.exports = {
-    unIndent,
-    ensureLeadingSlash,
-    resolveScriptPath,
-    parseJson,
-    isDynamicRoute
+    Object.keys(alias).forEach(item => {
+        const key = item + '/*'
+        const value = path.relative(pathsBaseUrl, alias[item])
+        paths[key] = [value + '/*']
+    })
+
+    return paths
 }

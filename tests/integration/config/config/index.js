@@ -6,7 +6,7 @@ const config = {
     projectName: 'config',
     framework: 'react',
     plugins: [
-        path.resolve(__dirname, '../../../../src')
+        path.resolve(__dirname, '../../../../lib')
     ]
 }
 

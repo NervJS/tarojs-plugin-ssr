@@ -1,6 +1,6 @@
-const path = require('path')
-const fs = require('fs')
-const ejs = require('ejs')
+import * as path from 'path'
+import * as fs from 'fs'
+import ejs from 'ejs'
 
 const nextConfigEjsPath = path.resolve(__dirname, '../../template/next.config.ejs')
 const template = fs.readFileSync(nextConfigEjsPath, 'utf-8')
