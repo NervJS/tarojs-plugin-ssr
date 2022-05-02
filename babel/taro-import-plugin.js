@@ -1,8 +1,9 @@
 module.exports = function (babel) {
     const t = babel.types
 
-    function transformProgram(programPath) {
-        programPath.traverse({
+    return {
+        name: 'taro-import-plugin',
+        visitor: {
             ImportDeclaration(path) {
                 const source = path.get('source')
                 if (source.isStringLiteral()) {
@@ -15,17 +16,6 @@ module.exports = function (babel) {
                             t.stringLiteral('tarojs-plugin-platform-nextjs/taro')
                         )
                     }
-                }
-            }
-        })
-    }
-
-    return {
-        name: 'taro-import-plugin',
-        visitor: {
-            Program: {
-                enter(programPath) {
-                    transformProgram(programPath)
                 }
             }
         }
