@@ -107,7 +107,21 @@ export function useReady(callback: () => void): void {
 
 export function useRouter(): TaroRouter {
     const nextRouter = useNextRouter()
-    return getCurrentInstance(nextRouter).router
+
+    const params = Object.keys(nextRouter.query).reduce((result, key) => {
+        const value = nextRouter.query[key]
+        if (typeof value === 'string') {
+            result[key] = value
+        }
+        return result
+    }, {} as Record<string, string>)
+
+    const path = nextRouter.pathname
+
+    return {
+        params,
+        path
+    }
 }
 
 type onPageScrollParam = {

@@ -4,7 +4,10 @@ import Taro from "@tarojs/taro";
 let _Index;
 
 class Index extends Component {
-  $instance = Taro.getCurrentInstance(this.props.router);
+  $instance = Taro.getCurrentInstance({
+    type: "class",
+    component: this,
+  });
 
   render() {
     return null;

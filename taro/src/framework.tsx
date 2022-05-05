@@ -6,60 +6,102 @@ import {
     PureComponent,
     FC,
     FunctionComponent,
-    ComponentClass
+    ComponentClass,
+    ReactElement
 } from 'react'
-import type {NextRouter} from 'next/router'
+import Router from 'next/router'
 import type {TaroRouter} from './typings'
 
 interface TaroInstance {
     router: TaroRouter
 }
 
-export function getCurrentInstance(nextRouter: NextRouter): TaroInstance {
-    if (typeof window !== 'undefined') {
-        const obj = new URLSearchParams(location.search)
-        const params: Record<string, string> = Array.from(obj.entries())
-            .reduce((result, [key, value]) => {
-                result[key] = value
-                return result
-            }, {} as Record<string, string>)
+interface Meta {
+    type: 'class' | 'func',
+    component: ReactElement
+}
 
-        return {
-            router: {
-                params,
-                path: location.pathname
-            }
-        }
-    }
+/**
+ * 在类组件中，从属性中获取 Next.js 的路由对象。
+ */
+export function getCurrentInstance(meta?: Meta): TaroInstance {
+    const instance = {
+        router: {}
+    } as TaroInstance
 
-    if (nextRouter) {
-        let params: Record<string, string> = {}
-        if (nextRouter.query) {
-            params = Object.keys(nextRouter.query).reduce((result, key) => {
-                const value = nextRouter.query[key]
-                if (typeof value === 'string') {
-                    result[key] = value
+    if (!meta) {
+        if (typeof window === 'undefined') {
+            Object.defineProperty(instance.router, 'params', {
+                get() {
+                    const nextRouter = Router.router
+                    if (!nextRouter) {
+                        throw new Error('Next.js router is not initialized!')
+                    }
+                    return Object.keys(nextRouter.query).reduce((result, key) => {
+                        const value = nextRouter.query[key]
+                        if (typeof value === 'string') {
+                            result[key] = value
+                        }
+                        return result
+                    }, {} as Record<string, string>)
                 }
-                return result
-            }, {} as Record<string, string>)
+            })
+
+            Object.defineProperty(instance.router, 'path', {
+                get() {
+                    const nextRouter = Router.router
+                    if (!nextRouter) {
+                        throw new Error('Next.js router is not initialized!')
+                    }
+                    return nextRouter.pathname
+                }
+            })
+
+            return instance
+        } else {
+            throw new Error('`getCurrentInstance()` should be used in component scope!')
+        }
+    }
+
+    if (meta.type === 'class') {
+        if (!meta.component) {
+            throw new Error('`getCurrentInstance()` cannot get component instance!')
         }
 
-        return {
-            router: {
-                params,
-                path: nextRouter.pathname
+        if (!meta.component.props.router) {
+            throw new Error('`getCurrentInstance()` cannot get Next.js router in props!')
+        }
+
+        Object.defineProperty(instance.router, 'params', {
+            get() {
+                const nextRouter = meta.component.props.router
+                if (!nextRouter) {
+                    throw new Error('Next.js router is not initialized!')
+                }
+                return Object.keys(nextRouter.query).reduce((result, key) => {
+                    const value = nextRouter.query[key]
+                    if (typeof value === 'string') {
+                        result[key] = value
+                    }
+                    return result
+                }, {} as Record<string, string>)
             }
-        }
-    }
+        })
+    
+        Object.defineProperty(instance.router, 'pathname', {
+            get() {
+                const nextRouter = meta.component.props.router
+                if (!nextRouter) {
+                    throw new Error('Next.js router is not initialized!')
+                }
+                return nextRouter.pathname
+            }
+        })
 
-    console.error('`getCurrentInstance` should be in class component when it is called on server!')
-
-    return {
-        router: {
-            params: {},
-            path: ''
-        }
+        return instance
     }
+    
+    throw new Error('`getCurrentInstance()` cannot used in function component currently!')
 }
 
 interface TaroPage {

@@ -52,10 +52,6 @@ module.exports = function (babel) {
 
     let isWithRouterImported = false
 
-    let isInClassComponent = false
-
-    let isCalledGetCurrentInstance = false
-
     return {
         name: 'class-component-taro-router-plugin',
         visitor: {
@@ -76,7 +72,6 @@ module.exports = function (babel) {
                                 t.stringLiteral('next/router')
                             )
                         )
-                        path.skip()
                     }
                 }
             },
@@ -89,89 +84,102 @@ module.exports = function (babel) {
                 }
             },
 
-            ClassDeclaration: {
-                enter(path) {
-                    if (
-                        t.isIdentifier(path.node.superClass)
-                        && ['Component', 'PureComponent'].includes(path.node.superClass.name)
-                    ) {
-                        isInClassComponent = true
-                    }
-                },
-                exit(path) {
-                    if (isInClassComponent && isCalledGetCurrentInstance) {
-                        needsWithRouter = true
+            ClassDeclaration(path) {
+                let isCalledGetCurrentInstance = false
 
-                        const isDecorated = Array.from(path.parentPath.node.body).some(exp => (
-                            t.isExpressionStatement(exp)
-                            && t.isAssignmentExpression(exp.expression)
-                            && t.isCallExpression(exp.expression.right)
-                            && t.isIdentifier(exp.expression.right.callee, {
-                                name: 'withRouter'
+                if (
+                    !t.isIdentifier(path.node.superClass)
+                    || !['Component', 'PureComponent'].includes(path.node.superClass.name)
+                ) {
+                    return
+                }
+
+                path.traverse({
+                    CallExpression(path) {
+                        if (
+                            t.isIdentifier(path.node.callee, {
+                                type: 'Identifier',
+                                name: 'getCurrentInstance'
                             })
-                            && exp.expression.right.arguments.some(arg => t.isIdentifier(arg, {
-                                name: path.node.id.name
-                            }))
-                        ))
-
-                        if (!isDecorated) {
-                            const [localId, classPath] = replaceClassWithVar(path)
-                            classPath.insertAfter(
-                                t.expressionStatement(
-                                    t.assignmentExpression(
-                                        '=',
-                                        localId,
-                                        t.callExpression(
-                                            t.identifier('withRouter'),
-                                            [t.identifier(classPath.node.id.name)]
-                                        )
-                                    )
-                                )
+                            || (
+                                t.isMemberExpression(path.node.callee)
+                                && t.isIdentifier(path.node.callee.property, {name: 'getCurrentInstance'})
                             )
+                        ) {
+                            isCalledGetCurrentInstance = true
+
+                            if (
+                                t.isIdentifier(path.node.callee, {
+                                    type: 'Identifier',
+                                    name: 'getCurrentInstance'
+                                })
+                                || (
+                                    t.isMemberExpression(path.node.callee)
+                                    && t.isIdentifier(path.node.callee.property, {name: 'getCurrentInstance'})
+                                )
+                            ) {
+                                isCalledGetCurrentInstance = true
+            
+                                if (path.node.arguments.length === 0) {
+                                    const exp = t.cloneNode(path.node)
+                                    exp.arguments.push(
+                                        t.objectExpression([
+                                            t.objectProperty(
+                                                t.identifier('type'),
+                                                t.stringLiteral('class')
+                                            ),
+                                            t.objectProperty(
+                                                t.identifier('component'),
+                                                t.thisExpression()
+                                            )
+                                        ])
+                                    )
+                                    path.replaceWith(exp)
+                                    path.skip()
+                                }
+                            }
                         }
                     }
+                })
 
-                    isInClassComponent = false
-                    isCalledGetCurrentInstance = false
+                if (!isCalledGetCurrentInstance) {
+                    return
+                }
+
+                needsWithRouter = true
+
+                const isDecorated = Array.from(path.parentPath.node.body).some(exp => (
+                    t.isExpressionStatement(exp)
+                    && t.isAssignmentExpression(exp.expression)
+                    && t.isCallExpression(exp.expression.right)
+                    && t.isIdentifier(exp.expression.right.callee, {
+                        name: 'withRouter'
+                    })
+                    && exp.expression.right.arguments.some(arg => t.isIdentifier(arg, {
+                        name: path.node.id.name
+                    }))
+                ))
+
+                if (!isDecorated) {
+                    const [localId, classPath] = replaceClassWithVar(path)
+                    classPath.insertAfter(
+                        t.expressionStatement(
+                            t.assignmentExpression(
+                                '=',
+                                localId,
+                                t.callExpression(
+                                    t.identifier('withRouter'),
+                                    [t.identifier(classPath.node.id.name)]
+                                )
+                            )
+                        )
+                    )
                 }
             },
             'ExportNamedDeclaration|ExportDefaultDeclaration'(path) {
                 if (!path.get('declaration').isClassDeclaration()) return
 
                 splitExportDeclaration(path)
-            },
-            CallExpression(path) {
-                if (!isInClassComponent) {
-                    return
-                }
-
-                if (
-                    t.isIdentifier(path.node.callee, {
-                        type: 'Identifier',
-                        name: 'getCurrentInstance'
-                    })
-                    || (
-                        t.isMemberExpression(path.node.callee)
-                        && t.isIdentifier(path.node.callee.property, {name: 'getCurrentInstance'})
-                    )
-                ) {
-                    isCalledGetCurrentInstance = true
-
-                    if (path.node.arguments.length === 0) {
-                        const exp = t.cloneNode(path.node)
-                        exp.arguments.push(
-                            t.memberExpression(
-                                t.memberExpression(
-                                    t.thisExpression(),
-                                    t.identifier('props')
-                                ),
-                                t.identifier('router')
-                            )
-                        )
-                        path.replaceWith(exp)
-                        path.skip()
-                    }
-                }
             }
         }
     }

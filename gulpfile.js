@@ -153,6 +153,14 @@ gulp.task('taro', gulp.series(
     buildTaro
 ))
 
+function cleanPlugin() {
+    const lib = getPluginProjectPath('lib')
+    return gulp.src(lib, {
+        allowEmpty: true,
+        read: false
+    }).pipe(clean())
+}
+
 const buildPlugin = () => {
     const tsConfig = getTSCommonConfig()
     return gulp.src('src/**')
@@ -160,6 +168,9 @@ const buildPlugin = () => {
         .pipe(gulp.dest(getPluginProjectPath('lib')))
 }
 
-gulp.task('plugin', buildPlugin)
+gulp.task('plugin', gulp.series(
+    cleanPlugin,
+    buildPlugin
+))
 
 gulp.task('default', gulp.parallel('plugin', 'taro', 'components'))

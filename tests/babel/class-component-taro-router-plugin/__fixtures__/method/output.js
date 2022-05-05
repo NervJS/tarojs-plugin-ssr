@@ -6,12 +6,18 @@ let _Index;
 class Index extends Component {
   constructor(props) {
     super(props);
-    const $instance = Taro.getCurrentInstance(this.props.router);
+    const $instance = Taro.getCurrentInstance({
+      type: "class",
+      component: this,
+    });
     console.log($instance);
   }
 
   render() {
-    const $instance = Taro.getCurrentInstance(this.props.router);
+    const $instance = Taro.getCurrentInstance({
+      type: "class",
+      component: this,
+    });
     console.log($instance);
     return null;
   }
