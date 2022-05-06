@@ -31,36 +31,36 @@ export function getCurrentInstance(meta?: Meta): TaroInstance {
 
     if (!meta) {
         if (typeof window === 'undefined') {
-            Object.defineProperty(instance.router, 'params', {
-                get() {
-                    const nextRouter = Router.router
-                    if (!nextRouter) {
-                        throw new Error('Next.js router is not initialized!')
-                    }
-                    return Object.keys(nextRouter.query).reduce((result, key) => {
-                        const value = nextRouter.query[key]
-                        if (typeof value === 'string') {
-                            result[key] = value
-                        }
-                        return result
-                    }, {} as Record<string, string>)
-                }
-            })
-
-            Object.defineProperty(instance.router, 'path', {
-                get() {
-                    const nextRouter = Router.router
-                    if (!nextRouter) {
-                        throw new Error('Next.js router is not initialized!')
-                    }
-                    return nextRouter.pathname
-                }
-            })
-
-            return instance
-        } else {
-            throw new Error('`getCurrentInstance()` should be used in component scope!')
+            throw new Error('`getCurrentInstance()` should be called in component scope!')
         }
+
+        Object.defineProperty(instance.router, 'params', {
+            get() {
+                const nextRouter = Router.router
+                if (!nextRouter) {
+                    throw new Error('Next.js router is not initialized!')
+                }
+                return Object.keys(nextRouter.query).reduce((result, key) => {
+                    const value = nextRouter.query[key]
+                    if (typeof value === 'string') {
+                        result[key] = value
+                    }
+                    return result
+                }, {} as Record<string, string>)
+            }
+        })
+
+        Object.defineProperty(instance.router, 'path', {
+            get() {
+                const nextRouter = Router.router
+                if (!nextRouter) {
+                    throw new Error('Next.js router is not initialized!')
+                }
+                return nextRouter.pathname
+            }
+        })
+
+        return instance
     }
 
     if (meta.type === 'class') {
@@ -101,7 +101,7 @@ export function getCurrentInstance(meta?: Meta): TaroInstance {
         return instance
     }
     
-    throw new Error('`getCurrentInstance()` cannot used in function component currently!')
+    throw new Error('`getCurrentInstance()` cannot called in function component currently!')
 }
 
 interface TaroPage {
@@ -109,7 +109,15 @@ interface TaroPage {
 }
 
 export function getCurrentPages(): TaroPage[] {
-    return []
+    if (typeof window === 'undefined') {
+        throw new Error('`getCurrentPages()` can be only called in browser environment!')
+    }
+
+    const page: TaroPage = {
+        route: location.pathname
+    }
+
+    return [page]
 }
 
 export enum ENV_TYPE {

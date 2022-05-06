@@ -1,6 +1,5 @@
 import {useEffect, useRef} from 'react'
 import {useRouter as useNextRouter} from 'next/router'
-import {getCurrentInstance} from './framework'
 import type {TaroRouter} from './typings'
 
 function useDepRef<T = any>(prop: T) {
@@ -150,3 +149,7 @@ export function usePageScroll(callback: PageScrollCallback): void {
         }
     }, [])
 }
+
+export function useShareAppMessage(): void {}
+
+export function useShareTimeline(): void {}

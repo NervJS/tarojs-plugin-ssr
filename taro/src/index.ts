@@ -100,7 +100,9 @@ import {
     useResize,
     useReady,
     useRouter,
-    usePageScroll
+    usePageScroll,
+    useShareAppMessage,
+    useShareTimeline
 } from './hooks'
 
 import {
@@ -187,6 +189,8 @@ export {
     useReady,
     useRouter,
     usePageScroll,
+    useShareAppMessage,
+    useShareTimeline,
 
     setCustomRoutes,
     switchTab,
@@ -280,6 +284,8 @@ export default {
     useReady,
     useRouter,
     usePageScroll,
+    useShareAppMessage,
+    useShareTimeline,
 
     switchTab,
     reLaunch,
