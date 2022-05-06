@@ -9,13 +9,18 @@ import ejs from 'ejs'
 import chalk from 'chalk'
 import spawn from 'cross-spawn'
 import open from 'open'
-import getNextjsExportedFunctions from './getNextjsExportedFunctions'
-import resolveAliasToTSConfigPaths from './resolveAliasToTSConfigPaths'
-import resolveDynamicPagesToRewrites from './resolveDynamicPagesToRewrites'
-import getNextjsSassOptions from './scssUtils'
-import {ensureLeadingSlash, resolveScriptPath, parseJson, isDynamicRoute, unIndent} from './utils'
+import type {IPluginContext} from '@tarojs/service'
+import {getNextExportedFunctions, resolveDynamicPagesToRewrites, isDynamicRoute} from './nextUtils'
+import getNextSassOptions from './scssUtils'
+import {
+    ensureLeadingSlash,
+    resolveScriptPath,
+    parseJson,
+    unIndent,
+    resolveAliasToTSConfigPaths
+} from './utils'
 
-const isWindows = process.platform === 'win32';
+const isWindows = process.platform === 'win32'
 
 const DEFAULT_ROUTER_CONFIG = {
     mode: 'browser',
@@ -33,7 +38,7 @@ const DEFAULT_AUTOPREFIXER_OPTION = {
 
 const DEFAULT_PORT = '10086'
 
-module.exports = ctx => {
+module.exports = (ctx: IPluginContext) => {
     const {paths, helper, runOpts} = ctx
     const {appPath, outputPath, sourcePath} = paths
 
@@ -84,7 +89,7 @@ module.exports = ctx => {
 
             const templateDir = path.resolve(__dirname, '../template')
 
-            const taroPages = []
+            const taroPages: string[] = []
             if (Array.isArray(appConfig.pages)) {
                 for (const page of appConfig.pages) {
                     taroPages.push(ensureLeadingSlash(page))
@@ -109,10 +114,10 @@ module.exports = ctx => {
                 }
             }
 
-            const {additionalData} = await getNextjsSassOptions(sass)
+            const {additionalData} = await getNextSassOptions(sass)
 
             function createNextjsPages() {
-                const result = []
+                const result: string[] = []
 
                 const nextjsPagesDir = `${outputPath}/pages`
 
@@ -141,7 +146,7 @@ module.exports = ctx => {
                         fs.mkdirSync(nextjsPageDir, {recursive: true})
                     }
 
-                    const exportedFunctions = getNextjsExportedFunctions(targetPageFilePath)
+                    const exportedFunctions = getNextExportedFunctions(targetPageFilePath)
 
                     let request = path.join(outputSourcePath, taroPage)
                     if (dynamicPageFileBaseName) {
@@ -218,7 +223,8 @@ module.exports = ctx => {
                         .pipe(dest(outputPath)),
                     src(`${templateDir}/postcss.config.ejs`)
                         .pipe(es.through(function (data) {
-                            const plugins = Object.entries(postcss).reduce((result, [pluginName, pluginOption]) => {
+                            const plugins = Object.entries(postcss).reduce((result, info) => {
+                                const [pluginName, pluginOption] = info as any;
                                 if (
                                     !DEFAULT_POSTCSS_OPTIONS.includes(pluginName) &&
                                     pluginOption?.enable
@@ -242,7 +248,7 @@ module.exports = ctx => {
                                 }
 
                                 return result
-                            }, [])
+                            }, [] as {request: string, option: Record<string, any>}[])
 
                             const autoprefixerOption = merge({}, DEFAULT_AUTOPREFIXER_OPTION, postcss.autoprefixer)
                             const ejsData = {
@@ -292,7 +298,7 @@ module.exports = ctx => {
             }
             scaffold().on('end', async () => {
                 const port = devServer.port || DEFAULT_PORT
-                const args = []
+                const args: string[] = []
                 if (mode === 'development') {
                     args.push('dev')
                     args.push('-p', port)
@@ -316,7 +322,7 @@ module.exports = ctx => {
                         open(`http://127.0.0.1:${port}${indexRoute}`)
                     }
 
-                    function hasSpecifiedFile(filePath) {
+                    function hasSpecifiedFile(filePath: string): boolean {
                         const dir = path.dirname(filePath)
                         const ext = path.extname(filePath)
                         const base = path.basename(filePath, ext)
@@ -341,7 +347,7 @@ module.exports = ctx => {
                         })
                     }
 
-                    function getOutputFilePath(filePath) {
+                    function getOutputFilePath(filePath: string): string | null {
                         const relativePath = filePath.substring(appPath.length + 1)
 
                         const ext = path.extname(filePath)
@@ -366,7 +372,7 @@ module.exports = ctx => {
                         return path.join(outputPath, relativePath)
                     }
 
-                    function handleWatch(operation, filePath) {
+                    function handleWatch(operation: 'changed' | 'added' | 'removed', filePath: string): void {
                         const outputFilePath = getOutputFilePath(filePath)
                         if (!outputFilePath) {
                             return
@@ -388,7 +394,7 @@ module.exports = ctx => {
                         }
                     }
 
-                    const watcher = watch(`${sourcePath}/**`, {readDelay: 200})
+                    const watcher = watch(`${sourcePath}/**`, {delay: 200})
                     watcher.on('change', filePath => handleWatch('changed', filePath))
                     watcher.on('add', filePath => handleWatch('added', filePath))
                     watcher.on('unlink', filePath => handleWatch('removed', filePath))

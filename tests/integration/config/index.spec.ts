@@ -1,6 +1,6 @@
-const path = require('path')
-const fs = require('fs')
-const {taroBuild} = require('../../taroTestUtils')
+import * as path from 'path'
+import * as fs from 'fs'
+import {taroBuild} from '../../taroTestUtils'
 
 const distDir = path.resolve(__dirname, './dist')
 

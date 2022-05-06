@@ -1,5 +1,4 @@
-const path = require('path')
-const {unIndent, isDynamicRoute} = require('../src/utils')
+import {unIndent} from '../src/utils'
 
 describe('utils', () => {
     it('unIndent', () => {
@@ -16,10 +15,5 @@ describe('utils', () => {
                 return ${a} + ${b}
             }
         `).toEqual('function (a, b) {\n    return a + b\n}')
-    })
-
-    it('isDynamicRoute', () => {
-        expect(isDynamicRoute('index.ts')).toEqual(false)
-        expect(isDynamicRoute('[param].ts')).toEqual(true)
     })
 })

@@ -1,6 +1,6 @@
-/** @type {import('@jest/types').Config.InitialOptions} */
-const config = {
-    testRegex: '(\\.|/)(test|spec)\\.[jt]sx?$'
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testRegex: '(\\.|/)(test|spec)\\.[jt]sx?$'
 }
-  
-module.exports = config

@@ -6,7 +6,7 @@ Taro 插件，用于编译为 Next.js 应用。
 
 ## 动机
 
-让 Taro 在 Web 端支持 [SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，以提升页面首屏速度。
+让 Taro 在 Web 端支持 [SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，提升页面首屏速度，利于 SEO。
 
 ## 安装与使用
 
