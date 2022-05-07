@@ -135,7 +135,7 @@ module.exports = (ctx: IPluginContext) => {
                         result.push(`${taroRoute}/${dynamicPageFileBaseName}`)
                     }
 
-                    const targetPageFile = dynamicPageFileName || 'index.js'
+                    const targetPageFile = dynamicPageFileBaseName ? `${dynamicPageFileBaseName}.js` : 'index.js'
                     const targetPageFilePath = dynamicPageFileName
                         ? path.join(taroPageDir, dynamicPageFileName)
                         : taroPageFilePath

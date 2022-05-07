@@ -14,6 +14,12 @@ describe('next uitls', () => {
             const functions = getNextExportedFunctions(funcFilePath)
             expect(functions).toEqual(['getStaticPaths', 'getStaticProps'])
         })
+
+        it('named declarator', () => {
+            const funcFilePath = path.resolve(__dirname, './__fixtures__/getNextExportedFunctions/named.js')
+            const functions = getNextExportedFunctions(funcFilePath)
+            expect(functions).toEqual(['getStaticPaths', 'getStaticProps'])
+        })
     })
 
     it('resolveDynamicPagesToRewrites', () => {

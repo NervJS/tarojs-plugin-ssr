@@ -16,26 +16,34 @@ export function getNextExportedFunctions(filename: string): string[] {
 
     babel.traverse(ast, {
         ExportNamedDeclaration(path) {
-            const declaration = path.get('declaration')
-            if (!declaration || !declaration.node) {
-                return;
-            }
-
-            if (declaration.isFunctionDeclaration()) {
-                const name = declaration.node.id!.name
-                if (NEXT_EXPORT_FUNCTIONS.includes(name)) {
-                    result.push(name)
+            const specifiers = path.get('specifiers')
+            if (specifiers && specifiers.length) {
+                for (const specifier of specifiers) {
+                    const exported = specifier.node.exported
+                    if (exported.type === 'Identifier' && NEXT_EXPORT_FUNCTIONS.includes(exported.name)) {
+                        result.push(exported.name)
+                    }
                 }
             }
 
-            if (declaration.isVariableDeclaration()) {
-                for (const declarator of declaration.node.declarations) {
-                    if (declarator.id.type !== 'Identifier') {
-                        return
-                    }
-                    const name = declarator.id.name
+            const declaration = path.get('declaration')
+            if (declaration && declaration.node) {
+                if (declaration.isFunctionDeclaration()) {
+                    const name = declaration.node.id!.name
                     if (NEXT_EXPORT_FUNCTIONS.includes(name)) {
                         result.push(name)
+                    }
+                }
+    
+                if (declaration.isVariableDeclaration()) {
+                    for (const declarator of declaration.node.declarations) {
+                        if (declarator.id.type !== 'Identifier') {
+                            return
+                        }
+                        const name = declarator.id.name
+                        if (NEXT_EXPORT_FUNCTIONS.includes(name)) {
+                            result.push(name)
+                        }
                     }
                 }
             }
