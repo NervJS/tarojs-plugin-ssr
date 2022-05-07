@@ -6,7 +6,12 @@ const through2 = require('through2')
 const merge2 = require('merge2')
 const webpack = require('webpack')
 const path = require('path')
-const {getPluginProjectPath, getComponentsProjectPath, getTaroProjectPath} = require('./build/projectHelper')
+const {
+    getPluginProjectPath,
+    getComponentsProjectPath,
+    getTaroProjectPath,
+    getRouterProjectPath
+} = require('./build/projectHelper')
 const getBabelCommonConfig = require('./build/getBabelCommonConfig')
 const getTSCommonConfig = require('./build/getTSCommonConfig')
 const getWebpackConfig = require('./build/getWebpackConfig')
@@ -151,6 +156,32 @@ function cleanTaro() {
 gulp.task('taro', gulp.series(
     cleanTaro,
     buildTaro
+))
+
+function buildRouter() {
+    const source = [
+        'router/src/**/*.jsx',
+        'router/src/**/*.js',
+        'router/src/**/*.tsx',
+        'router/src/**/*.ts'
+    ]
+    const sourceStream = gulp.src(source)
+
+    const libDir = getRouterProjectPath('lib')
+    return babelify(sourceStream, false).pipe(gulp.dest(libDir))
+}
+
+function cleanRouter() {
+    const lib = getRouterProjectPath('lib')
+    return gulp.src(lib, {
+        allowEmpty: true,
+        read: false
+    }).pipe(clean())
+}
+
+gulp.task('router', gulp.series(
+    cleanRouter,
+    buildRouter
 ))
 
 function cleanPlugin() {

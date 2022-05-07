@@ -1,4 +1,4 @@
-import { withRouter } from "next/router";
+import { withRouter } from "tarojs-plugin-platform-nextjs/router";
 import Taro from "@tarojs/taro";
 
 let _Index;

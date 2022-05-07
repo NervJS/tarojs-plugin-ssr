@@ -69,7 +69,7 @@ module.exports = function (babel) {
                                     t.identifier('withRouter'),
                                     t.identifier('withRouter')
                                 )],
-                                t.stringLiteral('next/router')
+                                t.stringLiteral('tarojs-plugin-platform-nextjs/router')
                             )
                         )
                     }
@@ -77,7 +77,7 @@ module.exports = function (babel) {
             },
 
             ImportDeclaration(path) {
-                if (t.isStringLiteral(path.node.source, {value: 'next/router'})) {
+                if (t.isStringLiteral(path.node.source, {value: 'tarojs-plugin-platform-nextjs/router'})) {
                     if (path.node.specifiers.find(specifier => t.isIdentifier(specifier.imported, {name: 'withRouter'}))) {
                         isWithRouterImported = true
                     }

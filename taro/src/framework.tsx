@@ -2,6 +2,7 @@ import {
     useRef,
     useEffect,
     createElement,
+    forwardRef,
     Component,
     PureComponent,
     FC,
@@ -128,6 +129,22 @@ export function getEnv(): ENV_TYPE {
     return ENV_TYPE.WEB
 }
 
+let forwardRefType: Symbol | undefined
+
+function isForwardRefTypeComponent(component) {
+    if (!forwardRefType) {
+        forwardRefType = forwardRef(() => null).$$typeof
+    }
+    return component.$$typeof === forwardRefType
+}
+
+function isClassComponent(component) {
+    return typeof component === 'function' && (
+        component.prototype instanceof Component ||
+        component.prototype instanceof PureComponent
+    )
+}
+
 interface TaroPageWrapperProps {
     TaroPage: FunctionComponent<any> | ComponentClass<any>
 }
@@ -179,11 +196,10 @@ export const TaroPageWrapper: FC<TaroPageWrapperProps> = ({TaroPage, ...rest}) =
         }
     }, [])
 
-    const isClassComponent = typeof TaroPage === 'function' && (
-        TaroPage.prototype instanceof Component || TaroPage.prototype instanceof PureComponent)
+    const hasRef = isForwardRefTypeComponent(TaroPage) || isClassComponent(TaroPage)
 
     return createElement(TaroPage, {
-        ref: isClassComponent ? ref : undefined,
+        ref: hasRef ? ref : undefined,
         ...rest
     })
 }

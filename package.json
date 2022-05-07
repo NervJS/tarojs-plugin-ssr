@@ -17,7 +17,9 @@
         "lib",
         "template",
         "taro/lib",
-        "taro/index.js"
+        "taro/index.js",
+        "router/lib",
+        "router/index.js"
     ],
     "keywords": [
         "taro",
