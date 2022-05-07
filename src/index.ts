@@ -85,7 +85,7 @@ module.exports = (ctx: IPluginContext) => {
 
             const outputSourcePath = path.join(outputPath, 'src')
             const outputAppFilePath = path.join(outputSourcePath, helper.ENTRY) + path.extname(appFilePath)
-            const nextAppFilePath = path.join(outputPath, 'pages/_app.tsx')
+            const nextAppFilePath = path.join(outputPath, 'pages/_app.jsx')
 
             const templateDir = path.resolve(__dirname, '../template')
 
@@ -203,7 +203,19 @@ module.exports = (ctx: IPluginContext) => {
                             }
                         }))
                         .pipe(dest(outputSourcePath)),
-                    src(`${templateDir}/pages/**`).pipe(dest(path.join(outputPath, 'pages'))),
+                    src(`${templateDir}/pages/_app.ejs`)
+                        .pipe(es.through(function (data) {
+                            const ejsData = {
+                                designWidth
+                            }
+                            const result = ejs.render(data.contents.toString(), ejsData)
+                            data.contents = Buffer.from(result)
+
+                            this.emit('data', data)
+                        }))
+                        .pipe(rename('_app.jsx'))
+                        .pipe(dest(path.join(outputPath, 'pages'))),
+                    src(`${templateDir}/pages/_document.jsx`).pipe(dest(path.join(outputPath, 'pages'))),
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
                             const rewrites = resolveDynamicPagesToRewrites(dynamicPages)

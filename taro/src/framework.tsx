@@ -179,6 +179,20 @@ export const TaroPageWrapper: FC<TaroPageWrapperProps> = ({TaroPage, ...rest}) =
             pageInstance.onResize()
         }
 
+        function handleVisibilityChanged() {
+            if (
+                document.visibilityState === 'visible' &&
+                typeof pageInstance.componentDidShow !== 'function'
+            ) {
+                pageInstance.componentDidShow()
+            } else if (
+                document.visibilityState !== 'visible' &&
+                typeof pageInstance.componentDidHide !== 'function'
+            ) {
+                pageInstance.componentDidHide()
+            }
+        }
+
         if (
             typeof pageInstance.onPageScroll !== 'function' ||
             typeof pageInstance.onReachBottom !== 'function'
@@ -190,9 +204,21 @@ export const TaroPageWrapper: FC<TaroPageWrapperProps> = ({TaroPage, ...rest}) =
             document.addEventListener('resize', handleResize)
         }
 
+        if (typeof pageInstance.componentDidShow === 'function') {
+            pageInstance.componentDidShow()
+        }
+
+        if (
+            typeof pageInstance.componentDidShow === 'function' ||
+            typeof pageInstance.componentDidHide === 'function'
+        ) {
+            document.addEventListener('visibilitychange', handleVisibilityChanged)
+        }
+
         return () => {
             document.removeEventListener('scroll', handleScroll)
             document.removeEventListener('resize', handleResize)
+            document.removeEventListener('visibilitychange', handleVisibilityChanged)
         }
     }, [])
 
@@ -202,4 +228,22 @@ export const TaroPageWrapper: FC<TaroPageWrapperProps> = ({TaroPage, ...rest}) =
         ref: hasRef ? ref : undefined,
         ...rest
     })
+}
+
+let designWidth: number | undefined
+
+interface PxTransformOptions {
+    designWidth: number
+}
+
+export function initPxTransform(options: PxTransformOptions): void {
+    designWidth = options.designWidth
+}
+
+export function pxTransform(size: number): string {
+    if (designWidth == null) {
+        throw new Error('`designWidth` is not initialized')
+    }
+
+    return Math.ceil((((size / 40) * 640) / designWidth) * 10000) / 10000 + 'rem'
 }

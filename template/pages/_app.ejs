@@ -1,10 +1,12 @@
 import Head from 'next/head'
-import {setCustomRoutes} from 'tarojs-plugin-platform-nextjs/taro'
+import {setCustomRoutes, initPxTransform} from 'tarojs-plugin-platform-nextjs/taro'
 import TaroApp from '../src/app'
 import customRoutes from '../customRoutes.json'
 import 'tarojs-plugin-platform-nextjs/components/dist/lilin.css'
 
 setCustomRoutes(customRoutes)
+
+initPxTransform({designWidth: <%- designWidth %>})
 
 const MyApp = ({Component, pageProps}) => (
     <>

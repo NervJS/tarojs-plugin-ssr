@@ -110,7 +110,9 @@ import {
     getCurrentPages,
     getEnv,
     ENV_TYPE,
-    TaroPageWrapper
+    TaroPageWrapper,
+    initPxTransform,
+    pxTransform
 } from './framework'
 
 export {
@@ -205,7 +207,9 @@ export {
     getCurrentPages,
     getEnv,
     ENV_TYPE,
-    TaroPageWrapper
+    TaroPageWrapper,
+    initPxTransform,
+    pxTransform
 }
 
 export default {
@@ -299,5 +303,7 @@ export default {
     getCurrentPages,
     getEnv,
     ENV_TYPE,
-    TaroPageWrapper
+    TaroPageWrapper,
+    initPxTransform,
+    pxTransform
 }
