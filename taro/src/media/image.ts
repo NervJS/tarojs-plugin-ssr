@@ -88,6 +88,14 @@ export function chooseImage({
     complete,
     sourceType = ['album', 'camera']
 }: chooseImage.Param): void {
+    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
+        console.error('setStorage is always fail on the server-side.')
+        fail?.()
+        complete?.()
+        const msg = 'clearStorage is always fail on the server-side.'
+        console.error(msg)
+    }
+
     const result: chooseImage.ParamPropSuccessParam = {
         tempFilePaths: [],
         tempFiles: []
