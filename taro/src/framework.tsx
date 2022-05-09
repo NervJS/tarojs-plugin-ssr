@@ -182,12 +182,12 @@ export const TaroPageWrapper: FC<TaroPageWrapperProps> = ({TaroPage, ...rest}) =
         function handleVisibilityChanged() {
             if (
                 document.visibilityState === 'visible' &&
-                typeof pageInstance.componentDidShow !== 'function'
+                typeof pageInstance.componentDidShow === 'function'
             ) {
                 pageInstance.componentDidShow()
             } else if (
                 document.visibilityState !== 'visible' &&
-                typeof pageInstance.componentDidHide !== 'function'
+                typeof pageInstance.componentDidHide === 'function'
             ) {
                 pageInstance.componentDidHide()
             }

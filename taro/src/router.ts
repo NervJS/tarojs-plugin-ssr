@@ -2,6 +2,9 @@ import Router from 'next/router'
 
 let customRoutes: Record<string, string> = {}
 
+/**
+ * 内部方法，由插件调用
+ */
 export function setCustomRoutes(routes: Record<string, string> = {}) {
     customRoutes = routes
 }
@@ -10,11 +13,15 @@ export function switchTab() {
 }
 
 export function reLaunch() {
-
 }
 
-export function redirectTo() {
-
+export function redirectTo({url, complete, fail, success}): void {
+    return navigateTo({
+        url,
+        complete,
+        fail,
+        success
+    })
 }
 
 namespace navigateTo {

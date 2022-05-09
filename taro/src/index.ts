@@ -115,6 +115,12 @@ import {
     pxTransform
 } from './framework'
 
+import {
+    chooseImage
+} from './media/image'
+
+import {uploadFile} from './network/upload'
+
 export {
     getWindowInfo,
     getSystemSetting,
@@ -209,7 +215,11 @@ export {
     ENV_TYPE,
     TaroPageWrapper,
     initPxTransform,
-    pxTransform
+    pxTransform,
+
+    chooseImage,
+
+    uploadFile
 }
 
 export default {
@@ -305,5 +315,9 @@ export default {
     ENV_TYPE,
     TaroPageWrapper,
     initPxTransform,
-    pxTransform
+    pxTransform,
+
+    chooseImage,
+
+    uploadFile
 }

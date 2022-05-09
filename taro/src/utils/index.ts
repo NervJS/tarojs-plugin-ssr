@@ -61,20 +61,9 @@ export function serializeParams(params?: Record<string, any>): string {
         .join('&')
 }
 
-export function temporarilyNotSupport(apiName: string): () => void {
+export function temporarilyNotSupport(apiName: string): () => never {
     return () => {
-        const errMsg = `暂时不支持 API ${apiName}`
-        if (process.env.NODE_ENV !== 'production') {
-            console.error(errMsg)
-            return Promise.reject({
-                errMsg
-            })
-        } else {
-            console.warn(errMsg)
-            return Promise.resolve({
-                errMsg
-            })
-        }
+        throw new Error(`暂时不支持 API ${apiName}`)
     }
 }
 

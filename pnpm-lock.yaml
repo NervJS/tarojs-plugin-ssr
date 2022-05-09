@@ -61,6 +61,7 @@ specifiers:
   swiper: ^4.4.2
   through2: ^4.0.2
   ts-jest: ^27.1.4
+  ts-loader: ^9.3.0
   typescript: ^4.6.3
   url-loader: ^4.1.1
   webpack: ^5.72.0
@@ -132,6 +133,7 @@ devDependencies:
   sass-loader: 12.6.0_sass@1.50.0+webpack@5.72.0
   through2: 4.0.2
   ts-jest: 27.1.4_7fa30b0d2209d94f2b34019bbee69c7e
+  ts-loader: 9.3.0_typescript@4.6.3+webpack@5.72.0
   webpack: 5.72.0
 
 packages:
@@ -15529,6 +15531,21 @@ packages:
       semver: 7.3.5
       typescript: 4.6.3
       yargs-parser: 20.2.9
+    dev: true
+
+  /ts-loader/9.3.0_typescript@4.6.3+webpack@5.72.0:
+    resolution: {integrity: sha512-2kLLAdAD+FCKijvGKi9sS0OzoqxLCF3CxHpok7rVgCZ5UldRzH0TkbwG9XECKjBzHsAewntC5oDaI/FwKzEUog==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      typescript: '*'
+      webpack: ^5.0.0
+    dependencies:
+      chalk: 4.1.2
+      enhanced-resolve: 5.9.2
+      micromatch: 4.0.5
+      semver: 7.3.5
+      typescript: 4.6.3
+      webpack: 5.72.0
     dev: true
 
   /ts-pnp/1.2.0_typescript@4.6.3:
