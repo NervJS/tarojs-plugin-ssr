@@ -15,6 +15,7 @@ class View extends React.Component {
     startTime = 0;
     render() {
         const {
+            innerRef,
             hoverClass,
             onTouchStart,
             onTouchEnd,
@@ -79,7 +80,9 @@ class View extends React.Component {
         }
         return (
             <div
+                ref={innerRef}
                 {...omit(this.props, [
+                    'innerRef',
                     'hoverClass',
                     'onTouchStart',
                     'onTouchEnd',
@@ -100,4 +103,4 @@ class View extends React.Component {
     }
 }
 
-export default View
+export default React.forwardRef((props, ref) => <View innerRef={ref} {...props} />);

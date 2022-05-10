@@ -12,12 +12,13 @@ class Button extends React.Component {
     }
 
     componentWillUnmount() {
-        this.startTimer && clearTimeout(this.startTimer)
-        this.endTimer && clearTimeout(this.endTimer)
+        clearTimeout(this.startTimer)
+        clearTimeout(this.endTimer)
     }
 
     render() {
         const {
+            innerRef,
             children,
             disabled,
             className,
@@ -78,7 +79,8 @@ class Button extends React.Component {
 
         return (
             <button
-                {...omit(this.props, ['hoverClass', 'onTouchStart', 'onTouchEnd'])}
+                {...omit(this.props, ['innerRef', 'hoverClass', 'onTouchStart', 'onTouchEnd'])}
+                ref={innerRef}
                 className={cls}
                 style={style}
                 onClick={onClick}
@@ -93,4 +95,4 @@ class Button extends React.Component {
     }
 }
 
-export default Button
+export default React.forwardRef((props, ref) => <Button innerRef={ref} {...props} />);

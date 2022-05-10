@@ -1,4 +1,10 @@
-import {useRef, FC} from 'react'
+import {
+    useRef,
+    useImperativeHandle,
+    forwardRef,
+    ForwardRefRenderFunction,
+    CSSProperties
+} from 'react'
 
 interface FormSubmitEvent {
     detail: {
@@ -7,16 +13,28 @@ interface FormSubmitEvent {
 }
 
 interface FormProps {
+    className?: string
+    style?: CSSProperties
     onSubmit: (event: FormSubmitEvent) => void
     onReset: () => void
 }
 
-const Form: FC<FormProps> = ({children, onSubmit, onReset}) => {
+const Form: ForwardRefRenderFunction<HTMLFormElement, FormProps> = ({
+    className,
+    style,
+    children,
+    onSubmit,
+    onReset
+}, ref) => {
     const form = useRef<HTMLFormElement>(null)
+
+    useImperativeHandle(ref, () => form.current!)
 
     return (
         <form
             ref={form}
+            className={className}
+            style={style}
             onSubmit={event => {
                 event.stopPropagation()
                 event.preventDefault()
@@ -39,4 +57,4 @@ const Form: FC<FormProps> = ({children, onSubmit, onReset}) => {
     )
 }
 
-export default Form
+export default forwardRef(Form)

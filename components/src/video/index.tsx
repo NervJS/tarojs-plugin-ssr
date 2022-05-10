@@ -1,4 +1,10 @@
-import {FC, EventHandler, SyntheticEvent, CSSProperties} from 'react'
+import {
+    forwardRef,
+    EventHandler,
+    SyntheticEvent,
+    CSSProperties,
+    ForwardRefRenderFunction
+} from 'react'
 
 interface VideoEvent extends SyntheticEvent<HTMLVideoElement, Event> {
     detail?: Record<string, any>
@@ -26,7 +32,7 @@ interface VideoProps {
     onLoadedMetaData?: VideoEventHandler
 }
 
-const Video: FC<VideoProps> = ({
+const Video: ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
     className,
     style,
     src,
@@ -43,9 +49,10 @@ const Video: FC<VideoProps> = ({
     onError,
     onProgress,
     onLoadedMetaData
-}) => (
+}, ref) => (
     <video
         playsInline
+        ref={ref}
         className={className}
         style={style}
         src={src}
@@ -82,4 +89,4 @@ const Video: FC<VideoProps> = ({
     />
 )
 
-export default Video
+export default forwardRef(Video)

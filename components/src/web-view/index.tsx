@@ -1,17 +1,18 @@
-import {FC} from 'react'
+import {forwardRef, ForwardRefRenderFunction} from 'react'
 
-interface WebViewEvent {
+export interface WebViewEvent {
     src: string
 }
 
-interface WebViewProps {
+export interface WebViewProps {
     src: string
     onLoad?: (event: WebViewEvent) => void
     onError?: (event: WebViewEvent) => void
 }
 
-const WebView: FC<WebViewProps> = ({src, onLoad, onError}) => (
+const WebView: ForwardRefRenderFunction<HTMLIFrameElement, WebViewProps> = ({src, onLoad, onError}, ref) => (
     <iframe
+        ref={ref}
         className='taro-webview'
         onLoad={event => {
             event.stopPropagation()
@@ -25,4 +26,4 @@ const WebView: FC<WebViewProps> = ({src, onLoad, onError}) => (
     />
 )
 
-export default WebView
+export default forwardRef(WebView)
