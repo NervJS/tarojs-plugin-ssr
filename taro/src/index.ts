@@ -121,6 +121,8 @@ import {
 
 import {uploadFile} from './network/upload'
 
+import {getLocation} from './location'
+
 export {
     getWindowInfo,
     getSystemSetting,
@@ -219,7 +221,9 @@ export {
 
     chooseImage,
 
-    uploadFile
+    uploadFile,
+
+    getLocation
 }
 
 export default {
@@ -319,5 +323,7 @@ export default {
 
     chooseImage,
 
-    uploadFile
+    uploadFile,
+
+    getLocation
 }

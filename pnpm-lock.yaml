@@ -44,6 +44,7 @@ specifiers:
   merge2: ^1.4.1
   mini-css-extract-plugin: ^2.6.0
   mobile-detect: ^1.4.5
+  mpromisify: ^1.0.2
   next: ^11.1.4
   next-transpile-modules: ^9.0.0
   object-assign: ^4.1.1
@@ -84,6 +85,7 @@ dependencies:
   jsonp-retry: 1.0.3
   lodash: 4.17.21
   mobile-detect: 1.4.5
+  mpromisify: 1.0.2
   next-transpile-modules: 9.0.0
   omit.js: 2.0.2
   open: 8.4.0
@@ -11400,6 +11402,10 @@ packages:
       rimraf: 2.7.1
       run-queue: 1.0.3
     dev: true
+
+  /mpromisify/1.0.2:
+    resolution: {integrity: sha512-YIAPnCc+lhnondgyl3ETHF9lRLR52L6dBvbd+oRzh7DXAfPDqP0DEE+ne1kJ3XbWqdihCWa2uKFO3ELAt6kGEw==}
+    dev: false
 
   /ms/2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
