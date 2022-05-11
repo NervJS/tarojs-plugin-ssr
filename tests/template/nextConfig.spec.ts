@@ -2,7 +2,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import ejs from 'ejs'
 
-const nextConfigEjsPath = path.resolve(__dirname, '../../template/next.config.ejs')
+const nextConfigEjsPath = require.resolve('tarojs-plugin-platform-nextjs/template/next.config.ejs')
 const template = fs.readFileSync(nextConfigEjsPath, 'utf-8')
 
 const fixturesDir = path.resolve(__dirname, '../__fixtures__/template/nextConfig')

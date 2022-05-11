@@ -1,5 +1,5 @@
 import * as path from 'path'
-import {getNextExportedFunctions, resolveDynamicPagesToRewrites, isDynamicRoute} from '../src/nextUtils'
+import {getNextExportedFunctions, resolveDynamicPagesToRewrites, isDynamicRoute} from 'tarojs-plugin-platform-nextjs/lib/nextUtils'
 
 describe('next uitls', () => {
     describe('getNextExportedFunctions', () => {

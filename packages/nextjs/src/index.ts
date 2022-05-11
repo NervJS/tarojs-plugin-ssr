@@ -38,7 +38,7 @@ const DEFAULT_AUTOPREFIXER_OPTION = {
 
 const DEFAULT_PORT = '10086'
 
-module.exports = (ctx: IPluginContext) => {
+export default (ctx: IPluginContext) => {
     const {paths, helper, runOpts} = ctx
     const {appPath, outputPath, sourcePath} = paths
 

@@ -1,4 +1,4 @@
-import {unIndent} from '../src/utils'
+import {unIndent} from 'tarojs-plugin-platform-nextjs/lib/utils'
 
 describe('utils', () => {
     it('unIndent', () => {

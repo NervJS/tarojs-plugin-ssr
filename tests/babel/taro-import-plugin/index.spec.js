@@ -1,6 +1,6 @@
 const path = require('path')
 const pluginTester = require('babel-plugin-tester').default
-const taroImportPlugin = require('../../../babel/taro-import-plugin')
+const taroImportPlugin = require('tarojs-plugin-platform-nextjs/babel/taro-import-plugin')
 
 pluginTester({
     plugin: taroImportPlugin,
