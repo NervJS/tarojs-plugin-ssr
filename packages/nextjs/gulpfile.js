@@ -204,4 +204,9 @@ gulp.task('plugin', gulp.series(
     buildPlugin
 ))
 
-gulp.task('default', gulp.parallel('plugin', 'taro', 'components'))
+gulp.task('default', gulp.parallel(
+    'plugin',
+    'taro',
+    'components',
+    'router'
+))

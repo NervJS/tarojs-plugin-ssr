@@ -100,7 +100,7 @@ const getLocationInternal = ({
     navigator.geolocation.getCurrentPosition(
         position => {
             const {accuracy, altitude, latitude, longitude, altitudeAccuracy} = position.coords
-            const result: Taro.getLocation.SuccessCallbackResult = {
+            const result: getLocation.ParamPropSuccessParam = {
                 /** 位置的精确度 */
                 accuracy,
                 /** 高度，单位 m */
@@ -114,9 +114,7 @@ const getLocationInternal = ({
                 /** 速度，单位 m/s */
                 speed: position.coords.speed!,
                 /** 垂直精度，单位 m（Android 无法获取，返回 0） */
-                verticalAccuracy: altitudeAccuracy || 0,
-                /** 调用结果,自动补充 */
-                errMsg: ''
+                verticalAccuracy: altitudeAccuracy || 0
             }
             success(result)
             complete?.()

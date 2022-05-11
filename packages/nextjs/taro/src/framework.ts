@@ -11,7 +11,8 @@ import {
     ReactElement
 } from 'react'
 import Router from 'next/router'
-import type {TaroRouter} from './typings'
+import {getTaroApp} from './internal'
+import type {TaroPage, TaroRouter} from './typings'
 
 interface TaroInstance {
     router: TaroRouter
@@ -105,20 +106,9 @@ export function getCurrentInstance(meta?: Meta): TaroInstance {
     throw new Error('`getCurrentInstance()` cannot called in function component currently!')
 }
 
-interface TaroPage {
-    route: string
-}
-
 export function getCurrentPages(): TaroPage[] {
-    if (typeof window === 'undefined') {
-        throw new Error('`getCurrentPages()` can be only called in browser environment!')
-    }
-
-    const page: TaroPage = {
-        route: location.pathname
-    }
-
-    return [page]
+    const taroApp = getTaroApp()
+    return taroApp.getCurrentPages()
 }
 
 export enum ENV_TYPE {

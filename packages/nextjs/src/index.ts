@@ -155,11 +155,11 @@ export default (ctx: IPluginContext) => {
                     const modulePath = path.relative(nextjsPageDir, request)
 
                     let contents = unIndent`
-                        import {TaroPageWrapper} from 'tarojs-plugin-platform-nextjs/taro'
-                        import TaroPage from '${modulePath}'
+                        import {TaroPage} from 'tarojs-plugin-platform-nextjs/taro'
+                        import Page from '${modulePath}'
 
                         export default function NextPage(props) {
-                            return <TaroPageWrapper TaroPage={TaroPage} {...props} />
+                            return <TaroPage Page={Page} {...props} />
                         }
                     `
                     if (exportedFunctions.length) {

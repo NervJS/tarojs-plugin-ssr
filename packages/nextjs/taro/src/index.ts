@@ -85,7 +85,6 @@ import {
 import pageScrollTo from './ui/pageScrollTo'
 
 import {
-    setCustomRoutes,
     switchTab,
     reLaunch,
     redirectTo,
@@ -110,7 +109,6 @@ import {
     getCurrentPages,
     getEnv,
     ENV_TYPE,
-    TaroPageWrapper,
     initPxTransform,
     pxTransform
 } from './framework'
@@ -122,6 +120,10 @@ import {
 import {uploadFile} from './network/upload'
 
 import {getLocation} from './location'
+
+import {getMenuButtonBoundingClientRect} from './ui/menu'
+
+import {initTaroApp, TaroPage} from './internal'
 
 export {
     getWindowInfo,
@@ -202,7 +204,6 @@ export {
     useShareAppMessage,
     useShareTimeline,
 
-    setCustomRoutes,
     switchTab,
     reLaunch,
     redirectTo,
@@ -215,7 +216,6 @@ export {
     getCurrentPages,
     getEnv,
     ENV_TYPE,
-    TaroPageWrapper,
     initPxTransform,
     pxTransform,
 
@@ -223,7 +223,12 @@ export {
 
     uploadFile,
 
-    getLocation
+    getLocation,
+
+    getMenuButtonBoundingClientRect,
+
+    initTaroApp,
+    TaroPage
 }
 
 export default {
@@ -317,7 +322,6 @@ export default {
     getCurrentPages,
     getEnv,
     ENV_TYPE,
-    TaroPageWrapper,
     initPxTransform,
     pxTransform,
 
@@ -325,5 +329,10 @@ export default {
 
     uploadFile,
 
-    getLocation
+    getLocation,
+
+    getMenuButtonBoundingClientRect,
+
+    initTaroApp,
+    TaroPage
 }
