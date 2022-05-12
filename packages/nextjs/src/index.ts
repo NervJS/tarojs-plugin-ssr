@@ -38,9 +38,23 @@ const DEFAULT_AUTOPREFIXER_OPTION = {
 
 const DEFAULT_PORT = '10086'
 
-export default (ctx: IPluginContext) => {
+interface PluginOptions {
+    /**
+     * 是否启动 nextjs
+     */
+    runNextjs?: boolean
+    /**
+     * 是否打开浏览器
+     */
+    openBrowser?: boolean
+}
+
+export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
     const {paths, helper, runOpts} = ctx
     const {appPath, outputPath, sourcePath} = paths
+
+    const runNextjs = pluginOpts.runNextjs == null && true
+    const openBrowser = pluginOpts.openBrowser == null && true
 
     ctx.registerCommand({
         name: 'start',
@@ -309,29 +323,29 @@ export default (ctx: IPluginContext) => {
                 )
             }
             scaffold().on('end', async () => {
+                console.log('Compiled to Next.js application successfully!\n')
+
                 const port = devServer.port || DEFAULT_PORT
-                const args: string[] = []
-                if (mode === 'development') {
-                    args.push('dev')
-                    args.push('-p', port)
-                } else {
-                    args.push('build')
+                if (runNextjs) {
+                    const args: string[] = []
+                    if (mode === 'development') {
+                        args.push('dev')
+                        args.push('-p', port)
+                    } else {
+                        args.push('build')
+                    }    
+                    spawn('next', args, {
+                        cwd: outputPath,
+                        stdio: 'inherit'
+                    })
                 }
-
-                // Jest 测试时暂不执行以下逻辑
-                if (process.env.NODE_ENV === 'test') {
-                    return
-                }
-
-                spawn('next', args, {
-                    cwd: outputPath,
-                    stdio: 'inherit'
-                })
 
                 if (isWatch) {
-                    const indexRoute = customRoutes[taroPages[0]] || taroPages[0]
-                    if (indexRoute) {
-                        open(`http://127.0.0.1:${port}${indexRoute}`)
+                    if (openBrowser) {
+                        const indexRoute = customRoutes[taroPages[0]] || taroPages[0]
+                        if (indexRoute) {
+                            open(`http://127.0.0.1:${port}${indexRoute}`)
+                        }
                     }
 
                     function hasSpecifiedFile(filePath: string): boolean {
@@ -391,7 +405,6 @@ export default (ctx: IPluginContext) => {
                         }
 
                         const relativePath = filePath.substring(appPath.length + 1)
-                        console.log(`${chalk.green(`File was ${operation}`)} ${relativePath}`)
 
                         if (['changed', 'added'].includes(operation)) {
                             const outputDir = path.dirname(outputFilePath)
@@ -403,13 +416,44 @@ export default (ctx: IPluginContext) => {
 
                         if (operation === 'removed') {
                             fs.rmSync(outputFilePath)
+
+                            const dir = path.dirname(filePath)
+                            const ext = path.extname(filePath)
+                            const base = path.basename(filePath, ext)
+                            const secondaryExt = path.extname(base)
+                            if (secondaryExt) {
+                                const primaryFilePath = path.join(dir, `${path.basename(base, secondaryExt)}${ext}`)
+                                if (fs.existsSync(primaryFilePath)) {
+                                    const outputDir = path.dirname(outputFilePath)
+                                    if (!fs.existsSync(outputDir)) {
+                                        fs.mkdirSync(outputDir, {recursive: true})
+                                    }
+                                    fs.copyFileSync(primaryFilePath, outputFilePath)
+                                }
+                            } else if (hasSpecifiedFile(filePath)) {
+                                const h5FilePath = path.join(dir, `${base}.h5${ext}`)
+                                if (fs.existsSync(h5FilePath)) {
+                                    const outputDir = path.dirname(outputFilePath)
+                                    if (!fs.existsSync(outputDir)) {
+                                        fs.mkdirSync(outputDir, {recursive: true})
+                                    }
+                                    fs.copyFileSync(h5FilePath, outputFilePath)
+                                }
+                            }
                         }
+
+                        console.log(`${chalk.green(`File was ${operation}`)} ${relativePath}`)
                     }
 
                     const watcher = watch(`${sourcePath}/**`, {delay: 200})
+                    watcher.on('ready', () => console.log('Watching for file changes...'))
                     watcher.on('change', filePath => handleWatch('changed', filePath))
                     watcher.on('add', filePath => handleWatch('added', filePath))
                     watcher.on('unlink', filePath => handleWatch('removed', filePath))
+
+                    process.on('exit', () => {
+                        watcher.close()
+                    })
                 }
             })
         }
