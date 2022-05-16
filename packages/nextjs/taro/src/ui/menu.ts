@@ -1,3 +1,5 @@
+import {isAndroid} from '../utils'
+
 /** 菜单按钮的布局位置信息 */
 interface ClientRect {
     /** 下边界坐标，单位：px */
@@ -19,14 +21,13 @@ export function getMenuButtonBoundingClientRect(): ClientRect {
         throw new Error('`getMenuButtonBoundingClientRect` cannot be called on server-side.')
     }
 
-    const userAgent = window.navigator.userAgent
-    const isAndroid = /(Android);?[\s\/]+([\d.]+)?|Baidu;.*P1/.test(userAgent)
+    const android = isAndroid()
 
     return {
-        height: isAndroid ? 28 : 32,
+        height: android ? 28 : 32,
         width: 0,
-        top: isAndroid ? 5 : 6,
-        bottom: isAndroid ? 33 : 38,
+        top: android ? 5 : 6,
+        bottom: android ? 33 : 38,
         left: window.screen.width - 10,
         right: window.screen.width - 10
     }

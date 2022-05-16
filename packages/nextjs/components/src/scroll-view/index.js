@@ -198,9 +198,14 @@ class ScrollView extends React.Component {
                 ref={container => {
                     this.container = container
                 }}
-                {
-                ...omit(this.props, ['className', 'scrollTop', 'scrollLeft'])
-                }
+                {...omit(this.props, [
+                    'className',
+                    'scrollTop',
+                    'scrollLeft',
+                    'scrollX',
+                    'scrollY',
+                    'scrollWithAnimation'
+                ])}
                 className={cls}
                 onScroll={_onScroll}
                 onTouchMove={

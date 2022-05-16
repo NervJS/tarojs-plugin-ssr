@@ -1,5 +1,5 @@
 import MobileDetect from 'mobile-detect'
-import { temporarilyNotSupport } from '../utils'
+import { temporarilyNotSupport, isAndroid } from '../utils'
 import { MethodHandler } from '../utils/handler'
 
 /** 跳转系统蓝牙设置页 */
@@ -21,8 +21,10 @@ export const getWindowInfo = () => {
         windowWidth: document.documentElement.clientWidth,
         /** 可使用窗口高度，单位px */
         windowHeight: document.documentElement.clientHeight,
+        /** 导航栏的高度，单位px */
+        navigationBarHeight: isAndroid() ? 38 : 44,
         /** 状态栏的高度，单位px */
-        statusBarHeight: NaN,
+        statusBarHeight: 0,
         /** 在竖屏正方向下的安全区域 */
         safeArea: {
             bottom: 0,
@@ -146,7 +148,7 @@ export const getSystemInfoSync = () => {
         ...deviceInfo,
         ...appBaseInfo,
         /** 用户字体大小（单位px）。以微信客户端「我-设置-通用-字体大小」中的设置为准 */
-        fontSizeSetting: NaN,
+        fontSizeSetting: 2,
         /** 允许微信使用相册的开关（仅 iOS 有效） */
         albumAuthorized: appAuthorizeSetting.albumAuthorized === 'authorized',
         /** 允许微信使用摄像头的开关 */
