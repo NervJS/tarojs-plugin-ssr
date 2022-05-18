@@ -110,7 +110,8 @@ import {
     getEnv,
     ENV_TYPE,
     initPxTransform,
-    pxTransform
+    pxTransform,
+    nextTick
 } from './framework'
 
 import {
@@ -218,6 +219,7 @@ export {
     ENV_TYPE,
     initPxTransform,
     pxTransform,
+    nextTick,
 
     chooseImage,
 
@@ -324,6 +326,7 @@ export default {
     ENV_TYPE,
     initPxTransform,
     pxTransform,
+    nextTick,
 
     chooseImage,
 

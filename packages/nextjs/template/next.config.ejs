@@ -18,6 +18,9 @@ const nextConfig = {
     images: {
         disableStaticImages: true
     },
+    eslint: {
+        ignoreDuringBuilds: true
+    },
     webpack(config, {isServer, webpack}) {
         config.module.rules.push({
             test: /\.(bmp|gif|jpg|jpeg|png|svg)$/,

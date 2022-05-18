@@ -1,4 +1,5 @@
 import Router from 'next/router'
+import swan from '../swan'
 import type {TaroPage, CustomRoutes} from '../typings'
 
 function isAbsoluteUrl(url?: string): boolean {

@@ -1,5 +1,6 @@
 import promisify from 'mpromisify'
 import {getTaroApp} from './internal'
+import swan from './swan'
 
 export function switchTab() {
 }

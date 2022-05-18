@@ -10,6 +10,10 @@ export const openAppAuthorizeSetting = temporarilyNotSupport('openAppAuthorizeSe
 
 /** 获取窗口信息 */
 export const getWindowInfo = () => {
+    if (typeof window === 'undefined') {
+        throw new Error('`getWindowInfo` cannot called on server-side!');
+    }
+
     const info = {
         /** 设备像素比 */
         pixelRatio: window.devicePixelRatio,
@@ -41,6 +45,10 @@ export const getWindowInfo = () => {
 
 /** 获取设备设置 */
 export const getSystemSetting = () => {
+    if (typeof window === 'undefined') {
+        throw new Error('`getSystemSetting` cannot called on server-side!');
+    }
+
     const isLandscape = window.screen.width >= window.screen.height
     const info = {
         /** 蓝牙的系统开关 */
@@ -58,6 +66,10 @@ export const getSystemSetting = () => {
 
 /** 获取设备设置 */
 export const getDeviceInfo = () => {
+    if (typeof window === 'undefined') {
+        throw new Error('`getDeviceInfo` cannot called on server-side!');
+    }
+
     const md = new MobileDetect(navigator.userAgent)
 
     const info = {
@@ -80,6 +92,10 @@ export const getDeviceInfo = () => {
 
 /** 获取微信APP基础信息 */
 export const getAppBaseInfo = () => {
+    if (typeof window === 'undefined') {
+        throw new Error('`getAppBaseInfo` cannot called on server-side!');
+    }
+
     let isDarkMode = false
     if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
         isDarkMode = true
@@ -135,6 +151,10 @@ export const getAppAuthorizeSetting = () => {
 
 /** 获取设备设置 */
 export const getSystemInfoSync = () => {
+    if (typeof window === 'undefined') {
+        throw new Error('`getSystemInfoSync` cannot called on server-side!');
+    }
+
     const windowInfo = getWindowInfo()
     const systemSetting = getSystemSetting()
     const deviceInfo = getDeviceInfo()

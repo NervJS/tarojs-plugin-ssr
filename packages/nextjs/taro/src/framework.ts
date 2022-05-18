@@ -125,3 +125,7 @@ export function pxTransform(size: number): string {
 
     return Math.ceil((((size / 40) * 640) / designWidth) * 10000) / 10000 + 'rem'
 }
+
+export function nextTick(callback: () => void): void {
+    setTimeout(callback)
+}
