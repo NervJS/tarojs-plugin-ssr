@@ -1,5 +1,13 @@
+<%_ if (customNextConfig) { _%>
+// @ts-ignore
+const customNextConfig = require('<%- customNextConfig -%>')
+<%_ } _%>
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    <%_ if (customNextConfig) { _%>
+    ...customNextConfig,
+    <%_ } _%>
     env: {
         TARO_ENV: 'h5',
     <%_ if (env) {
@@ -21,7 +29,8 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true
     },
-    webpack(config, {isServer, webpack}) {
+    webpack(config, options) {
+        const {isServer, webpack} = options
         config.module.rules.push({
             test: /\.(bmp|gif|jpg|jpeg|png|svg)$/,
             exclude: /node_modules/,
@@ -46,6 +55,12 @@ const nextConfig = {
                     ...plugin.definitions
                 })
             }
+        }
+        <%_ } _%>
+
+        <%_ if (customNextConfig) { _%>
+        if (customNextConfig.webpack) {
+            customNextConfig.webpack(config, options)
         }
         <%_ } _%>
         return config

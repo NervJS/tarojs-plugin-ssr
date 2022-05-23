@@ -51,7 +51,7 @@ interface PluginOptions {
 
 export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
     const {paths, helper, runOpts} = ctx
-    const {appPath, outputPath, sourcePath} = paths
+    const {appPath, outputPath, sourcePath, configPath} = paths
 
     const runNextjs = pluginOpts.runNextjs == null && true
     const openBrowser = pluginOpts.openBrowser == null && true
@@ -234,11 +234,18 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         .pipe(es.through(function (data) {
                             const rewrites = resolveDynamicPagesToRewrites(dynamicPages)
 
+                            const customNextConfigPath = path.join(path.dirname(configPath), 'next.config.js')
+                            let customNextConfig: string | null = null
+                            if (fs.existsSync(customNextConfigPath)) {
+                                customNextConfig = path.relative(outputPath, customNextConfigPath)
+                            }
+
                             const ejsData = {
                                 env,
                                 defineConstants,
                                 additionalData,
-                                rewrites
+                                rewrites,
+                                customNextConfig
                             }
                             const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)
@@ -333,7 +340,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         args.push('-p', port)
                     } else {
                         args.push('build')
-                    }    
+                    }
                     spawn('next', args, {
                         cwd: outputPath,
                         stdio: 'inherit'
