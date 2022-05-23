@@ -230,6 +230,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         .pipe(rename('_app.jsx'))
                         .pipe(dest(path.join(outputPath, 'pages'))),
                     src(`${templateDir}/pages/_document.jsx`).pipe(dest(path.join(outputPath, 'pages'))),
+                    src(`${appPath}/config/**`).pipe(dest(path.join(outputPath, 'config'))),
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
                             const rewrites = resolveDynamicPagesToRewrites(dynamicPages)
