@@ -303,7 +303,8 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         .pipe(es.through(function (data) {
                             const ejsData = {
                                 nextAppFilePath: JSON.stringify(path.relative(outputPath, nextAppFilePath)),
-                                outputAppFilePath: JSON.stringify(path.relative(outputPath, outputAppFilePath))
+                                outputAppFilePath: JSON.stringify(path.relative(outputPath, outputAppFilePath)),
+                                taroPages: JSON.stringify(taroPages)
                             }
                             const result = ejs.render(data.contents.toString(), ejsData)
                             data.contents = Buffer.from(result)

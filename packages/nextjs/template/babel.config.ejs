@@ -1,7 +1,12 @@
 module.exports = {
     presets: [
+        ['tarojs-plugin-platform-nextjs/babel/after', {
+            <%_ if (taroPages) { _%>
+                taroPages: <%- taroPages %>
+            <%_ } _%>
+        }],
         'next/babel',
-        ['tarojs-plugin-platform-nextjs/babel/preset', {
+        ['tarojs-plugin-platform-nextjs/babel/before', {
             <%_ if (nextAppFilePath) { _%>
             nextAppFilePath: <%- nextAppFilePath %>,
             <%_ } _%>

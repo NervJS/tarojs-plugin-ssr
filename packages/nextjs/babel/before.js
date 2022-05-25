@@ -1,4 +1,4 @@
-function lilinBabelPreset(api, options = {}) {
+function beforePreset(api, options = {}) {
     const {nextAppFilePath, outputAppFilePath} = options
 
     return {
@@ -21,4 +21,4 @@ function lilinBabelPreset(api, options = {}) {
     }
 }
 
-module.exports = lilinBabelPreset
+module.exports = beforePreset

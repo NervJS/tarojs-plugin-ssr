@@ -8,5 +8,8 @@ pluginTester({
     babelOptions: {
         plugins: ['@babel/plugin-syntax-jsx']
     },
+    pluginOptions: {
+        transformAll: true
+    },
     fixtures: path.join(__dirname, '__fixtures__')
 })

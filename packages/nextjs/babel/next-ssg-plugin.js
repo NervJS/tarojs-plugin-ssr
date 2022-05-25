@@ -1,3 +1,5 @@
+const path = require('path')
+
 const SERVER_PROPS_SSG_CONFLICT = `You can not use getStaticProps or getStaticPaths with getServerSideProps. To use SSG, please remove getServerSideProps`
 
 const STATIC_PROPS_ID = '__N_SSG'
@@ -74,7 +76,33 @@ const isDataIdentifier = (name, state) => {
     return false
 }
 
-function nextTransformSsg({types: t}) {
+function nextTransformSsg({types: t}, options, dirname) {
+    const taroPages = options.taroPages
+    // used in test
+    const transformAll = options.transformAll
+    const sourceDir = path.join(dirname, 'src')
+
+    function isTaroPage(filename) {
+        if (transformAll) {
+            return true
+        }
+
+        if (!filename.startsWith(sourceDir)) {
+            return false
+        }
+
+        const ext = path.extname(filename)
+        if (!['.js', '.jsx', '.ts', '.tsx'].includes(ext)) {
+            return false
+        }
+
+        // transform dynamic route
+        const currentPage = filename
+            .substring(sourceDir.length, filename.length - ext.length)
+            .replace(/\/\[([^/]+?)\]$/, '/index')
+        return taroPages.some(page => currentPage.startsWith(page))
+    }
+
     function getIdentifier(path) {
         const parentPath = path.parentPath
         if (parentPath.type === 'VariableDeclarator') {
@@ -137,6 +165,11 @@ function nextTransformSsg({types: t}) {
         visitor: {
             Program: {
                 enter(path, state) {
+                    const filename = state.file.opts.filename
+                    if (!isTaroPage(filename)) {
+                        return
+                    }
+
                     state.refs = new Set()
                     state.isPrerender = false
                     state.isServerProps = false
