@@ -13,7 +13,8 @@ describe('next.config.ejs', () => {
             env: null,
             defineConstants: null,
             additionalData: null,
-            rewrites: null
+            rewrites: null,
+            customNextConfig: null
         }
         const result = ejs.render(template, ejsData)
         const expected = fs.readFileSync(path.join(fixturesDir, 'default.js'), 'utf-8')
@@ -30,7 +31,8 @@ describe('next.config.ejs', () => {
                 'process.env.GITHUB_TOKEN': JSON.stringify('this is github token')
             },
             additionalData: 'body { background-color: red; }',
-            rewrites: null
+            rewrites: null,
+            customNextConfig: null
         }
         const result = ejs.render(template, ejsData)
         const expected = fs.readFileSync(path.join(fixturesDir, 'basic.js'), 'utf-8')

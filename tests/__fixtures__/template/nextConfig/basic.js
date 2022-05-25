@@ -1,3 +1,4 @@
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     env: {
@@ -10,7 +11,11 @@ const nextConfig = {
     images: {
         disableStaticImages: true
     },
-    webpack(config, {isServer, webpack}) {
+    eslint: {
+        ignoreDuringBuilds: true
+    },
+    webpack(config, options) {
+        const {isServer, webpack} = options
         config.module.rules.push({
             test: /\.(bmp|gif|jpg|jpeg|png|svg)$/,
             exclude: /node_modules/,
@@ -34,6 +39,7 @@ const nextConfig = {
                 })
             }
         }
+
         return config
     },
 }
