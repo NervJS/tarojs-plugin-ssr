@@ -2,9 +2,6 @@ const path = require('path')
 
 const SERVER_PROPS_SSG_CONFLICT = `You can not use getStaticProps or getStaticPaths with getServerSideProps. To use SSG, please remove getServerSideProps`
 
-const STATIC_PROPS_ID = '__N_SSG'
-const SERVER_PROPS_ID = '__N_SSP'
-
 const EXPORT_NAME_GET_STATIC_PROPS = 'getStaticProps'
 const EXPORT_NAME_GET_STATIC_PATHS = 'getStaticPaths'
 const EXPORT_NAME_GET_SERVER_PROPS = 'getServerSideProps'
@@ -21,42 +18,6 @@ const ssgExports = new Set([
     `unstable_getServerProps`,
     `unstable_getServerSideProps`,
 ])
-
-function decorateSsgExport(t, path, state) {
-    const gsspName = state.isPrerender ? STATIC_PROPS_ID : SERVER_PROPS_ID
-    const gsspId = t.identifier(gsspName)
-
-    const addGsspExport = exportPath => {
-        if (state.done) {
-            return
-        }
-        state.done = true
-
-        const [pageCompPath] = exportPath.replaceWithMultiple([
-            t.exportNamedDeclaration(
-                t.variableDeclaration(
-                    // We use 'var' instead of 'let' or 'const' for ES5 support. Since
-                    // this runs in `Program#exit`, no ES2015 transforms (preset env)
-                    // will be ran against this code.
-                    'var',
-                    [t.variableDeclarator(gsspId, t.booleanLiteral(true))]
-                ),
-                [t.exportSpecifier(gsspId, gsspId)]
-            ),
-            exportPath.node,
-        ])
-        exportPath.scope.registerDeclaration(pageCompPath)
-    }
-
-    path.traverse({
-        ExportDefaultDeclaration(exportDefaultPath) {
-            addGsspExport(exportDefaultPath)
-        },
-        ExportNamedDeclaration(exportNamedPath) {
-            addGsspExport(exportNamedPath)
-        },
-    })
-}
 
 const isDataIdentifier = (name, state) => {
     if (ssgExports.has(name)) {
@@ -400,8 +361,6 @@ function nextTransformSsg({types: t}, options, dirname) {
                             ImportNamespaceSpecifier: sweepImport,
                         })
                     } while (count)
-
-                    decorateSsgExport(t, path, state)
                 },
             },
         },

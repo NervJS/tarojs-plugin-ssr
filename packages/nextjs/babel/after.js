@@ -6,7 +6,7 @@ function afterPreset(api, options = {}) {
         sourceType: 'unambiguous',
         plugins: [
             !isServer && [
-                require.resolve('tarojs-plugin-platform-nextjs/babel/next-ssg-plugin'),
+                require.resolve('tarojs-plugin-platform-nextjs/babel/taro-ssg-plugin'),
                 {taroPages}
             ]
         ].filter(Boolean)

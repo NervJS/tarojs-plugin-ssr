@@ -59,7 +59,8 @@ class Image extends React.Component {
         const cls = classNames(
             'taro-img',
             {
-                'taro-img__widthfix': mode === 'widthFix'
+                'taro-img__widthfix': mode === 'widthFix',
+                'taro-img__heightfix': mode === 'heightFix'
             },
             className
         )
