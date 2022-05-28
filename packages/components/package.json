@@ -1,0 +1,27 @@
+{
+    "name": "@taror/components",
+    "version": "0.0.1",
+    "description": "React-based Taro3 components implementation",
+    "license": "MIT",
+    "files": [
+        "dist",
+        "lib",
+        "es"
+    ],
+    "main": "lib/index.js",
+    "module": "es/index.js",
+    "unpkg": "dist/taror.min.js",
+    "typings": "lib/index.d.ts",
+    "scripts": {
+        "build": "yarn compile && yarn dist",
+        "compile": "yarn clean && taror-tools run compile",
+        "dist": "taror-tools run dist",
+        "clean": "taror-tools run clean && rm -rf es lib coverage dist report.html"
+    },
+    "devDependencies": {
+        "@taror/tools": "^0.0.2"
+    },
+    "dependencies": {
+        "classnames": "^2.3.1"
+    }
+}

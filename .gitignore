@@ -104,12 +104,6 @@ dist
 .DS_Store
 Thumbs.db
 
-# plugin
+es
 lib
-
-# taro
-taro/lib
-
-# components
-components/es
-components/lib
+dist
