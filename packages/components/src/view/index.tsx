@@ -1,11 +1,9 @@
 import React, {useState, useRef, forwardRef} from 'react'
 import classNames from 'classnames'
+import type {BaseProps} from '../_util/types'
+import useEvents from '../_util/hooks/useEvents'
 
-export interface ViewProps {
-    id?: string
-    className?: string
-    style?: React.CSSProperties
-
+export interface ViewProps extends BaseProps {
     /**
      * 指定按下去的样式类。当 `hover-class="none"` 时，没有点击态效果
      * @default none
@@ -29,21 +27,6 @@ export interface ViewProps {
      * @default 400
      */
     hoverStayTime?: number
-
-    /**
-     * 是否以 catch 的形式绑定 touchmove 事件
-     */
-    catchMove?: boolean
-
-    onTouchStart?: (event: React.TouchEvent<HTMLDivElement>) => void
-
-    onTouchEnd?: (event: React.TouchEvent<HTMLDivElement>) => void
-
-    onTouchMove?: (event: React.TouchEvent<HTMLDivElement>) => void
-
-    onLongPress?: () => void
-
-    onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
 
 const View: React.ForwardRefRenderFunction<HTMLDivElement, ViewProps> = ({
@@ -51,20 +34,19 @@ const View: React.ForwardRefRenderFunction<HTMLDivElement, ViewProps> = ({
     className,
     style,
     hoverClass = 'none',
-    hoverStartTime = 400,
+    hoverStartTime = 50,
     hoverStayTime = 400,
-    catchMove,
     children,
-    onTouchStart,
-    onTouchEnd,
-    onTouchMove,
-    onLongPress,
-    onClick
+    ...eventProps
 }, ref) => {
     const [hovered, setHovered] = useState(false)
-
+    const {
+        onTouchStart,
+        onTouchCancel,
+        onTouchEnd,
+        ...events
+    } = useEvents(eventProps)
     const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-    const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     return (
         <div
@@ -83,50 +65,27 @@ const View: React.ForwardRefRenderFunction<HTMLDivElement, ViewProps> = ({
                         setHovered(true)
                     }, hoverStartTime)
                 }
-
-                if (onTouchStart) {
-                    onTouchStart(event)
-                }
-
-                if (onLongPress) {
-                    longPressTimer.current = setTimeout(() => {
-                        onLongPress()
-                    }, 350)
-                }
+                onTouchStart(event)
             }}
-            onTouchMove={event => {
-                if (longPressTimer.current) {
-                    clearTimeout(longPressTimer.current)
-                }
-
-                if (onTouchMove) {
-                    onTouchMove(event)
-                }
-            }}
-            onTouchEnd={event => {
-                if (longPressTimer.current) {
-                    clearTimeout(longPressTimer.current)
-                }
+            onTouchCancel={event => {
                 if (hoverTimer.current) {
                     clearTimeout(hoverTimer.current)
                 }
                 hoverTimer.current = setTimeout(() => {
                     setHovered(false)
                 }, hoverStayTime)
-
-                if (onTouchEnd) {
-                    onTouchEnd(event)
-                }
+                onTouchCancel(event)
             }}
-            onClick={event => {
-                if (catchMove) {
-                    event.stopPropagation()
-                    event.preventDefault()
+            onTouchEnd={event => {
+                if (hoverTimer.current) {
+                    clearTimeout(hoverTimer.current)
                 }
-                if (onClick) {
-                    onClick(event)
-                }
+                hoverTimer.current = setTimeout(() => {
+                    setHovered(false)
+                }, hoverStayTime)
+                onTouchEnd(event)
             }}
+            {...events}
         >
             {children}
         </div>
