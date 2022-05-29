@@ -19,7 +19,7 @@
         "clean": "taror-tools run clean && rm -rf es lib coverage dist report.html"
     },
     "devDependencies": {
-        "@taror/tools": "^0.0.2"
+        "@taror/tools": "^0.0.3"
     },
     "dependencies": {
         "classnames": "^2.3.1"

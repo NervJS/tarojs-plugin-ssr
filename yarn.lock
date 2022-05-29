@@ -3696,10 +3696,10 @@
     webpack-dev-server "3.11.0"
     webpack-format-messages "^2.0.5"
 
-"@taror/tools@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@taror/tools/-/tools-0.0.2.tgz#6daa5bd08038ad526c73d2fa1327f0c5d8aeb3f8"
-  integrity sha512-mRjKuciqteioL4bunZ/eW/BTnEEZhwAJUgOrkUSdK/k3kEoD3hhGly/3hkRSZEsZ5mL/t8mhr3SoS+mgtpCVHg==
+"@taror/tools@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@taror/tools/-/tools-0.0.3.tgz#ffb2ded46cecb2b11fadef2e62dd8c8a6b6838ed"
+  integrity sha512-kH/r1NPOlIS/5dgfOAdGXwjUksSboyzHh0Ckrmg7bNadJQ3hJo293htbLu8s3eijrMIxOIOZ02jq1gHsUseRhw==
   dependencies:
     "@babel/core" "^7.17.7"
     "@babel/plugin-proposal-class-properties" "^7.4.4"
@@ -3758,6 +3758,8 @@
     remark-stringify "^8.0.0"
     remark-yaml-config "^4.1.0"
     rimraf "^3.0.0"
+    sass "^1.52.1"
+    sass-loader "^10.2.1"
     through2 "^3.0.1"
     ts-loader "^8.0.12"
     tslint "^6.1.2"
@@ -17684,6 +17686,17 @@ sass-loader@10.2.0:
     schema-utils "^3.0.0"
     semver "^7.3.2"
 
+sass-loader@^10.2.1:
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/sass-loader/-/sass-loader-10.2.1.tgz#17e51df313f1a7a203889ce8ff91be362651276e"
+  integrity sha512-RRvWl+3K2LSMezIsd008ErK4rk6CulIMSwrcc2aZvjymUgKo/vjXGp1rSWmfTUX7bblEOz8tst4wBwWtCGBqKA==
+  dependencies:
+    klona "^2.0.4"
+    loader-utils "^2.0.0"
+    neo-async "^2.6.2"
+    schema-utils "^3.0.0"
+    semver "^7.3.2"
+
 sass-loader@^12.6.0:
   version "12.6.0"
   resolved "https://registry.yarnpkg.com/sass-loader/-/sass-loader-12.6.0.tgz#5148362c8e2cdd4b950f3c63ac5d16dbfed37bcb"
@@ -17705,6 +17718,15 @@ sass@^1.23.7, sass@^1.50.0:
   version "1.51.0"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.51.0.tgz#25ea36cf819581fe1fe8329e8c3a4eaaf70d2845"
   integrity sha512-haGdpTgywJTvHC2b91GSq+clTKGbtkkZmVAb82jZQN/wTy6qs8DdFm2lhEQbEwrY0QDRgSQ3xDurqM977C3noA==
+  dependencies:
+    chokidar ">=3.0.0 <4.0.0"
+    immutable "^4.0.0"
+    source-map-js ">=0.6.2 <2.0.0"
+
+sass@^1.52.1:
+  version "1.52.1"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.52.1.tgz#554693da808543031f9423911d62c60a1acf7889"
+  integrity sha512-fSzYTbr7z8oQnVJ3Acp9hV80dM1fkMN7mSD/25mpcct9F7FPBMOI8krEYALgU1aZoqGhQNhTPsuSmxjnIvAm4Q==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
