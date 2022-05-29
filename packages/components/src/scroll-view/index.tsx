@@ -77,16 +77,17 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
     style,
     scrollX,
     scrollY,
-    // upperThreshold = 50,
-    // lowerThreshold = 50,
-    // scrollTop,
-    // scrollLeft,
-    // scrollIntoView,
-    // scrollWithAnimation,
+    upperThreshold = 50,
+    lowerThreshold = 50,
+    scrollTop,
+    scrollLeft,
+    scrollIntoView,
+    scrollWithAnimation,
+    // TODO: 待实现
     // enableBackToTop,
     children,
-    // onScrollToUpper,
-    // onScrollToLower,
+    onScrollToUpper,
+    onScrollToLower,
     onScroll
 }, ref) => {
     const el = useRef<HTMLDivElement | null>(null)
@@ -101,6 +102,39 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
             lastLeft.current = el.current.scrollLeft
         }
     }, [])
+
+    useEffect(() => {
+        if (el.current && scrollY && typeof scrollTop === 'number') {
+            el.current.scrollTo({
+                top: scrollTop,
+                behavior: scrollWithAnimation ? 'smooth' : 'auto'
+            })
+        }
+    }, [scrollTop])
+
+    useEffect(() => {
+        if (el.current && scrollX && typeof scrollLeft === 'number') {
+            el.current.scrollTo({
+                left: scrollLeft,
+                behavior: scrollWithAnimation ? 'smooth' : 'auto'
+            })
+        }
+    }, [scrollLeft])
+
+    useEffect(() => {
+        if (!el.current || !scrollIntoView) {
+            return
+        }
+        const node = el.current.querySelector(`#${scrollIntoView}`)
+        if (!node) {
+            return
+        }
+        node.scrollIntoView({
+            behavior: scrollWithAnimation ? 'smooth' : 'auto',
+            block: 'center',
+            inline: 'start'
+        })
+    }, [scrollIntoView])
 
     function getTaroScrollEvent(uiEvent: React.UIEvent) {
         const {
@@ -145,9 +179,32 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
             )}
             style={style}
             onScroll={uiEvent => {
+                const taroEvent = getTaroScrollEvent(uiEvent)
                 if (onScroll) {
-                    const taroEvent = getTaroScrollEvent(uiEvent)
                     onScroll(taroEvent)
+                }
+                const {
+                    offsetWidth,
+                    offsetHeight,
+                    scrollLeft,
+                    scrollTop,
+                    scrollHeight,
+                    scrollWidth
+                } = el.current!
+                if (onScrollToLower) {
+                    if (
+                        (scrollY && offsetHeight + scrollTop + lowerThreshold >= scrollHeight) ||
+                        (scrollX && offsetWidth + scrollLeft + lowerThreshold >= scrollWidth)
+                    )
+                    onScrollToLower(taroEvent)
+                }
+                if (onScrollToUpper) {
+                    if (
+                        (scrollY && scrollTop <= upperThreshold) ||
+                        (scrollX && scrollLeft <= upperThreshold)
+                    ) {
+                        onScrollToUpper(taroEvent)
+                    }
                 }
             }}
         >
