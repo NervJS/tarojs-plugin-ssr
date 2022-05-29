@@ -1,7 +1,7 @@
 import React, {useRef, useCallback} from 'react'
-import {EventPorps, TaroMouseEvent, TaroTouchEvent} from '../types'
+import {BaseEventPorps, TaroMouseEvent, TaroTouchEvent} from '../types'
 
-function toTaroMouseEvent(uiEvent: React.MouseEvent) {
+function getTaroMouseEvent(uiEvent: React.MouseEvent) {
     const {
         timeStamp,
         target,
@@ -26,7 +26,7 @@ function toTaroMouseEvent(uiEvent: React.MouseEvent) {
     return taroEvent
 }
 
-function toTaroTouchEvent(uiEvent: React.TouchEvent) {
+function getTaroTouchEvent(uiEvent: React.TouchEvent) {
     const {
         timeStamp,
         target,
@@ -61,19 +61,19 @@ function useEvents({
     onTouchCancel,
     onTouchEnd,
     onLongPress
-}: EventPorps): EventHandles {
+}: BaseEventPorps): EventHandles {
     const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const isPressed = useRef(false)
 
     const handleClick = useCallback((uiEvent: React.MouseEvent): void => {
         if (onClick && isPressed.current === false) {
-            const taroEvent = toTaroMouseEvent(uiEvent)
+            const taroEvent = getTaroMouseEvent(uiEvent)
             onClick(taroEvent)
         }
     }, [onClick])
 
     const handleTouchStart = useCallback((uiEvent: React.TouchEvent): void => {
-        const taroEvent = toTaroTouchEvent(uiEvent)
+        const taroEvent = getTaroTouchEvent(uiEvent)
 
         if (onTouchStart) {
             onTouchStart(taroEvent)
@@ -94,7 +94,7 @@ function useEvents({
             clearTimeout(longPressTimer.current)
         }
         if (onTouchMove) {
-            const taroEvent = toTaroTouchEvent(uiEvent)
+            const taroEvent = getTaroTouchEvent(uiEvent)
             onTouchMove(taroEvent)
         }
     }, [onTouchMove])
@@ -104,7 +104,7 @@ function useEvents({
             clearTimeout(longPressTimer.current)
         }
         if (onTouchCancel) {
-            const taroEvent = toTaroTouchEvent(uiEvent)
+            const taroEvent = getTaroTouchEvent(uiEvent)
             onTouchCancel(taroEvent)
         }
     }, [onTouchCancel])
@@ -114,7 +114,7 @@ function useEvents({
             clearTimeout(longPressTimer.current)
         }
         if (onTouchEnd) {
-            const taroEvent = toTaroTouchEvent(uiEvent)
+            const taroEvent = getTaroTouchEvent(uiEvent)
             onTouchEnd(taroEvent)
         }
     }, [onTouchCancel])

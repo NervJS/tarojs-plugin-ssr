@@ -45,7 +45,8 @@ export { default as MovableArea } from './view'
 
 export { default as MovableView } from './view'
 
-export { default as ScrollView } from './view'
+export type { ScrollViewProps } from './scroll-view'
+export { default as ScrollView } from './scroll-view'
 
 export { default as Swiper } from './view'
 

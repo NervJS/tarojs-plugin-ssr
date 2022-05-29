@@ -39,8 +39,17 @@ export interface TaroTouchEvent extends TaroBaseEvent<{}> {}
 
 export interface TaroMouseEvent extends TaroBaseEvent<{x: number, y: number}> {}
 
+export interface TaroScrollEvent extends TaroBaseEvent<{
+    scrollLeft: number,
+    scrollTop: number,
+    scrollHeight: number,
+    scrollWidth: number,
+    deltaX: number,
+    deltaY: number
+}> {}
+
 // https://smartprogram.baidu.com/docs/develop/framework/view_incident/
-export interface EventPorps {
+export interface BaseEventPorps {
     /**
      * 是否以 catch 的形式绑定 touchmove 事件
      */
@@ -77,7 +86,7 @@ export interface EventPorps {
     onLongPress?: (event: TaroTouchEvent) => void
 }
 
-export interface BaseProps extends EventPorps {
+export interface BaseProps extends BaseEventPorps {
     /**
      * 组件唯一标示
      */
