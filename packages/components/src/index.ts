@@ -5,7 +5,8 @@ export { default as Icon } from './view'
 
 export { default as Progress } from './view'
 
-export { default as Text } from './view'
+export type { TextProps } from './text'
+export { default as Text } from './text'
 
 export { default as Button } from './view'
 
