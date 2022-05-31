@@ -2,14 +2,14 @@ import React, {useRef, useImperativeHandle, forwardRef} from 'react'
 import type {BaseProps} from '../_util/types'
 import useBaseEvents from '../_util/hooks/useBaseEvents'
 
-interface FormSubmitEvent {
+interface TaroFormSubmitEvent {
     detail: {
         value: Record<string, any>
     }
 }
 
-interface FormProps extends BaseProps {
-    onSubmit: (event: FormSubmitEvent) => void
+export interface FormProps extends BaseProps {
+    onSubmit: (event: TaroFormSubmitEvent) => void
     onReset: () => void
 }
 

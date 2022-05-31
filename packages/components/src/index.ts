@@ -1,7 +1,8 @@
 export type { ViewProps } from './view'
 export { default as View } from './view'
 
-export { default as Icon } from './view'
+export type { IconProps } from './icon'
+export { default as Icon } from './icon'
 
 export { default as Progress } from './view'
 
@@ -17,7 +18,8 @@ export { default as CheckboxGroup } from './view'
 
 export { default as Editor } from './view'
 
-export { default as Form } from './view'
+export type { FormProps } from './form'
+export { default as Form } from './form'
 
 export { default as Input } from './view'
 
