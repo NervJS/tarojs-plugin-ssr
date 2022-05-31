@@ -4,7 +4,8 @@ export { default as View } from './view'
 export type { IconProps } from './icon'
 export { default as Icon } from './icon'
 
-export { default as Progress } from './view'
+export type { ProgressProps } from './progress'
+export { default as Progress } from './progress'
 
 export type { TextProps } from './text'
 export { default as Text } from './text'
