@@ -10,6 +10,9 @@ export { default as Progress } from './progress'
 export type { TextProps } from './text'
 export { default as Text } from './text'
 
+export type { RichTextProps } from './rich-text'
+export { default as RichText } from './rich-text'
+
 export { ButtonProps } from './button'
 export { default as Button } from './button'
 
