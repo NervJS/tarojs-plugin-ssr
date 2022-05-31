@@ -5,6 +5,13 @@ export interface TaroBaseEvent<T> {
     type: string
 
     /**
+     * 额外的信息
+     */
+    detail: T
+}
+
+export interface TaroDomEvent<T> extends TaroBaseEvent<T> {
+    /**
      * 事件生成时的时间戳
      */
     timeStamp: number
@@ -18,12 +25,7 @@ export interface TaroBaseEvent<T> {
      * 当前组件的一些属性值集合
      */
     currentTarget: EventTarget
-
-    /**
-     * 额外的信息
-     */
-    detail: T
-
+ 
     /**
      * 阻止元素发生默认的行为
      */
@@ -35,11 +37,11 @@ export interface TaroBaseEvent<T> {
     stopPropagation: () => void
 }
 
-export interface TaroTouchEvent extends TaroBaseEvent<{}> {}
+export interface TaroTouchEvent extends TaroDomEvent<{}> {}
 
-export interface TaroMouseEvent extends TaroBaseEvent<{x: number, y: number}> {}
+export interface TaroMouseEvent extends TaroDomEvent<{x: number, y: number}> {}
 
-export interface TaroScrollEvent extends TaroBaseEvent<{
+export interface TaroScrollEvent extends TaroDomEvent<{
     scrollLeft: number,
     scrollTop: number,
     scrollHeight: number,

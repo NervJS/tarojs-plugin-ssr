@@ -1,6 +1,11 @@
-import React, {useRef, useImperativeHandle ,forwardRef} from 'react'
+import React, {
+    useEffect,
+    useRef,
+    useImperativeHandle,
+    forwardRef
+} from 'react'
 import classNames from 'classnames'
-import type {BaseProps} from '../_util/types'
+import type {BaseProps, TaroBaseEvent} from '../_util/types'
 import useBaseEvents from '../_util/hooks/useBaseEvents'
 import useIntersection from '../_util/hooks/useIntersection'
 
@@ -19,6 +24,10 @@ type ModeType =
     | 'top right'
     | 'bottom left'
     | 'bottom right'
+
+interface TaroImageLoadEvent extends TaroBaseEvent<{height: number, width: number}> {}
+
+interface TaroImageErrorEvent extends TaroBaseEvent<{errMsg: string}> {}
 
 export interface ImageProps extends BaseProps {
     /**
@@ -41,12 +50,12 @@ export interface ImageProps extends BaseProps {
     /**
      * 当错误发生时，发布到 AppService 的事件名，事件对象
      */
-    onError?: () => void
+    onError?: (event: TaroImageErrorEvent) => void
 
     /**
      * 当图片载入完毕时，发布到 AppService 的事件名，事件对象
      */
-    onLoad?: () => void
+    onLoad?: (event: TaroImageLoadEvent) => void
 }
 
 const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
@@ -56,6 +65,8 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
     src,
     mode = 'scaleToFill',
     lazyLoad = false,
+    onError,
+    onLoad,
     ...eventProps
 }, ref) => {
     const handles = useBaseEvents(eventProps)
@@ -77,6 +88,36 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
     const mergedStyle = Object.assign({
         backgroundImage: isVisible && src ? `url(${src})` : undefined
     }, style)
+
+    useEffect(() => {
+        if (src && (onLoad || onError)) {
+            const img = new window.Image()
+            img.src = src
+            img.onerror = () => {
+                const taroEvent: TaroImageErrorEvent = {
+                    type: 'error',
+                    detail: {
+                        errMsg: 'something wrong'
+                    }
+                }
+                if (onError) {
+                    onError(taroEvent)
+                }
+            }
+            img.onload = () => {
+                const taroEvent: TaroImageLoadEvent = {
+                    type: 'load',
+                    detail: {
+                        height: img.height,
+                        width: img.width
+                    }
+                }
+                if (onLoad) {
+                    onLoad(taroEvent)
+                }
+            }
+        }
+    }, [src])
 
     return (
         <div

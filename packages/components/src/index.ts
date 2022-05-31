@@ -73,7 +73,8 @@ export { default as Image } from './image'
 
 export { default as LivePlayer } from './view'
 
-export { default as Video } from './view'
+export type { VideoProps } from './video'
+export { default as Video } from './video'
 
 export { default as Map } from './view'
 
