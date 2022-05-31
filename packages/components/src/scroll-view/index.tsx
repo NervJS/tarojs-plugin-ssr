@@ -1,7 +1,7 @@
 import React, {useImperativeHandle, useRef, useEffect, forwardRef} from 'react'
 import classNames from 'classnames'
 import type {BaseProps, TaroScrollEvent} from '../_util/types'
-import useEvents from '../_util/hooks/useEvents'
+import useBaseEvents from '../_util/hooks/useBaseEvents'
 
 export interface ScrollViewProps extends BaseProps {
     /**
@@ -95,7 +95,7 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
     const el = useRef<HTMLDivElement | null>(null)
     const lastTop = useRef(0)
     const lastLeft = useRef(0)
-    const events = useEvents(eventProps)
+    const handles = useBaseEvents(eventProps)
 
     useImperativeHandle(ref, () => el.current!)
 
@@ -210,7 +210,7 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
                     }
                 }
             }}
-            {...events}
+            {...handles}
         >
             {children}
         </div>

@@ -8,7 +8,8 @@ export { default as Progress } from './view'
 export type { TextProps } from './text'
 export { default as Text } from './text'
 
-export { default as Button } from './view'
+export { ButtonProps } from './button'
+export { default as Button } from './button'
 
 export { default as Checkbox } from './view'
 

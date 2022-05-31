@@ -1,7 +1,7 @@
 import React, {forwardRef} from 'react'
 import classNames from 'classnames'
 import type {BaseProps} from '../_util/types'
-import useEvents from '../_util/hooks/useEvents'
+import useBaseEvents from '../_util/hooks/useBaseEvents'
 
 export interface TextProps extends BaseProps {
     /**
@@ -26,7 +26,7 @@ const Text: React.ForwardRefRenderFunction<HTMLDivElement, TextProps> = ({
     children,
     ...eventProps
 }, ref) => {
-    const events = useEvents(eventProps)
+    const handles = useBaseEvents(eventProps)
 
     if (typeof children === 'string') {
         if (space === 'nbsp') {
@@ -46,7 +46,7 @@ const Text: React.ForwardRefRenderFunction<HTMLDivElement, TextProps> = ({
                 {'taro-text__selectable': selectable},
                 className
             )}
-            {...events}
+            {...handles}
         >
             {children}
         </span>

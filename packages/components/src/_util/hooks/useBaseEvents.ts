@@ -54,7 +54,7 @@ interface EventHandles {
     onTouchEnd: (event: React.TouchEvent) => void
 }
 
-function useEvents({
+function useBaseEvents({
     onClick,
     onTouchStart,
     onTouchMove,
@@ -128,4 +128,4 @@ function useEvents({
     }
 }
 
-export default useEvents
+export default useBaseEvents
