@@ -68,7 +68,8 @@ export { default as Audio } from './view'
 
 export { default as Camera } from './view'
 
-export { default as Image } from './view'
+export type { ImageProps } from './image'
+export { default as Image } from './image'
 
 export { default as LivePlayer } from './view'
 
