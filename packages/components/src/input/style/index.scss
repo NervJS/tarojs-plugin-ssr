@@ -1,0 +1,43 @@
+.taro-input {
+    overflow: hidden;
+    position: relative;
+    display: block;
+    height: 1.4em;
+    min-height: 1.4em;
+    white-space: nowrap;
+    text-overflow: clip;
+    color: #333;
+
+    &__content {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        font-size: inherit;
+        text-overflow: inherit;
+    }
+
+    &__placeholder {
+        position: absolute;
+        font-size: inherit;
+        color: #ccc;
+    }
+
+    &__main {
+        font-size: inherit;
+        font-weight: inherit;
+        color: inherit;
+        background: transparent;
+        border: none;
+        outline: none;
+        text-align: inherit;
+        text-overflow: inherit;
+        font-family: inherit;
+        padding: inherit;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        z-index: 1;
+    }
+}

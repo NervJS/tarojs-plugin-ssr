@@ -25,7 +25,8 @@ export { default as Editor } from './view'
 export type { FormProps } from './form'
 export { default as Form } from './form'
 
-export { default as Input } from './view'
+export type { InputProps } from './input'
+export { default as Input } from './input'
 
 export { default as Label } from './view'
 
