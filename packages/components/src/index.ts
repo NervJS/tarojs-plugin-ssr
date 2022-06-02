@@ -58,9 +58,9 @@ export { default as MovableView } from './view'
 export type { ScrollViewProps } from './scroll-view'
 export { default as ScrollView } from './scroll-view'
 
-export { default as Swiper } from './view'
+export { default as Swiper } from './swiper'
 
-export { default as SwiperItem } from './view'
+export { default as SwiperItem } from './swiper-item'
 
 export { default as FunctionalPageNavigator } from './view'
 
