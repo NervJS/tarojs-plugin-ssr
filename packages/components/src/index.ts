@@ -43,7 +43,8 @@ export { default as RadioGroup } from './view'
 
 export { default as Slider } from './view'
 
-export { default as Switch } from './view'
+export type { SwitchProps } from './switch'
+export { default as Switch } from './switch'
 
 export { default as CoverImage } from './view'
 

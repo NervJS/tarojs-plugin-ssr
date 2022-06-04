@@ -24,6 +24,11 @@ interface TaroInputConfirmEvent extends TaroBaseEvent<{
 
 export interface InputProps extends BaseProps {
     /**
+     * 在表单组件中加上 name 来作为 key 
+     */
+    name?: string
+
+    /**
      * 输入框的初始内容
      */
     value?: string
@@ -123,6 +128,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
     id,
     style,
     className,
+    name,
     value,
     type = 'text',
     password = false,
@@ -210,6 +216,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
                 <input
                     ref={inputEl}
                     className='taro-input__main'
+                    name={name}
                     value={mergedValue}
                     type={password ? 'password' : type}
                     disabled={disabled}

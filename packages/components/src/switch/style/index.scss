@@ -1,0 +1,10 @@
+.taro-checkbox {
+    &.weui-agree__checkbox {
+        width: 22px;
+        height: 22px;
+
+        &::before {
+            font-size: 22px;
+        }
+    }
+}
