@@ -89,7 +89,8 @@ export { default as OfficialAccount } from './view'
 
 export { default as OpenData } from './view'
 
-export { default as WebView } from './view'
+export type { WebViewProps } from './web-view'
+export { default as WebView } from './web-view'
 
 export { default as NavigationBar } from './view'
 
