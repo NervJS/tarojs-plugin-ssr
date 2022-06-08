@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useImperativeHandle,forwardRef} from 'react'
+import React, {useEffect, useRef, useImperativeHandle, forwardRef} from 'react'
 import classNames from 'classnames'
 import type {BaseProps, TaroBaseEvent} from '../_util/types'
 import useBaseEvents from '../_util/hooks/useBaseEvents'

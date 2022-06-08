@@ -65,7 +65,8 @@ export { default as SwiperItem } from './swiper-item'
 
 export { default as FunctionalPageNavigator } from './view'
 
-export { default as Navigator } from './view'
+export type { NavigatorProps } from './navigator'
+export { default as Navigator } from './navigator'
 
 export { default as Audio } from './view'
 
