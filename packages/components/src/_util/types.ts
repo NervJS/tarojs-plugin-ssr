@@ -29,12 +29,12 @@ export interface TaroDomEvent<T> extends TaroBaseEvent<T> {
     /**
      * 阻止元素发生默认的行为
      */
-    preventDefault: () => void
+    preventDefault?: () => void
 
     /**
      * 阻止事件冒泡到父元素,阻止任何父事件处理程序被执行
      */
-    stopPropagation: () => void
+    stopPropagation?: () => void
 }
 
 export interface TaroTouchEvent extends TaroDomEvent<{}> {}

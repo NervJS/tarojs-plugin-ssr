@@ -185,7 +185,7 @@ const Swiper: React.ForwardRefRenderFunction<HTMLDivElement, SwiperProps> = ({
     const handles = useBaseEvents(eventProps)
 
     const [mergedCurrent, setMergedCurrent] = useMergedState(0, {
-        defaultValue: current
+        value: current
     })
 
     const items = toArray(children) as React.ReactElement<SwiperItemProps>[]

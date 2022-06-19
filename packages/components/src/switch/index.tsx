@@ -1,4 +1,4 @@
-import React, {CSSProperties} from 'react'
+import React from 'react'
 import classNames from 'classnames'
 import type {BaseProps, TaroDomEvent} from '../_util/types'
 import useBaseEvents from '../_util/hooks/useBaseEvents'
@@ -32,16 +32,16 @@ const Switch: React.ForwardRefRenderFunction<HTMLInputElement, SwitchProps> = ({
     const handles = useBaseEvents(eventProps)
 
     const [mergedChecked, setMergedChecked] = useMergedState(false, {
-        defaultValue: checked
+        value: checked
     })
 
-    const checkedStyle: CSSProperties = mergedChecked
+    const checkedStyle: React.CSSProperties = mergedChecked
         ? {
             borderColor: color,
             backgroundColor: color
         }
         : {}
-    const mergedStyle: CSSProperties = Object.assign(checkedStyle, style)
+    const mergedStyle: React.CSSProperties = Object.assign(checkedStyle, style)
 
     return (
         <input

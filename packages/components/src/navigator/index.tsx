@@ -22,10 +22,10 @@ const Navigator: React.ForwardRefRenderFunction<HTMLAnchorElement, NavigatorProp
 
     return (
         <a
+            ref={ref}
             id={id}
             style={style}
             className={classNames(hoverClass, 'taro-nav', className)}
-            ref={ref}
             href={url}
             {...handles}
         >
