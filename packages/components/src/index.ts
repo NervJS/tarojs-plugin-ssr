@@ -98,3 +98,6 @@ export { default as NavigationBar } from './view'
 export { Fragment as Block } from 'react'
 
 export { default as CustomWrapper} from './view'
+
+export type { ToastProps } from './toast'
+export { default as Toast} from './toast'
