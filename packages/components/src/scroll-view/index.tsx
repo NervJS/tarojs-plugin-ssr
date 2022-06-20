@@ -56,6 +56,11 @@ export interface ScrollViewProps extends BaseProps {
     enableBackToTop?: boolean
 
     /**
+     * 滚动区域的内容
+     */
+    children?: React.ReactNode
+
+    /**
      * 滚动到顶部/左边，会触发 scrolltoupper 事件
      */
     onScrollToUpper?: (event: TaroScrollEvent) => void

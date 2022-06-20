@@ -69,6 +69,11 @@ export interface ButtonProps extends BaseProps {
      * @default false
      */
     loading?: boolean
+
+    /**
+     * 按钮内容
+     */
+    children?: React.ReactNode
 }
 
 const Button: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = ({

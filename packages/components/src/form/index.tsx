@@ -9,7 +9,20 @@ interface TaroFormSubmitEvent {
 }
 
 export interface FormProps extends BaseProps {
+    /**
+     * 表单内容
+     */
+    children?: React.ReactNode
+
+    /**
+     * 携带 form 中的数据触发 submit 事件
+     * event.detail = { value : {'name': 'value'} , formId: '' }
+     */
     onSubmit: (event: TaroFormSubmitEvent) => void
+
+    /**
+     * 表单重置时会触发 reset 事件
+     */
     onReset: () => void
 }
 

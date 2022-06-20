@@ -7,6 +7,11 @@ export interface SwiperItemProps extends BaseProps {
      * 该 swiper-item 的标识符
      */
     itemId?: string
+
+    /**
+     * 内容
+     */
+    children?: React.ReactNode
 }
 
 const SwiperItem: React.ForwardRefRenderFunction<HTMLDivElement, SwiperItemProps> = ({

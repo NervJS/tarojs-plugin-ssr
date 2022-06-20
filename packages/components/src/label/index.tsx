@@ -3,7 +3,15 @@ import type {BaseProps} from '../_util/types'
 import useBaseEvents from '../_util/hooks/useBaseEvents'
 
 export interface LabelProps extends BaseProps {
+    /**
+     * 绑定控件的 id
+     */
     for?: string
+
+    /**
+     * 标签内容
+     */
+    children?: React.ReactNode
 }
 
 const Label: React.ForwardRefRenderFunction<HTMLLabelElement, LabelProps> = ({

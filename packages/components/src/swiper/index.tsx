@@ -151,6 +151,11 @@ interface SwiperProps extends BaseProps {
      * @default false
      */
     disableTouch?: boolean
+
+    /**
+     * swiper-item
+     */
+    children?: React.ReactNode
 }
 
 const Swiper: React.ForwardRefRenderFunction<HTMLDivElement, SwiperProps> = ({

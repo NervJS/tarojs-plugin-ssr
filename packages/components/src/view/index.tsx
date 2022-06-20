@@ -3,7 +3,12 @@ import classNames from 'classnames'
 import type {HoverablePorps} from '../_util/types'
 import useHoverableEvents from '../_util/hooks/useHoverableEvents'
 
-export interface ViewProps extends HoverablePorps {}
+export interface ViewProps extends HoverablePorps {
+    /**
+     * View 内容
+     */
+    children?: React.ReactNode
+}
 
 const View: React.ForwardRefRenderFunction<HTMLDivElement, ViewProps> = ({
     id,

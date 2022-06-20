@@ -8,6 +8,11 @@ export interface NavigatorProps extends HoverablePorps {
      * 应用内的跳转链接
      */
     url?: string
+
+    /**
+     * 导航内容
+     */
+    children?: React.ReactNode
 }
 
 const Navigator: React.ForwardRefRenderFunction<HTMLAnchorElement, NavigatorProps> = ({

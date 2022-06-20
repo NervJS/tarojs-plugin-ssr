@@ -15,6 +15,11 @@ export interface TextProps extends BaseProps {
      * @default false
      */
     selectable: boolean
+
+    /**
+     * 文本内容
+     */
+    children?: React.ReactNode
 }
 
 const Text: React.ForwardRefRenderFunction<HTMLDivElement, TextProps> = ({

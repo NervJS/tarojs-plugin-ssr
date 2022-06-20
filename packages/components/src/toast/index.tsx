@@ -17,6 +17,11 @@ export interface ToastProps {
      * Display toast
      */
     visible?: boolean
+
+    /**
+     * Toast 内容
+     */
+    children?: React.ReactNode
 }
 
 const Toast = ({icon, iconSize, visible, children}) => (
