@@ -7,7 +7,7 @@ interface TaroInstance {
     router: TaroRouter
 }
 
-interface Meta {
+interface ScopeInfo {
     type: 'class' | 'func',
     component: ReactElement
 }
@@ -15,12 +15,12 @@ interface Meta {
 /**
  * 在类组件中，从属性中获取 Next.js 的路由对象。
  */
-export function getCurrentInstance(meta?: Meta): TaroInstance {
+export function getCurrentInstance(info?: ScopeInfo): TaroInstance {
     const instance = {
         router: {}
     } as TaroInstance
 
-    if (!meta) {
+    if (!info) {
         if (typeof window === 'undefined') {
             throw new Error('`getCurrentInstance()` should be called in component scope!')
         }
@@ -54,18 +54,18 @@ export function getCurrentInstance(meta?: Meta): TaroInstance {
         return instance
     }
 
-    if (meta.type === 'class') {
-        if (!meta.component) {
+    if (info.type === 'class') {
+        if (!info.component) {
             throw new Error('`getCurrentInstance()` cannot get component instance!')
         }
 
-        if (!meta.component.props.router) {
+        if (!info.component.props.router) {
             throw new Error('`getCurrentInstance()` cannot get Next.js router in props!')
         }
 
         Object.defineProperty(instance.router, 'params', {
             get() {
-                const nextRouter = meta.component.props.router
+                const nextRouter = info.component.props.router
                 if (!nextRouter) {
                     throw new Error('Next.js router is not initialized!')
                 }
@@ -81,7 +81,7 @@ export function getCurrentInstance(meta?: Meta): TaroInstance {
     
         Object.defineProperty(instance.router, 'pathname', {
             get() {
-                const nextRouter = meta.component.props.router
+                const nextRouter = info.component.props.router
                 if (!nextRouter) {
                     throw new Error('Next.js router is not initialized!')
                 }
