@@ -88,7 +88,7 @@ export interface BaseEventPorps {
     onLongPress?: (event: TaroTouchEvent) => void
 }
 
-export interface HoverableEventPorps {
+export interface HoverableEventPorps extends BaseEventPorps {
     /**
      * 指定按下去的样式类。当 `hover-class="none"` 时，没有点击态效果
      */
