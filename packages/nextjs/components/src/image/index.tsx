@@ -6,6 +6,7 @@ import React, {
 } from 'react'
 import classNames from 'classnames'
 import type {TaroBaseProps} from '../_util/typings'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 import useIntersection from '../_util/hooks/useIntersection'
 
 type ModeType =
@@ -61,8 +62,11 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
     mode = 'scaleToFill',
     lazyLoad = false,
     onError,
-    onLoad
+    onLoad,
+    ...events
 }, ref) => {
+    const props = useTaroBaseEvents(events)
+
     const [setRef, isIntersected] = useIntersection<HTMLDivElement>({
         rootMargin: '50px',
         disabled: !lazyLoad
@@ -112,6 +116,7 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
         <div
             className={classNames('taro-img', className)}
             style={style}
+            {...props}
         >
             <div
                 ref={el => {
