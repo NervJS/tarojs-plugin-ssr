@@ -168,14 +168,28 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     }
                     const modulePath = path.relative(nextjsPageDir, request)
 
-                    let contents = unIndent`
-                        import {TaroPage} from 'tarojs-plugin-platform-nextjs/taro'
-                        import Page from '${modulePath}'
+                    const configAbsolutePath = helper.resolveMainFilePath(`${request}.config`)
+                    let contents: string
+                    if (fs.existsSync(configAbsolutePath)) {
+                        contents = unIndent`
+                            import {TaroPage} from 'tarojs-plugin-platform-nextjs/taro'
+                            import Page from '${modulePath}'
+                            import pageConfig from '${modulePath}.config'
 
-                        export default function NextPage(props) {
-                            return <TaroPage Page={Page} {...props} />
-                        }
-                    `
+                            export default function NextPage(props) {
+                                return <TaroPage {...props} Page={Page} pageConfig={pageConfig} />
+                            }
+                        `
+                    } else {
+                        contents = unIndent`
+                            import {TaroPage} from 'tarojs-plugin-platform-nextjs/taro'
+                            import Page from '${modulePath}'
+
+                            export default function NextPage(props) {
+                                return <TaroPage {...props} Page={Page} />
+                            }
+                        `
+                    }
                     if (exportedFunctions.length) {
                         contents += `\nexport {${exportedFunctions.join(', ')}} from '${modulePath}'`
                     }
