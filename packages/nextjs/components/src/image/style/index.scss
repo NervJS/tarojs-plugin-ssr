@@ -1,9 +1,13 @@
 .taro-img {
-    display: inline-block;
     overflow: hidden;
-    position: relative;
+    display: inline-block;
     width: 300px;
     height: 225px;
+}
+
+.taro-img > div {
+    height: 100%;
+    width: 100%;
     background-repeat: no-repeat;
     background-size: contain;
 }

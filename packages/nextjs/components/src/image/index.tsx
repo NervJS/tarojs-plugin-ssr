@@ -77,9 +77,6 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
         isLazy = false
     }
     const isVisible = !isLazy || isIntersected
-    const mergedStyle = Object.assign({
-        backgroundImage: isVisible && src ? `url(${src})` : undefined
-    }, style)
 
     useEffect(() => {
         if (src && (onLoad || onError)) {
@@ -113,29 +110,36 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
 
     return (
         <div
-            ref={el => {
-                div.current = el
-                setRef(el)
-            }}
-            id={id}
-            className={classNames('taro-img', {
-                'taro-img__scale-to-fill': mode === 'scaleToFill',
-                'taro-img__aspect-fit': mode === 'aspectFit',
-                'taro-img__aspect-fill': mode === 'aspectFill',
-                'taro-img__width-fix': mode === 'widthFix',
-                'taro-img__height-fix': mode === 'heightFix',
-                'taro-img__top': mode === 'top',
-                'taro-img__bottom': mode === 'bottom',
-                'taro-img__center': mode === 'center',
-                'taro-img__left': mode === 'left',
-                'taro-img__right': mode === 'right',
-                'taro-img__top-left': mode === 'top left',
-                'taro-img__top-right': mode === 'top right',
-                'taro-img__bottom-left': mode === 'bottom left',
-                'taro-img__bottom-right': mode === 'bottom right'
-            }, className)}
-            style={mergedStyle}
-        />
+            className={classNames('taro-img', className)}
+            style={style}
+        >
+            <div
+                ref={el => {
+                    div.current = el
+                    setRef(el)
+                }}
+                id={id}
+                className={classNames({
+                    'taro-img__scale-to-fill': mode === 'scaleToFill',
+                    'taro-img__aspect-fit': mode === 'aspectFit',
+                    'taro-img__aspect-fill': mode === 'aspectFill',
+                    'taro-img__width-fix': mode === 'widthFix',
+                    'taro-img__height-fix': mode === 'heightFix',
+                    'taro-img__top': mode === 'top',
+                    'taro-img__bottom': mode === 'bottom',
+                    'taro-img__center': mode === 'center',
+                    'taro-img__left': mode === 'left',
+                    'taro-img__right': mode === 'right',
+                    'taro-img__top-left': mode === 'top left',
+                    'taro-img__top-right': mode === 'top right',
+                    'taro-img__bottom-left': mode === 'bottom left',
+                    'taro-img__bottom-right': mode === 'bottom right'
+                })}
+                style={{
+                    backgroundImage: isVisible && src ? `url(${src})` : undefined
+                }}
+            />
+        </div>
     )
 }
 
