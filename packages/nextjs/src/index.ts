@@ -162,19 +162,23 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
 
                     const exportedFunctions = getNextExportedFunctions(targetPageFilePath)
 
-                    let request = path.join(outputSourcePath, taroPage)
+                    const originRequest = path.join(outputSourcePath, taroPage)
+                    let request = originRequest
                     if (dynamicPageFileBaseName) {
                         request = path.join(path.dirname(request), dynamicPageFileBaseName)
                     }
                     const modulePath = path.relative(nextjsPageDir, request)
 
-                    const configAbsolutePath = helper.resolveMainFilePath(`${request}.config`)
+                    const configAbsolutePath = helper.resolveMainFilePath(`${originRequest}.config`)
+
                     let contents: string
                     if (fs.existsSync(configAbsolutePath)) {
+                        const configPath = path.relative(nextjsPageDir, `${originRequest}.config`)
+
                         contents = unIndent`
                             import {TaroPage} from 'tarojs-plugin-platform-nextjs/taro'
                             import Page from '${modulePath}'
-                            import pageConfig from '${modulePath}.config'
+                            import pageConfig from '${configPath}'
 
                             export default function NextPage(props) {
                                 return <TaroPage {...props} Page={Page} pageConfig={pageConfig} />
