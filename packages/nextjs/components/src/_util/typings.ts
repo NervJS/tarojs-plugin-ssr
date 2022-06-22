@@ -6,6 +6,8 @@ export interface TaroEvent<D = object> {
     detail: D
     timeStamp: number
     type: string
+    preventDefault(): void
+    stopPropagation(): void
 }
 
 export interface TaroMouseEventDetail {
@@ -25,7 +27,7 @@ export interface TaroTouchEvent extends TaroEvent<TaroTouchEventDetail> {
     touches: React.TouchList
 }
 
-export type TaroEventHandler<E extends TaroEvent<any>> = (event: E) => void
+export type TaroEventHandler<E extends TaroEvent<{}>> = (event: E) => void
 
 export type TaroMouseEventHandler = TaroEventHandler<TaroMouseEvent>
 export type TaroTouchEventHandler = TaroEventHandler<TaroTouchEvent>
@@ -67,7 +69,32 @@ export interface TaroBaseEvents {
     onLongPress?: TaroMouseEventHandler
 }
 
-export interface TaroBaseProps extends TaroBaseEvents {
+export interface TaroHoverableEvents extends TaroBaseEvents {
+    /**
+     * 指定按下去的样式类。当 `hover-class="none"` 时，没有点击态效果
+     */
+    hoverClass?: string
+
+    /**
+     * 指定是否阻止本节点的祖先节点出现点击态
+     * @default false
+     */
+    hoverStopPropagation?: boolean
+
+    /**
+     * 按住后多久出现点击态，单位毫秒
+     * @default 20
+     */
+    hoverStartTime?: number
+
+    /**
+     * 手指松开后点击态保留时间，单位毫秒
+     * @default 70
+     */
+    hoverStayTime?: number
+}
+
+export interface TaroBaseAttributes {
     /**
      * 组件唯一标示
      */
@@ -83,3 +110,7 @@ export interface TaroBaseProps extends TaroBaseEvents {
      */
     style?: React.CSSProperties
 }
+
+export interface TaroBaseProps extends TaroBaseAttributes, TaroBaseEvents { }
+
+export interface TaroHoverableProps extends TaroBaseAttributes, TaroHoverableEvents { }

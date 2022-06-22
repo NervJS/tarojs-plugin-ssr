@@ -1,5 +1,5 @@
 import React from 'react'
-import {TaroMouseEvent, TaroTouchEvent} from './typings'
+import {TaroMouseEvent, TaroTouchEvent, TaroEvent} from './typings'
 
 export function createTaroMouseEvent(taroEventType: string, reactEvent: React.TouchEvent): TaroMouseEvent {
     const {
@@ -7,7 +7,9 @@ export function createTaroMouseEvent(taroEventType: string, reactEvent: React.To
         target,
         currentTarget,
         changedTouches,
-        touches
+        touches,
+        preventDefault,
+        stopPropagation
     } = reactEvent
 
     return {
@@ -20,7 +22,9 @@ export function createTaroMouseEvent(taroEventType: string, reactEvent: React.To
         timeStamp,
         type: taroEventType,
         changedTouches,
-        touches
+        touches,
+        preventDefault,
+        stopPropagation
     }
 }
 
@@ -30,7 +34,9 @@ export function createTaroTouchEvent(taroEventType: string, reactEvent: React.To
         target,
         currentTarget,
         changedTouches,
-        touches
+        touches,
+        preventDefault,
+        stopPropagation
     } = reactEvent
 
     return {
@@ -40,6 +46,20 @@ export function createTaroTouchEvent(taroEventType: string, reactEvent: React.To
         timeStamp,
         type: taroEventType,
         changedTouches,
-        touches
+        touches,
+        preventDefault,
+        stopPropagation
+    }
+}
+
+export function createTaroEvent<D extends object>(taroEventType: string, eventTarget: EventTarget, detail: D): TaroEvent<D> {
+    return {
+        currentTarget: eventTarget,
+        target: eventTarget,
+        detail,
+        timeStamp: Date.now(),
+        type: taroEventType,
+        preventDefault() {},
+        stopPropagation() {}
     }
 }

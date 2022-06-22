@@ -5,9 +5,10 @@ import React, {
     forwardRef
 } from 'react'
 import classNames from 'classnames'
-import type {TaroBaseProps} from '../_util/typings'
+import type {TaroBaseProps, TaroEvent, TaroEventHandler} from '../_util/typings'
 import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 import useIntersection from '../_util/hooks/useIntersection'
+import {createTaroEvent} from '../_util/taroEvent'
 
 type ModeType =
     | 'scaleToFill'
@@ -46,12 +47,12 @@ export interface ImageProps extends TaroBaseProps {
     /**
      * 当错误发生时，发布到 AppService 的事件名，事件对象
      */
-    onError?: (event: any) => void
+    onError?: TaroEventHandler<TaroEvent<{errMsg: string}>>
 
     /**
      * 当图片载入完毕时，发布到 AppService 的事件名，事件对象
      */
-    onLoad?: (event: any) => void
+    onLoad?: TaroEventHandler<TaroEvent<{height: number, width: number}>>
 }
 
 const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
@@ -88,24 +89,20 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
             img.src = src
             img.onerror = () => {
                 if (onError) {
-                    const taroEvent = {
-                        type: 'error',
-                        detail: {
-                            errMsg: 'something wrong'
-                        }
+                    const detail = {
+                        errMsg: 'something wrong'
                     }
+                    const taroEvent = createTaroEvent('error', div.current, detail)
                     onError(taroEvent)
                 }
             }
             img.onload = () => {
                 if (onLoad) {
-                    const taroEvent = {
-                        type: 'load',
-                        detail: {
-                            height: img.height,
-                            width: img.width
-                        }
+                    const detail = {
+                        height: img.height,
+                        width: img.width
                     }
+                    const taroEvent = createTaroEvent('load', div.current, detail)
                     onLoad(taroEvent)
                 }
             }
