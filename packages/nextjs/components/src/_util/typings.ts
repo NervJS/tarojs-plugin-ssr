@@ -27,10 +27,22 @@ export interface TaroTouchEvent extends TaroEvent<TaroTouchEventDetail> {
     touches: React.TouchList
 }
 
+export interface TaroUIEventDetail {
+    scrollLeft: number
+    scrollTop: number
+    scrollHeight: number
+    scrollWidth: number
+    deltaX: number
+    deltaY: number
+}
+
+export interface TaroUIEvent extends TaroEvent<TaroUIEventDetail> { }
+
 export type TaroEventHandler<E extends TaroEvent<{}>> = (event: E) => void
 
 export type TaroMouseEventHandler = TaroEventHandler<TaroMouseEvent>
 export type TaroTouchEventHandler = TaroEventHandler<TaroTouchEvent>
+export type TaroUIEventHandler = TaroEventHandler<TaroUIEvent>
 
 export interface TaroBaseEvents {
     /**
