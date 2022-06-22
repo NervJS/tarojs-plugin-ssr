@@ -14,14 +14,12 @@ export interface TaroMouseEventDetail {
     x: number
     y: number
 }
-
 export interface TaroMouseEvent extends TaroEvent<TaroMouseEventDetail> {
     changedTouches: React.TouchList
     touches: React.TouchList
 }
 
 export interface TaroTouchEventDetail {}
-
 export interface TaroTouchEvent extends TaroEvent<TaroTouchEventDetail> {
     changedTouches: React.TouchList
     touches: React.TouchList
@@ -35,14 +33,35 @@ export interface TaroUIEventDetail {
     deltaX: number
     deltaY: number
 }
-
 export interface TaroUIEvent extends TaroEvent<TaroUIEventDetail> { }
+
+export interface TaroInputEventDetail {
+    cursor: number
+    keyCode: number
+    value: string
+}
+export interface TaroInputEvent extends TaroEvent<TaroInputEventDetail> { }
+
+export interface TaroFocusEventDetail {
+    height: number
+    value: string
+}
+export interface TaroFocusEvent extends TaroEvent<TaroFocusEventDetail> { }
+
+export interface TaroBlurEventDetail {
+    cursor: number
+    value: string
+}
+export interface TaroBlurEvent extends TaroEvent<TaroBlurEventDetail> { }
 
 export type TaroEventHandler<E extends TaroEvent<{}>> = (event: E) => void
 
 export type TaroMouseEventHandler = TaroEventHandler<TaroMouseEvent>
 export type TaroTouchEventHandler = TaroEventHandler<TaroTouchEvent>
 export type TaroUIEventHandler = TaroEventHandler<TaroUIEvent>
+export type TaroInputEventHandler = TaroEventHandler<TaroInputEvent>
+export type TaroFocusEventHandler = TaroEventHandler<TaroFocusEvent>
+export type TaroBlurEventHandler = TaroEventHandler<TaroBlurEvent>
 
 export interface TaroBaseEvents {
     /**
