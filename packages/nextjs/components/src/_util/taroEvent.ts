@@ -59,7 +59,7 @@ export function createTaroEvent<D extends object>(taroEventType: string, eventTa
         detail,
         timeStamp: Date.now(),
         type: taroEventType,
-        preventDefault() {},
-        stopPropagation() {}
+        preventDefault() { },
+        stopPropagation() { }
     }
 }

@@ -1,5 +1,4 @@
 import React, {forwardRef} from 'react'
-import classNames from 'classnames'
 import {TaroHoverableProps} from '../_util/typings'
 import useTaroHoverableEvents from '../_util/hooks/useTaroHoverableEvents'
 
@@ -11,20 +10,14 @@ export interface ViewProps extends TaroHoverableProps {
 }
 
 const View: React.ForwardRefRenderFunction<HTMLDivElement, ViewProps> = ({
-    id,
-    className,
-    style,
     children,
-    ...events
+    ...rest
 }, ref) => {
-    const [hoverClass, props] = useTaroHoverableEvents(events, 'none')
+    const props = useTaroHoverableEvents(rest, 'none')
 
     return (
         <div
             ref={ref}
-            id={id}
-            className={classNames(hoverClass, className)}
-            style={style}
             {...props}
         >
             {children}

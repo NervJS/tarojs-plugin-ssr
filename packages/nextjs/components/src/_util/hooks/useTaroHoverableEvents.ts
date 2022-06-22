@@ -1,20 +1,19 @@
 import {useState, useRef} from 'react'
-import {TaroHoverableEvents} from '../typings'
-import useTaroBaseEvents from './useTaroBaseEvents'
+import classNames from 'classnames'
+import {TaroHoverableProps} from '../typings'
+import useTaroBaseEvents, {UseTaroBaseEventsReturn} from './useTaroBaseEvents'
 
-type UseTaroHoverableEventsReturn = [
-    string | undefined,
-    ReturnType<typeof useTaroBaseEvents>
-]
+interface UseTaroHoverableEventsReturn extends UseTaroBaseEventsReturn { }
 
 function useTaroHoverableEvents(
     {
+        className,
         hoverClass,
         hoverStopPropagation = false,
         hoverStartTime = 50,
         hoverStayTime = 400,
-        ...baseEvents
-    }: TaroHoverableEvents,
+        ...baseProps
+    }: TaroHoverableProps,
     defaultHoverClass?: string
 ): UseTaroHoverableEventsReturn {
     const {
@@ -22,7 +21,7 @@ function useTaroHoverableEvents(
         onTouchCancel,
         onTouchEnd,
         ...rest
-    } = useTaroBaseEvents(baseEvents)
+    } = useTaroBaseEvents(baseProps)
 
     const [hovered, setHovered] = useState(false)
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -31,7 +30,10 @@ function useTaroHoverableEvents(
         hoverClass = defaultHoverClass
     }
 
-    const props: ReturnType<typeof useTaroBaseEvents> = {
+    return {
+        className: classNames({
+            hoverClass: hovered
+        }, className),
         onTouchStart(event) {
             if (timer.current) {
                 clearTimeout(timer.current)
@@ -66,11 +68,6 @@ function useTaroHoverableEvents(
         },
         ...rest
     }
-
-    return [
-        hovered ? hoverClass : undefined,
-        props
-    ]
 }
 
 export default useTaroHoverableEvents

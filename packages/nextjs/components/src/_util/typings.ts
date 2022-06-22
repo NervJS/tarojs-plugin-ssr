@@ -69,7 +69,24 @@ export interface TaroBaseEvents {
     onLongPress?: TaroMouseEventHandler
 }
 
-export interface TaroHoverableEvents extends TaroBaseEvents {
+export interface TaroBaseAttributes {
+    /**
+     * 组件唯一标示
+     */
+    id?: string
+
+    /**
+     * 组件类名
+     */
+    className?: string
+
+    /**
+     * 组件的内联样式
+     */
+    style?: React.CSSProperties
+}
+
+export interface TaroHoverableAttributes extends TaroBaseAttributes {
     /**
      * 指定按下去的样式类。当 `hover-class="none"` 时，没有点击态效果
      */
@@ -94,23 +111,6 @@ export interface TaroHoverableEvents extends TaroBaseEvents {
     hoverStayTime?: number
 }
 
-export interface TaroBaseAttributes {
-    /**
-     * 组件唯一标示
-     */
-    id?: string
-
-    /**
-     * 组件类名
-     */
-    className?: string
-
-    /**
-     * 组件的内联样式
-     */
-    style?: React.CSSProperties
-}
-
 export interface TaroBaseProps extends TaroBaseAttributes, TaroBaseEvents { }
 
-export interface TaroHoverableProps extends TaroBaseAttributes, TaroHoverableEvents { }
+export interface TaroHoverableProps extends TaroHoverableAttributes, TaroBaseEvents { }

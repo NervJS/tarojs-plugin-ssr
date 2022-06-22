@@ -56,17 +56,15 @@ export interface ImageProps extends TaroBaseProps {
 }
 
 const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
-    id,
     className,
-    style,
     src,
     mode = 'scaleToFill',
     lazyLoad = false,
     onError,
     onLoad,
-    ...events
+    ...rest
 }, ref) => {
-    const props = useTaroBaseEvents(events)
+    const props = useTaroBaseEvents(rest)
 
     const [setRef, isIntersected] = useIntersection<HTMLDivElement>({
         rootMargin: '50px',
@@ -112,7 +110,6 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
     return (
         <div
             className={classNames('taro-img', className)}
-            style={style}
             {...props}
         >
             <div
@@ -120,7 +117,6 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
                     div.current = el
                     setRef(el)
                 }}
-                id={id}
                 className={classNames({
                     'taro-img__scale-to-fill': mode === 'scaleToFill',
                     'taro-img__aspect-fit': mode === 'aspectFit',

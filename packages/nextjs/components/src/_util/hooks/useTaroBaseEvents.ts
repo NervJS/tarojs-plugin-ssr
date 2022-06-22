@@ -1,8 +1,8 @@
 import React, {useRef, useCallback} from 'react'
-import {TaroBaseEvents} from '../typings'
+import {TaroBaseProps, TaroBaseAttributes} from '../typings'
 import {createTaroMouseEvent, createTaroTouchEvent} from '../taroEvent'
 
-interface EventHandles {
+export interface UseTaroBaseEventsReturn extends TaroBaseAttributes {
     onTouchStart: (event: React.TouchEvent) => void
     onTouchMove: (event: React.TouchEvent) => void
     onTouchCancel: (event: React.TouchEvent) => void
@@ -10,13 +10,15 @@ interface EventHandles {
 }
 
 function useTaroBaseEvents({
+    catchMove,
     onClick,
     onTouchStart,
     onTouchMove,
     onTouchCancel,
     onTouchEnd,
-    onLongPress
-}: TaroBaseEvents): EventHandles {
+    onLongPress,
+    ...rest
+}: TaroBaseProps): UseTaroBaseEventsReturn {
     const trackingTap = useRef(false)
     const startTime = useRef(0)
     const touchStartInfo = useRef<{screenX: number, screenY: number} | null>(null)
@@ -52,6 +54,9 @@ function useTaroBaseEvents({
     }, [onTouchStart, onLongPress])
 
     const handleTouchMove = useCallback((reactEvent: React.TouchEvent): void => {
+        if (catchMove) {
+            reactEvent.preventDefault()
+        }
         trackingTap.current = trackingTap.current &&
             reactEvent.targetTouches.length === 1 &&
             !touchHasMoved(reactEvent)
@@ -97,7 +102,8 @@ function useTaroBaseEvents({
         onTouchStart: handleTouchStart,
         onTouchMove: handleTouchMove,
         onTouchCancel: handleTouchCancel,
-        onTouchEnd: handleTouchEnd
+        onTouchEnd: handleTouchEnd,
+        ...rest
     }
 }
 
