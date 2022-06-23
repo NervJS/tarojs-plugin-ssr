@@ -35,7 +35,7 @@ class TaroApp {
 
     navigateTo = ({url, success, fail, complete}: swan.navigateTo.Param): void => {
         if (typeof window === 'undefined') {
-            throw new Error('`navigateTo` cannot called on server-side!')
+            throw new Error('`navigateTo` cannot be called on server-side!')
         }
 
         if (!Router.router) {
@@ -46,13 +46,17 @@ class TaroApp {
 
         const base = isAbsoluteUrl(url) ?  undefined : location.origin
         const urlObj = new URL(url, base)
-    
-        const customRoute = this.customRoutes[urlObj.pathname]
-        if (customRoute) {
-            urlObj.pathname = customRoute
+
+        let target = url
+        if (!isAbsoluteUrl(url)) {
+            const customRoute = this.customRoutes[urlObj.pathname]
+            if (customRoute) {
+                urlObj.pathname = customRoute
+            }
+            target = urlObj.pathname + urlObj.search + urlObj.hash
         }
 
-        Router.router.push(urlObj.toString())
+        Router.router.push(target)
             .then(() => {
                 const page: TaroPage = {
                     route: urlObj.pathname
