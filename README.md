@@ -1,6 +1,4 @@
-# tarojs-plugin-platform-nextjs
-
-Taro 插件，用于编译为 Next.js 应用。
+# Taro 插件，用于编译为 Next.js 应用。
 
 <strong>⚠️ 本插件目前处于早期建设中，不建议用于生产环境！</strong>
 
