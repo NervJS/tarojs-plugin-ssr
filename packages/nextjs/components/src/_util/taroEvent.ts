@@ -7,16 +7,22 @@ import {
     TaroBlurEvent
 } from './typings'
 
-export function createTaroMouseEvent(taroEventType: string, reactEvent: React.TouchEvent): TaroMouseEvent {
+export function createTaroMouseEvent(taroEventType: string, reactEvent: React.TouchEvent | React.MouseEvent): TaroMouseEvent {
     const {
         timeStamp,
         target,
         currentTarget,
-        changedTouches,
-        touches,
         preventDefault,
         stopPropagation
     } = reactEvent
+
+    const changedTouches = 'changedTouches' in reactEvent
+        ? reactEvent.changedTouches
+        : [reactEvent] as any as React.TouchList
+
+    const touches = 'touches' in reactEvent
+        ? reactEvent.touches
+        : [reactEvent] as any as React.TouchList
 
     return {
         currentTarget,
@@ -34,16 +40,22 @@ export function createTaroMouseEvent(taroEventType: string, reactEvent: React.To
     }
 }
 
-export function createTaroTouchEvent(taroEventType: string, reactEvent: React.TouchEvent): TaroTouchEvent {
+export function createTaroTouchEvent(taroEventType: string, reactEvent: React.TouchEvent | React.MouseEvent): TaroTouchEvent {
     const {
         timeStamp,
         target,
         currentTarget,
-        changedTouches,
-        touches,
         preventDefault,
         stopPropagation
     } = reactEvent
+
+    const changedTouches = 'changedTouches' in reactEvent
+        ? reactEvent.changedTouches
+        : [reactEvent] as any as React.TouchList
+
+    const touches = 'touches' in reactEvent
+        ? reactEvent.touches
+        : [reactEvent] as any as React.TouchList
 
     return {
         currentTarget,

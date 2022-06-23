@@ -3,10 +3,17 @@ import {TaroBaseProps, TaroBaseAttributes} from '../typings'
 import {createTaroMouseEvent, createTaroTouchEvent} from '../taroEvent'
 
 export interface UseTaroBaseEventsReturn extends TaroBaseAttributes {
-    onTouchStart: (event: React.TouchEvent) => void
-    onTouchMove: (event: React.TouchEvent) => void
-    onTouchCancel: (event: React.TouchEvent) => void
-    onTouchEnd: (event: React.TouchEvent) => void
+    onMouseDown: React.MouseEventHandler
+    onTouchStart: React.TouchEventHandler
+
+    onMouseMove: React.MouseEventHandler
+    onTouchMove: React.TouchEventHandler
+
+    onMouseUp: React.MouseEventHandler
+    onTouchEnd: React.TouchEventHandler
+
+    onMouseLeave: React.MouseEventHandler
+    onTouchCancel: React.TouchEventHandler
 }
 
 function useTaroBaseEvents({
@@ -24,20 +31,23 @@ function useTaroBaseEvents({
     const touchStartInfo = useRef<{screenX: number, screenY: number} | null>(null)
     const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-    const touchHasMoved = useCallback((reactEvent: React.TouchEvent) => {
-        const start = reactEvent.changedTouches[0]
+    const touchHasMoved = useCallback((reactEvent: React.TouchEvent | React.MouseEvent) => {
+        const start = 'targetTouches' in reactEvent ? reactEvent.targetTouches[0] : reactEvent
         const end = touchStartInfo.current
 
         return Math.sqrt(Math.pow(end.screenX - start.screenX, 2) + Math.pow(end.screenY - start.screenY, 2))
     }, [])
 
-    const handleTouchStart = useCallback((reactEvent: React.TouchEvent): void => {
-        trackingTap.current = reactEvent.targetTouches.length === 1
+    const handleStart = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
+        const touches = 'targetTouches' in reactEvent ? reactEvent.targetTouches : [reactEvent]
+
+        trackingTap.current = touches.length === 1
         startTime.current = Date.now()
-        touchStartInfo.current = reactEvent.changedTouches[0]
+        
+        touchStartInfo.current = touches[0]
             ? {
-                screenX: reactEvent.changedTouches[0].screenX,
-                screenY: reactEvent.changedTouches[0].screenY,
+                screenX: touches[0].screenX,
+                screenY: touches[0].screenY,
             }
             : null
 
@@ -53,12 +63,15 @@ function useTaroBaseEvents({
         }
     }, [onTouchStart, onLongPress])
 
-    const handleTouchMove = useCallback((reactEvent: React.TouchEvent): void => {
+    const handleMove = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
         if (catchMove) {
             reactEvent.preventDefault()
         }
+
+        const touches = 'targetTouches' in reactEvent ? reactEvent.targetTouches : [reactEvent]
+
         trackingTap.current = trackingTap.current &&
-            reactEvent.targetTouches.length === 1 &&
+            touches.length === 1 &&
             !touchHasMoved(reactEvent)
 
         if (longPressTimer.current) {
@@ -70,17 +83,7 @@ function useTaroBaseEvents({
         }
     }, [touchHasMoved, onTouchMove])
 
-    const handleTouchCancel = useCallback((reactEvent: React.TouchEvent): void => {
-        if (longPressTimer.current) {
-            clearTimeout(longPressTimer.current)
-        }
-        if (onTouchCancel) {
-            const taroEvent = createTaroTouchEvent('touchcancel', reactEvent)
-            onTouchCancel(taroEvent)
-        }
-    }, [onTouchCancel])
-
-    const handleTouchEnd = useCallback((reactEvent: React.TouchEvent): void => {
+    const handleEnd = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
         if (longPressTimer.current) {
             clearTimeout(longPressTimer.current)
         }
@@ -94,15 +97,32 @@ function useTaroBaseEvents({
             setTimeout(() => {
                 onClick(taroEvent)
             })
-            
         }
     }, [onTouchEnd, onClick])
 
+    const handleCancel = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
+        if (longPressTimer.current) {
+            clearTimeout(longPressTimer.current)
+        }
+        if (onTouchCancel) {
+            const taroEvent = createTaroTouchEvent('touchcancel', reactEvent)
+            onTouchCancel(taroEvent)
+        }
+    }, [onTouchCancel])
+
     return {
-        onTouchStart: handleTouchStart,
-        onTouchMove: handleTouchMove,
-        onTouchCancel: handleTouchCancel,
-        onTouchEnd: handleTouchEnd,
+        onMouseDown: handleStart,
+        onTouchStart: handleStart,
+
+        onMouseMove: handleMove,
+        onTouchMove: handleMove,
+
+        onMouseUp: handleEnd,
+        onTouchEnd: handleEnd,
+
+        onMouseLeave: handleCancel,
+        onTouchCancel: handleCancel,
+
         ...rest
     }
 }
