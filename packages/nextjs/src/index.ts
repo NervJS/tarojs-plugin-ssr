@@ -350,7 +350,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                 )
             }
             scaffold().on('end', async () => {
-                console.log('Compiled to Next.js application successfully!\n')
+                console.log(chalk.green('Compiled to Next.js application successfully!\n'))
 
                 const port = devServer.port || DEFAULT_PORT
                 if (runNextjs) {
@@ -371,7 +371,13 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     if (openBrowser) {
                         const indexRoute = customRoutes[taroPages[0]] || taroPages[0]
                         if (indexRoute) {
-                            open(`http://127.0.0.1:${port}${indexRoute}`)
+                            const nextConfigPath = path.resolve(outputPath, 'next.config.js')
+                            const {basePath} = require(nextConfigPath)
+                            if (![undefined, '', '/'].includes(basePath)) {
+                                open(`http://127.0.0.1:${port}${basePath}${indexRoute}`)
+                            } else {
+                                open(`http://127.0.0.1:${port}${indexRoute}`)
+                            }
                         }
                     }
 
@@ -473,7 +479,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     }
 
                     const watcher = watch(`${sourcePath}/**`, {delay: 200})
-                    watcher.on('ready', () => console.log('Watching for file changes...'))
+                    watcher.on('ready', () => console.log(chalk.blue('Watching for file changes...\n')))
                     watcher.on('change', filePath => handleWatch('changed', filePath))
                     watcher.on('add', filePath => handleWatch('added', filePath))
                     watcher.on('unlink', filePath => handleWatch('removed', filePath))
