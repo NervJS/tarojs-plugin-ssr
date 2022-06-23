@@ -2,6 +2,20 @@ import React, {useRef, useCallback} from 'react'
 import {TaroBaseProps, TaroBaseAttributes} from '../typings'
 import {createTaroMouseEvent, createTaroTouchEvent} from '../taroEvent'
 
+const TOUCH_EVENT = 1
+const MOUSE_EVENT = 2
+
+const EVENT_TYPE_MAPPINGS = {
+    touchstart: TOUCH_EVENT,
+    touchmove: TOUCH_EVENT,
+    touchend: TOUCH_EVENT,
+
+    mousedown: MOUSE_EVENT,
+    mousemove: MOUSE_EVENT,
+    mouseup: MOUSE_EVENT,
+    mouseleave: MOUSE_EVENT
+}
+
 export interface UseTaroBaseEventsReturn extends TaroBaseAttributes {
     onMouseDown: React.MouseEventHandler
     onTouchStart: React.TouchEventHandler
@@ -39,6 +53,11 @@ function useTaroBaseEvents({
     }, [])
 
     const handleStart = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
+        const eventType = EVENT_TYPE_MAPPINGS[reactEvent.type]
+        if (eventType === MOUSE_EVENT && 'ontouchstart' in window) {
+            return
+        }
+
         const touches = 'targetTouches' in reactEvent ? reactEvent.targetTouches : [reactEvent]
 
         trackingTap.current = touches.length === 1
@@ -68,6 +87,11 @@ function useTaroBaseEvents({
             reactEvent.preventDefault()
         }
 
+        const eventType = EVENT_TYPE_MAPPINGS[reactEvent.type]
+        if (eventType === MOUSE_EVENT && 'ontouchmove' in window) {
+            return
+        }
+
         const touches = 'targetTouches' in reactEvent ? reactEvent.targetTouches : [reactEvent]
 
         trackingTap.current = trackingTap.current &&
@@ -84,6 +108,11 @@ function useTaroBaseEvents({
     }, [touchHasMoved, onTouchMove])
 
     const handleEnd = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
+        const eventType = EVENT_TYPE_MAPPINGS[reactEvent.type]
+        if (eventType === MOUSE_EVENT && 'ontouchend' in window) {
+            return
+        }
+
         if (longPressTimer.current) {
             clearTimeout(longPressTimer.current)
         }
@@ -101,6 +130,11 @@ function useTaroBaseEvents({
     }, [onTouchEnd, onClick])
 
     const handleCancel = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
+        const eventType = EVENT_TYPE_MAPPINGS[reactEvent.type]
+        if (eventType === MOUSE_EVENT && 'ontouchcancel' in window) {
+            return
+        }
+
         if (longPressTimer.current) {
             clearTimeout(longPressTimer.current)
         }

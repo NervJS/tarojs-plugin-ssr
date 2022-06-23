@@ -1,4 +1,4 @@
-import {useState, useRef} from 'react'
+import {useState, useRef, useCallback} from 'react'
 import classNames from 'classnames'
 import {TaroHoverableProps} from '../typings'
 import useTaroBaseEvents, {UseTaroBaseEventsReturn} from './useTaroBaseEvents'
@@ -17,9 +17,12 @@ function useTaroHoverableEvents(
     defaultHoverClass?: string
 ): UseTaroHoverableEventsReturn {
     const {
+        onMouseDown,
         onTouchStart,
-        onTouchCancel,
+        onMouseUp,
         onTouchEnd,
+        onMouseLeave,
+        onTouchCancel,
         ...rest
     } = useTaroBaseEvents(baseProps)
 
@@ -30,42 +33,78 @@ function useTaroHoverableEvents(
         hoverClass = defaultHoverClass
     }
 
+    const handleStart = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
+        if (timer.current) {
+            clearTimeout(timer.current)
+        }
+        if (hoverClass !== 'none' && !(event as any).stopHoverClass) {
+            timer.current = setTimeout(() => {
+                setHovered(true)
+            }, hoverStartTime)
+        }
+        if (hoverStopPropagation) {
+            (reactEvent as any).stopHoverClass = true
+        }
+    }, [])
+
+    const handleEnd = useCallback((): void => {
+        if (timer.current) {
+            clearTimeout(timer.current)
+        }
+        timer.current = setTimeout(() => {
+            setHovered(false)
+        }, hoverStayTime)
+    }, [])
+
+    const handleMouseDown = useCallback((reactEvent: React.MouseEvent): void => {
+        if (!('ontouchstart' in window)) {
+            handleStart(reactEvent)
+        }
+        onMouseDown(reactEvent)
+    }, [handleStart, onMouseDown])
+
+    const handleTouchStart = useCallback((reactEvent: React.TouchEvent): void => {
+        handleStart(reactEvent)
+        onTouchStart(reactEvent)
+    }, [handleStart, onTouchStart])
+
+    const handleMouseUp = useCallback((reactEvent: React.MouseEvent): void => {
+        if (!('ontouchend' in window)) {
+            handleEnd()
+        }
+        onMouseUp(reactEvent)
+    }, [handleEnd, onMouseUp])
+
+    const handleTouchEnd = useCallback((reactEvent: React.TouchEvent): void => {
+        handleEnd()
+        onTouchEnd(reactEvent)
+    }, [handleEnd, onTouchEnd])
+
+    const handleMouseLeave = useCallback((reactEvent: React.MouseEvent): void => {
+        if (!('ontouchcancel' in window)) {
+            handleEnd()
+        }
+        onMouseLeave(reactEvent)
+    }, [handleEnd, onMouseLeave])
+
+    const handleTouchCancel = useCallback((reactEvent: React.TouchEvent): void => {
+        handleEnd()
+        onTouchCancel(reactEvent)
+    }, [handleEnd, onTouchCancel])
+
     return {
         className: classNames({
             hoverClass: hovered
         }, className),
-        onTouchStart(event) {
-            if (timer.current) {
-                clearTimeout(timer.current)
-            }
-            if (hoverClass !== 'none' && !(event as any).stopHoverClass) {
-                timer.current = setTimeout(() => {
-                    setHovered(true)
-                }, hoverStartTime)
-            }
-            if (hoverStopPropagation) {
-                (event as any).stopHoverClass = true
-            }
-            onTouchStart(event)
-        },
-        onTouchCancel(event) {
-            if (timer.current) {
-                clearTimeout(timer.current)
-            }
-            timer.current = setTimeout(() => {
-                setHovered(false)
-            }, hoverStayTime)
-            onTouchCancel(event)
-        },
-        onTouchEnd(event) {
-            if (timer.current) {
-                clearTimeout(timer.current)
-            }
-            timer.current = setTimeout(() => {
-                setHovered(false)
-            }, hoverStayTime)
-            onTouchEnd(event)
-        },
+        onMouseDown: handleMouseDown,
+        onTouchStart: handleTouchStart,
+
+        onMouseUp: handleMouseUp,
+        onTouchEnd: handleTouchEnd,
+
+        onMouseLeave: handleMouseLeave,
+        onTouchCancel: handleTouchCancel,
+
         ...rest
     }
 }
