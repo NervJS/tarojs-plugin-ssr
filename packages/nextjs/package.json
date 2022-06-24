@@ -56,7 +56,6 @@
         "mobile-detect": "^1.4.5",
         "mpromisify": "^1.0.4",
         "next-transpile-modules": "^9.0.0",
-        "omit.js": "^2.0.2",
         "open": "^8.4.0",
         "postcss-pxtorem": "^6.0.0",
         "scss-bundle": "^3.1.2",
