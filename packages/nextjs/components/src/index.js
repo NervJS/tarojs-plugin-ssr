@@ -13,4 +13,7 @@ export {default as Toast} from './toast'
 export {default as Video} from './video'
 export {default as View} from './view'
 export {default as WebView} from './web-view'
+
+// internal components
 export {default as Icon} from './icon'
+export {default as Preview} from './preview'

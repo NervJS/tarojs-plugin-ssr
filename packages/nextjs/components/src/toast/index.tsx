@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import Mask from './mask'
+import Mask from '../mask'
 import Icon from '../icon'
 
 export interface ToastProps {

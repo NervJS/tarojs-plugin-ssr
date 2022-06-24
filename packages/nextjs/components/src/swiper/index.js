@@ -213,7 +213,7 @@ class Swiper extends React.Component {
             }
         )
         return (
-            <div className={`swiper-container-wrapper ${cls}`} style={sty}>
+            <div className={cls} style={sty}>
                 <div className='swiper-container' style={{ overflow: 'visible' }} ref={(el) => { this.$el = el }}>
                     <div
                         dangerouslySetInnerHTML={{

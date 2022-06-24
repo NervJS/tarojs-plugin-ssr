@@ -115,9 +115,7 @@ import {
     nextTick
 } from './framework'
 
-import {
-    chooseImage
-} from './media/image'
+import {chooseImage, registerPreviewComponent, previewImage} from './media/image'
 
 import {uploadFile} from './network/upload'
 
@@ -224,6 +222,8 @@ export {
     nextTick,
 
     chooseImage,
+    registerPreviewComponent,
+    previewImage,
 
     uploadFile,
 
@@ -332,6 +332,8 @@ export default {
     nextTick,
 
     chooseImage,
+    registerPreviewComponent,
+    previewImage,
 
     uploadFile,
 

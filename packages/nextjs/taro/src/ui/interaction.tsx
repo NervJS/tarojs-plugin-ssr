@@ -49,9 +49,7 @@ function newToast(props: ToastProps): void {
         }
         return
     }
-
     destroyToast()
-
     toastContainer = document.createElement('div')
     document.body.appendChild(toastContainer)
     ReactDOM.render(
@@ -117,7 +115,7 @@ namespace showToast {
     export type ParamPropComplete = () => any
 }
 
-export function registerToastComponent(Target: ToastType) {
+export function registerToastComponent(Target: ToastType): void {
     Toast = Target
 }
 
