@@ -1,16 +1,18 @@
-# Taro 插件，用于编译为 Next.js 应用。
+# tarojs-plugin-platform-nextjs
+
+Taro 插件，让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，提升页面首屏速度🚀，利于 SEO🔍，基于 Next.js。
+
+> 请 Star 🌟 这个项目来表达你的喜爱 ❤️ 和支持。
 
 <strong>⚠️ 本插件目前处于早期建设中，不建议用于生产环境！</strong>
-
-## 动机
-
-让 Taro 在 Web 端支持 [SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，提升页面首屏速度，利于 SEO。
 
 ## 安装与使用
 
 ### 安装
 
-你需要先拥有一个 Taro 项目，如果你还不知该如何创建一个 Taro 项目，那么请先从这里开始：[Taro 安装及使用](https://taro-docs.jd.com/taro/docs/)。
+> 你需要先拥有一个 Taro 项目，如果你还不知该如何创建一个 Taro 项目，请先从这里开始：[Taro 安装及使用](https://taro-docs.jd.com/taro/docs/)。
+
+在 Taro 项目中安装本插件。
 
 ```bash
 # 使用 npm 安装插件与 next.js
@@ -58,20 +60,17 @@ npx taro start -p 10086
 npx next start dist -p 10086
 ```
 
-## 基础教程
+## 主要功能
 
-### 编译配置
+### Pre-rendering - 预渲染
 
-本插件使用 Taro 项目中 h5 端的编译配置，但受 Next.js 框架的约束，有以下限制：
+插件默认 Pre-rendering 所有页面。这意味着提前为每个页面生成 HTML，而不是让浏览器端 JavaScript 完成所有工作。预渲染可以带来更好的性能和搜索引擎优化。
 
-1. 仅支持 `browser` 路由模式。
-2. 组件级样式必须使用 CSS Module。
+> 阅读 Next.js 文档了解更多：[Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)。
 
-### SSR
+### SSR - 服务端渲染
 
-在页面中导出 `getServerSideProps` 函数，Next.js 将对每个请求使用 `getServerSideProps` 返回的数据预先渲染该页面。
-
-阅读 Next.js 文档了解更多：[getServerSideProps](https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props)。
+在页面中导出 `getServerSideProps` 函数来使用 SSR 功能，插件将对每个请求使用 `getServerSideProps` 返回的数据预先渲染该页面。
 
 ```javascript
 export async function getServerSideProps(context) {
@@ -81,11 +80,13 @@ export async function getServerSideProps(context) {
 }
 ```
 
-### ISR
+> 阅读 Next.js 文档了解更多：[getServerSideProps](https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props)。
 
-Next.js 的 Incremental Static Regeneration（ISR）功能允许你单独对某个页面使用静态生成，无需重建整个网站。使用 ISR，你可以在数百万页面的规模上同时保留静态的好处。
+### ISR - 增量静态生成
 
-在页面导出 `getStaticProps` 并对其添加 `revalidate` 属性来使用 ISR。
+在页面导出 `getStaticProps` 函数并对其添加 `revalidate` 属性来使用 ISR 功能。
+
+ISR 功能允许你单独对某个页面进行增量静态生成，无需重新生成整个网站。使用 ISR，你可以在数百万页面的规模上同时保留静态的好处。
 
 ```javascript
 export async function getStaticProps() {
@@ -104,11 +105,20 @@ export async function getStaticProps() {
 }
 ```
 
+> 阅读 Next.js 文档了解更多：[Incremental Static Regeneration](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)。
+
 ## 注意事项
+
+### 功能限制
+
+插件受 Next.js 框架的约束，有以下限制：
+
+1. 仅支持 `browser` 路由模式。
+2. 组件级样式必须使用 CSS Module。
 
 ### 获取路由参数
 
-#### Next.js 路由的不同
+#### 方法的表现差异
 
 你在获取页面查询参数时，可能会发生值为空的情况：
 
@@ -123,7 +133,7 @@ const MyComponent = () => {
 }
 ```
 
-这是由于 Next.js 的 SSR 渲染机制导致的。
+这是由于 Next.js 的同构渲染机制导致的。
 
 在浏览器接受到从服务端返回而来的 html 页面后，会先执行 React 的 hydrate 方法，组件触发第一次渲染。之后 Next.js 才会将完整的路由信息传入，组件触发第二次渲染。所以，上述组件需要做以下修改：
 
