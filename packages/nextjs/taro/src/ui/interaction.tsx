@@ -1,5 +1,31 @@
+import React from 'react'
 import ReactDOM from 'react-dom'
-import {Toast} from '../../../components'
+
+interface ToastProps {
+    /**
+     * Toast 图标
+     */
+    icon?: string
+
+    /**
+     * Toast 图标大小
+     */
+    iconSize?: number
+
+    /**
+     * Display toast
+     */
+    visible?: boolean
+
+    /**
+     * Toast 内容
+     */
+    children?: React.ReactNode
+}
+
+type ToastType = React.ComponentType<ToastProps>
+
+let Toast: ToastType | null = null
 
 let toastContainer: HTMLDivElement | null = null
 
@@ -16,16 +42,20 @@ function destroyToast() {
     }
 }
 
-function newToast(options: any) {
+function newToast(props: ToastProps): void {
+    if (!Toast) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('`Toast` component is not registered.')
+        }
+        return
+    }
+
     destroyToast()
 
     toastContainer = document.createElement('div')
     document.body.appendChild(toastContainer)
     ReactDOM.render(
-        <Toast
-            show
-            {...options}
-        />,
+        <Toast visible {...props} />,
         toastContainer
     )
 }
@@ -87,12 +117,15 @@ namespace showToast {
     export type ParamPropComplete = () => any
 }
 
+export function registerToastComponent(Target: ToastType) {
+    Toast = Target
+}
+
 export function showToast({title, icon, duration = 1500}: showToast.Param) {
     newToast({
-        icon,
+        icon: icon === 'none' ? undefined : icon,
         children: title
     })
-
     setTimeout(destroyToast, duration)
 }
 

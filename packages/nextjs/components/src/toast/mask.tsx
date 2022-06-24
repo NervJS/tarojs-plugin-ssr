@@ -1,7 +1,12 @@
 import React from 'react'
 import classNames from 'classnames'
 
-const Mask = ({className, transparent = false}) => (
+export interface MaskProps {
+    className?: string
+    transparent?: boolean
+}
+
+const Mask: React.FC<MaskProps> = ({className, transparent = false}) => (
     <div
         className={classNames({
             'weui-mask': !transparent,

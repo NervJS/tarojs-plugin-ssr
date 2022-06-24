@@ -69,6 +69,7 @@ import {
 import {request} from './network'
 
 import {
+    registerToastComponent,
     showToast,
     hideToat,
     showLoading,
@@ -183,6 +184,7 @@ export {
     clearStorageSync,
     clearStorage,
 
+    registerToastComponent,
     showToast,
     hideToat,
     showLoading,
@@ -290,6 +292,7 @@ export default {
     clearStorageSync,
     clearStorage,
 
+    registerToastComponent,
     showToast,
     hideToat,
     showLoading,
