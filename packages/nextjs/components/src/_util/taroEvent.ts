@@ -4,7 +4,8 @@ import {
     TaroTouchEvent,
     TaroEvent,
     TaroFocusEvent,
-    TaroBlurEvent
+    TaroBlurEvent,
+    TaroConfirmEvent
 } from './typings'
 
 export function createTaroMouseEvent(taroEventType: string, reactEvent: React.TouchEvent | React.MouseEvent): TaroMouseEvent {
@@ -119,6 +120,28 @@ export function createTaroBlurEvent<T extends HTMLTextAreaElement | HTMLInputEle
         target,
         detail: {
             cursor: el.selectionEnd,
+            value: el.value
+        },
+        timeStamp,
+        type: 'blur',
+        preventDefault,
+        stopPropagation
+    }
+}
+
+export function createTaroConfirmEvent<T extends HTMLTextAreaElement | HTMLInputElement>(reactEvent: React.KeyboardEvent): TaroConfirmEvent {
+    const {
+        timeStamp,
+        target,
+        currentTarget,
+        preventDefault,
+        stopPropagation
+    } = reactEvent
+    const el = target as T
+    return {
+        currentTarget,
+        target,
+        detail: {
             value: el.value
         },
         timeStamp,

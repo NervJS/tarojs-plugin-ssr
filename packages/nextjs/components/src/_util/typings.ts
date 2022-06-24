@@ -54,6 +54,11 @@ export interface TaroBlurEventDetail {
 }
 export interface TaroBlurEvent extends TaroEvent<TaroBlurEventDetail> { }
 
+export interface TaroConfirmEventDetail {
+    value: string
+}
+export interface TaroConfirmEvent extends TaroEvent<TaroConfirmEventDetail> { }
+
 export type TaroEventHandler<E extends TaroEvent<{}>> = (event: E) => void
 
 export type TaroMouseEventHandler = TaroEventHandler<TaroMouseEvent>
@@ -62,6 +67,7 @@ export type TaroUIEventHandler = TaroEventHandler<TaroUIEvent>
 export type TaroInputEventHandler = TaroEventHandler<TaroInputEvent>
 export type TaroFocusEventHandler = TaroEventHandler<TaroFocusEvent>
 export type TaroBlurEventHandler = TaroEventHandler<TaroBlurEvent>
+export type TaroConfirmEventHandler = TaroEventHandler<TaroConfirmEvent>
 
 export interface TaroBaseEvents {
     /**
