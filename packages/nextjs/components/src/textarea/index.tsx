@@ -55,8 +55,63 @@ interface TextareaProps extends TaroBaseProps {
 
     /**
      * 指定 focus 时的光标位置
+     * @default -1
      */
     cursor?: number
+
+    /**
+     * 自动聚焦，调起键盘
+     * 由于浏览器兼容性问题，部分浏览器中无效
+     * @default false
+     */
+    autoFocus?: boolean
+
+    /**
+     * 设置键盘右下角按钮的文字
+     * @unsupported
+     */
+    confirmType?: string
+
+    /**
+     * 点击键盘右下角按钮时是否保持键盘不收起
+     * @default false
+     * @todo
+     */
+    confirmHold?: boolean
+
+    /**
+     * 获取焦点
+     * @default false
+     */
+    focus?: boolean
+
+    /**
+     * 是否自动增高，设置 autoHeight 时，style.height不生效
+     * @default false
+     * @todo
+     */
+    autoHeight?: boolean
+
+    /**
+     * 如果 Textarea 是在一个 `position:fixed` 的区域，需要显示指定属性 fixed 为 true
+     * @default false
+     * @unsupported
+     */
+    fixed?: boolean
+
+    /**
+     * 指定光标与键盘的距离（单位：px）。取 textarea 距离底部的距离和 cursor-spacing 指定的距离的最小值作为光标与键盘的距离
+     * @default 0
+     * @unsupported
+     */
+    cursorSpacing?: number
+
+    /**
+     * 是否显示键盘上方带有“完成”按钮那一栏
+     * @default true
+     * @unsupported
+     */
+    showConfirmBar?: boolean
 
     /**
      * 光标起始位置，自动聚集时有效，需与 selection-end 搭配使用
@@ -71,10 +126,11 @@ interface TextareaProps extends TaroBaseProps {
     selectionEnd?: number
 
     /**
-     * 获取焦点
-     * @default false
+     * 键盘弹起时，是否自动上推页面
+     * @default true
+     * @unsupported
      */
-    focus?: boolean
+    adjustPosition?: boolean
 
     /**
      * 当键盘输入时，触发 input 事件，event.detail = {value, keyCode, cursor}
@@ -95,8 +151,6 @@ interface TextareaProps extends TaroBaseProps {
 }
 
 const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProps> = ({
-    id,
-    style,
     className,
     name,
     value,
@@ -107,11 +161,22 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
     maxlength = 140,
     focus,
     cursor,
+    autoFocus,
     selectionStart = -1,
     selectionEnd = -1,
     onInput,
     onFocus,
     onBlur,
+
+    // unsupported props
+    confirmType,
+    confirmHold,
+    autoHeight,
+    fixed,
+    cursorSpacing,
+    showConfirmBar,
+    adjustPosition,
+
     ...rest
 }, ref) => {
     const props = useTaroBaseEvents(rest)
@@ -167,8 +232,6 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
 
     return (
         <div
-            id={id}
-            style={style}
             className={classNames('taro-textarea', className)}
             {...props}
         >
@@ -185,6 +248,7 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
                     className='taro-textarea__main'
                     name={name}
                     value={mergedValue}
+                    autoFocus={autoFocus}
                     disabled={disabled}
                     maxLength={maxlength === -1 ? undefined : maxlength}
                     onInput={event => {
