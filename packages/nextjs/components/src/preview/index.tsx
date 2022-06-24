@@ -12,9 +12,14 @@ interface PreviewProps {
      * 需要预览的图片链接列表
      */
     urls: string[]
+
+    /**
+     * 关闭时触发
+     */
+    onClose?: () => void;
 }
 
-const Preview: React.FC<PreviewProps> = ({defaultCurrent, urls}) => {
+const Preview: React.FC<PreviewProps> = ({defaultCurrent, urls, onClose}) => {
     const [current, setCurrent] = useState(() => {
         if (defaultCurrent) {
             const index = urls.indexOf(defaultCurrent)
@@ -24,7 +29,7 @@ const Preview: React.FC<PreviewProps> = ({defaultCurrent, urls}) => {
     })
 
     return (
-        <Mask>
+        <Mask onClick={onClose}>
             <Swiper
                 className='taro-preview_swiper'
                 current={current}

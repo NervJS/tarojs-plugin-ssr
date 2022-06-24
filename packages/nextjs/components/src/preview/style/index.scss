@@ -7,7 +7,11 @@
     }
 
     &_swiper {
-        height: 100%;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        height: fit-content;
+        transform: translateY(-50%);
 
         &-item {
             display: flex;

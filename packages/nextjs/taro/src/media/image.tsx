@@ -120,10 +120,16 @@ function previewImageInternal({
     previewContainer = document.createElement('div')
     document.body.appendChild(previewContainer)
     ReactDOM.render(
-        <Preview urls={urls} />,
+        <Preview
+            urls={urls}
+            onClose={() => {
+                ReactDOM.unmountComponentAtNode(previewContainer)
+                previewContainer = null
+            }}
+        />,
         previewContainer
     )
-    // success()
+    success({})
 }
 
 /**
