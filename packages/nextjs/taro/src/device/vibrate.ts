@@ -1,35 +1,46 @@
-import { MethodHandler } from '../utils/handler'
+import promisify from 'mpromisify'
+import type * as swan from '../swan'
 
-const vibrator = function vibrator(mm) {
-    try {
-        return window.navigator.vibrate(mm)
-    } catch (e) {
-        console.warn('当前浏览器不支持vibrate')
+const vibrateShortInternal: typeof swan.vibrateShort = ({success, fail, complete}) => {
+    if (typeof window === 'undefined') {
+        throw new Error('`vibrateShort` cannot be called on server-side!')
     }
+
+    if (!('vibrate' in navigator))  {
+        const err = {
+            errMsg: 'Your browser does not support vibrate api.'
+        }
+        fail?.(err)
+    } else {
+        navigator.vibrate(15)
+        success?.()
+    }
+    complete?.()
 }
 
 /**
- * 使手机发生较短时间的振动（15 ms）。仅在 iPhone 7 / 7 Plus 以上及 Android 机型生效
+ * 使手机发生较短时间的振动（15 ms）。
  */
-export const vibrateShort = ({ success, fail, complete } = {} as any) => {
-    const handle = new MethodHandler({ name: 'vibrateShort', success, fail, complete })
-    if (vibrator) {
-        vibrator(15)
-        return handle.success()
-    } else {
-        return handle.fail()
+export const vibrateShort = promisify(vibrateShortInternal)
+
+const vibrateLongInternal: typeof swan.vibrateShort = ({success, fail, complete}) => {
+    if (typeof window === 'undefined') {
+        throw new Error('`vibrateLong` cannot be called on server-side!')
     }
+
+    if (!('vibrate' in navigator))  {
+        const err = {
+            errMsg: 'Your browser does not support vibrate api.'
+        }
+        fail?.(err)
+    } else {
+        navigator.vibrate(400)
+        success?.()
+    }
+    complete?.()
 }
 
 /**
- * 使手机发生较长时间的振动（400 ms)
+ * 使手机发生较长时间的振动（400 ms)。
  */
-export const vibrateLong = ({success, fail, complete} = {} as any) => {
-    const handle = new MethodHandler({ name: 'vibrateLong', success, fail, complete })
-    if (vibrator) {
-        vibrator(400)
-        return handle.success()
-    } else {
-        return handle.fail()
-    }
-}
+export const vibrateLong = promisify(vibrateLongInternal)

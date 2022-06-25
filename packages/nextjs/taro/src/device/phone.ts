@@ -1,29 +1,14 @@
-import { shouldBeObject, getParameterError } from '../utils'
-import { MethodHandler } from '../utils/handler'
+import promisify from 'mpromisify'
+import type * as swan from '../swan'
 
-export const makePhoneCall = (options) => {
-    // options must be an Object
-    const isObject = shouldBeObject(options)
-    if (!isObject.flag) {
-        const res = { errMsg: `makePhoneCall:fail ${isObject.msg}` }
-        console.error(res.errMsg)
-        return Promise.reject(res)
+const makePhoneCallInternal: typeof swan.makePhoneCall = ({phoneNumber, success, complete}) => {
+    if (typeof window === 'undefined') {
+        throw new Error('`makePhoneCall` cannot be called on server-side!')
     }
 
-    const { phoneNumber, success, fail, complete } = options
-    const handle = new MethodHandler({ name: 'makePhoneCall', success, fail, complete })
-
-    if (typeof phoneNumber !== 'string') {
-        return handle.fail({
-            errMsg: getParameterError({
-                para: 'phoneNumber',
-                correct: 'String',
-                wrong: phoneNumber
-            })
-        })
-    }
-
-    window.location.href = `tel:${phoneNumber}`
-
-    return handle.success()
+    location.href = `tel:${phoneNumber}`
+    success?.()
+    complete?.()
 }
+
+export const makePhoneCall = promisify(makePhoneCallInternal)

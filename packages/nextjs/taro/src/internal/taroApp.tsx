@@ -1,5 +1,5 @@
 import Router from 'next/router'
-import type swan from '../swan'
+import type * as swan from '../swan'
 import type {TaroPage, CustomRoutes} from '../typings'
 
 function isAbsoluteUrl(url?: string): boolean {
@@ -28,7 +28,7 @@ class TaroApp {
 
     getCurrentPages = (): TaroPage[] => {
         if (typeof window === 'undefined') {
-            throw new Error('`getCurrentPages` cannot called on server-side!')
+            throw new Error('`getCurrentPages` cannot be called on server-side!')
         }
         return this.pageStack
     }
@@ -70,7 +70,7 @@ class TaroApp {
 
     navigateBack = ({success, fail, complete}: swan.navigateBack.Param): void => {
         if (typeof window === 'undefined') {
-            throw new Error('`navigateBack` cannot called on server-side!')
+            throw new Error('`navigateBack` cannot be called on server-side!')
         }
 
         if (!Router.router) {
@@ -89,7 +89,7 @@ class TaroApp {
 
     redirectTo = ({url, complete, fail, success}: swan.redirectTo.Param): void => {
         if (typeof window === 'undefined') {
-            throw new Error('`redirectTo` cannot called on server-side!')
+            throw new Error('`redirectTo` cannot be called on server-side!')
         }
 
         if (!Router.router) {
@@ -121,7 +121,7 @@ class TaroApp {
 
     reLaunch = ({url, complete, fail, success}: swan.reLaunch.Param): void => {
         if (typeof window === 'undefined') {
-            throw new Error('`reLaunch` cannot called on server-side!')
+            throw new Error('`reLaunch` cannot be called on server-side!')
         }
 
         if (!Router.router) {
