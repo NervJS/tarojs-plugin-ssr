@@ -9478,15 +9478,15 @@ export namespace canvasPutImageData {
     /**
      * 接口调用成功的回调函数
      */
-    export type Param0PropSuccess = (res: any) => any
+    export type Param0PropSuccess = () => void
     /**
      * 接口调用失败的回调函数
      */
-    export type Param0PropFail = (err: any) => any
+    export type Param0PropFail = (err: any) => void
     /**
      * 接口调用结束的回调函数（调用成功、失败都会执行）
      */
-    export type Param0PropComplete = () => any
+    export type Param0PropComplete = () => void
 }
 /**
  * 

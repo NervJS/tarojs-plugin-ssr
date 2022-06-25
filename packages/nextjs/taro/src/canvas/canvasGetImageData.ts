@@ -35,11 +35,10 @@ const canvasGetImageDataInternal: typeof swan.canvasGetImageData = ({
     try {
         const ctx = canvas.getContext('2d')
         const imageData = ctx.getImageData(x, y, width, height)
-        const data = new Uint8ClampedArray(imageData.data)
         success?.({
             width,
             height,
-            data
+            data: imageData.data
         })
     } catch (err) {
         fail?.({
