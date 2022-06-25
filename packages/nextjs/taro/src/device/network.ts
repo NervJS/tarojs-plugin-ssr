@@ -1,53 +1,47 @@
-import { CallbackManager, MethodHandler } from '../utils/handler'
-import { unsupported } from '../utils'
+import promisify from 'mpromisify'
+import {CallbackManager} from '../utils/handler'
+import {unsupported} from '../utils'
+import type * as swan from '../swan'
 
-function getConnection() {
+function getConnection(): NetworkInformation {
     // @ts-ignore
     return navigator.connection || navigator.mozConnection || navigator.webkitConnection || navigator.msConnection
 }
 
-export const getNetworkType = (options = {} as any) => {
+const getNetworkTypeInernal: typeof swan.getNetworkType = ({success, complete}) => {
     const connection = getConnection()
-    const { success, fail, complete } = options
-    const handle = new MethodHandler({ name: 'getNetworkType', success, fail, complete })
-
     let networkType = 'unknown'
     // 浏览器不支持获取网络状态
-    if (!connection) {
-        return handle.success({networkType})
-    }
-
-    // Supports only the navigator.connection.type value which doesn't match the latest spec.
-    // https://www.davidbcalhoun.com/2010/using-navigator-connection-android/
-    if (!isNaN(Number(connection.type))) {
-        switch (connection.type) {
-            // @ts-ignore
-            case connection.WIFI:
-                networkType = 'wifi'
-                break
-            // @ts-ignore
-            case connection.CELL_3G:
-                networkType = '3g'
-                break
-            // @ts-ignore
-            case connection.CELL_2G:
-                networkType = '2g'
-                break
-            default:
-                // ETHERNET, UNKNOWN
-                networkType = 'unknown'
+    if (connection) {
+        // Supports only the navigator.connection.type value which doesn't match the latest spec.
+        // https://www.davidbcalhoun.com/2010/using-navigator-connection-android/
+        if (!isNaN(Number(connection.type))) {
+            switch (connection.type) {
+                case (connection as any).WIFI:
+                    networkType = 'wifi'
+                    break
+                case (connection as any).CELL_3G:
+                    networkType = '3g'
+                    break
+                case (connection as any).CELL_2G:
+                    networkType = '2g'
+                    break
+                default:
+                    // ETHERNET, UNKNOWN
+                    networkType = 'unknown'
+                    break;
+            }
+        } else if (connection.type) {
+            networkType = connection.type // Only supports the type value.
+        } else if ((connection as any).effectiveType) {
+            networkType = (connection as any).effectiveType
         }
-    } else if (connection.type) {
-        // @ts-ignore
-        networkType = connection.type // Only supports the type value.
-        // @ts-ignore
-    } else if (connection.effectiveType) {
-        // @ts-ignore
-        networkType = connection.effectiveType
     }
-
-    return handle.success({ networkType })
+    success?.({networkType})
+    complete?.()
 }
+
+export const getNetworkType = promisify(getNetworkTypeInernal)
 
 const networkStatusManager = new CallbackManager()
 

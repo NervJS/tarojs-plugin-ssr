@@ -8,9 +8,9 @@ Taro 插件，让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-f
 
 ## 安装与使用
 
-### 安装
-
 > 你需要先拥有一个 Taro 项目，如果你还不知该如何创建一个 Taro 项目，请先从这里开始：[Taro 安装及使用](https://taro-docs.jd.com/taro/docs/)。
+
+### 安装
 
 在 Taro 项目中安装本插件。
 
