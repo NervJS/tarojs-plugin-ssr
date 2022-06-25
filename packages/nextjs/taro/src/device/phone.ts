@@ -1,5 +1,5 @@
 import promisify from 'mpromisify'
-import {limited} from '../utils'
+import {limited} from '../_util'
 import type * as swan from '../swan'
 
 const makePhoneCallInternal: typeof swan.makePhoneCall = ({phoneNumber, success, complete}) => {

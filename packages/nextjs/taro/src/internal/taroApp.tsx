@@ -1,5 +1,5 @@
 import Router from 'next/router'
-import {limited} from '../utils'
+import {limited} from '../_util'
 import type * as swan from '../swan'
 import type {TaroPage, CustomRoutes} from '../typings'
 

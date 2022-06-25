@@ -1,4 +1,4 @@
-import {unsupported} from '../utils'
+import {unsupported} from '../_util'
 
 /**
  * 设置是否打开调试开关，此开关对正式版也能生效。

@@ -1,5 +1,5 @@
 import { CanvasContext } from '../canvas/CanvasContext'
-import { findDOM } from '../utils'
+import { findDOM } from '../_util'
 import { NodesRef } from './nodesRef'
 
 type TElement = Document | HTMLElement | Element

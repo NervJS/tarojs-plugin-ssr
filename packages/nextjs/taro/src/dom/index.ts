@@ -1,4 +1,4 @@
-import {unsupported, limited} from '../utils'
+import {unsupported, limited} from '../_util'
 import {SelectorQuery} from './selectorQuery'
 
 const createSelectorQueryInternal = () => new SelectorQuery()

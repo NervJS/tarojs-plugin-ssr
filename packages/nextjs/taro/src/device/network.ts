@@ -1,6 +1,6 @@
 import promisify from 'mpromisify'
-import {CallbackManager} from '../utils/handler'
-import {unsupported} from '../utils'
+import {CallbackManager} from '../_util/handler'
+import {unsupported} from '../_util'
 import type * as swan from '../swan'
 
 function getConnection(): NetworkInformation {

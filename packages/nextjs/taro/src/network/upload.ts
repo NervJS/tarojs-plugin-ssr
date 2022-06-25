@@ -1,4 +1,4 @@
-import {CallbackManager} from '../utils/handler'
+import {CallbackManager} from '../_util/handler'
 
 export const NETWORK_TIMEOUT = 60000
 

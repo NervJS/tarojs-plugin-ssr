@@ -1,5 +1,5 @@
 import {fromByteArray, toByteArray} from 'base64-js'
-import {unsupported} from '../utils'
+import {unsupported} from '../_util'
 
 /**
  * 判断智能小程序的 API ，回调，参数，组件等是否在当前版本和当前系统下可用。

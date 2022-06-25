@@ -1,4 +1,4 @@
-import { findDOM } from '../utils'
+import { findDOM } from '../_util'
 import { CanvasContext } from './CanvasContext'
 
 /**

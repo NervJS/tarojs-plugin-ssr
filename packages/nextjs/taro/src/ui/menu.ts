@@ -1,4 +1,4 @@
-import {isAndroid, limited} from '../utils'
+import {isAndroid, limited} from '../_util'
 
 /** 菜单按钮的布局位置信息 */
 interface ClientRect {

@@ -1,7 +1,7 @@
 import MobileDetect from 'mobile-detect'
 import promisify from 'mpromisify'
+import {unsupported, limited ,isAndroid} from '../_util'
 import type * as swan from '../swan'
-import {unsupported, limited ,isAndroid} from '../utils'
 
 /**
  * 跳转系统蓝牙设置页

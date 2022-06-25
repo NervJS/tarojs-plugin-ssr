@@ -1,6 +1,6 @@
 import promisify from 'mpromisify'
 import type * as swan from '../swan'
-import {unsupported, limited} from '../utils'
+import {unsupported, limited} from '../_util'
 
 /**
  * getBatteryInfo 的同步版本。
@@ -17,7 +17,7 @@ const getBatteryInfoInternal: typeof swan.getBatteryInfo = ({success, fail, comp
     } else {
         (navigator as any).getBattery()
             .then(({charging, level}) => {
-                success({
+                success?.({
                     isCharging: charging,
                     level: Number(level || 0) * 100
                 })

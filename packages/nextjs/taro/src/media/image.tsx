@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
 import promisify from 'mpromisify'
-import {limited} from '../utils'
+import {limited} from '../_util'
 import type * as swan from '../swan'
 
 function chooseImageInternal({

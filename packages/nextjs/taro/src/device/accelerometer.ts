@@ -1,6 +1,6 @@
 import promisify from 'mpromisify'
-import {limited} from '../utils'
-import {CallbackManager} from '../utils/handler'
+import {limited} from '../_util'
+import {CallbackManager} from '../_util/handler'
 import type * as swan from '../swan'
 
 const callbackManager = new CallbackManager()

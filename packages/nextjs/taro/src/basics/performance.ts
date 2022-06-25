@@ -1,4 +1,4 @@
-import {unsupported} from '../utils'
+import {unsupported} from '../_util'
 
 /**
  * 小程序测速上报。使用前，需要在小程序管理后台配置。

@@ -1,6 +1,6 @@
 // @ts-ignore
 import jsonpRetry from 'jsonp-retry'
-import {serializeParams} from '../utils'
+import {serializeParams} from '../_util'
 
 function generateRequestUrlWithParams (url: string, params?: Record<string, any> | string) {
   params = typeof params === 'string' ? params : serializeParams(params)

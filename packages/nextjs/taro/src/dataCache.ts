@@ -1,5 +1,5 @@
 import promisify from 'mpromisify'
-import {unsupported, limited} from './utils'
+import {unsupported, limited} from './_util'
 import type * as swan from './swan'
 
 const setStorageSyncInternal: typeof swan.setStorageSync = (key, data) => {

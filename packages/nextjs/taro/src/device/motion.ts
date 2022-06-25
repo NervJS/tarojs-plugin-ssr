@@ -1,7 +1,6 @@
 import promisify from 'mpromisify'
-import {CallbackManager} from '../utils/handler'
-import {limited} from '../utils'
-import type * as swan from '../swan'
+import {CallbackManager} from '../_util/handler'
+import {limited} from '../_util'
 
 const callbackManager = new CallbackManager()
 let deviceMotionListener

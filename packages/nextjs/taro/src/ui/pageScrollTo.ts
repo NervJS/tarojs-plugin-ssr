@@ -1,4 +1,4 @@
-import {easeInOutCubic} from '../utils'
+import {easeInOutCubic} from '../_util'
 import raf from '../raf'
 
 namespace pageScrollTo {

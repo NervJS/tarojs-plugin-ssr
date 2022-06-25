@@ -22,34 +22,48 @@ import {
     canvasGetImageData
 } from './canvas'
 
-import {setClipboardData, getClipboardData} from './device/clipboard'
-
 import {
+    // accelerometer
+    stopAccelerometer,
+    startAccelerometer,
+    onAccelerometerChange,
+    offAccelerometerChange,
+
+    // battery
+    getBatteryInfoSync,
+    getBatteryInfo,
+
+    // clipboard
+    setClipboardData,
+    getClipboardData,
+
+    // compass
     stopCompass,
     startCompass,
     onCompassChange,
-    offCompassChange
-} from './device/compass'
+    offCompassChange,
 
-import {
+    // motion
     stopDeviceMotionListening,
     startDeviceMotionListening,
     onDeviceMotionChange,
-    offDeviceMotionChange
-} from './device/motion'
+    offDeviceMotionChange,
 
-import {makePhoneCall} from './device/phone'
+    // phone
+    makePhoneCall,
 
-import {vibrateShort, vibrateLong} from './device/vibrate'
+    // vibrate
+    vibrateShort,
+    vibrateLong,
 
-import {
+    // network
     getNetworkType,
     onNetworkWeakChange,
     onNetworkStatusChange,
     offNetworkWeakChange,
     offNetworkStatusChange,
     getLocalIPAddress
-} from  './device/network'
+} from './device'
 
 import {
     createSelectorQuery,
@@ -149,6 +163,14 @@ export {
     canvasToTempFilePath,
     canvasPutImageData,
     canvasGetImageData,
+
+    stopAccelerometer,
+    startAccelerometer,
+    onAccelerometerChange,
+    offAccelerometerChange,
+
+    getBatteryInfoSync,
+    getBatteryInfo,
 
     setClipboardData,
     getClipboardData,
@@ -263,6 +285,14 @@ export default {
     canvasToTempFilePath,
     canvasPutImageData,
     canvasGetImageData,
+
+    stopAccelerometer,
+    startAccelerometer,
+    onAccelerometerChange,
+    offAccelerometerChange,
+
+    getBatteryInfoSync,
+    getBatteryInfo,
 
     setClipboardData,
     getClipboardData,
