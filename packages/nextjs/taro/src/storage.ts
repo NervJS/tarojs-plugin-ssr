@@ -1,223 +1,213 @@
-import {getParameterError, unsupported} from './utils'
-import { MethodHandler } from './utils/handler'
+import promisify from 'mpromisify'
+import {unsupported} from './utils'
+import type * as swan from './swan'
 
-function getItem(key) {
-    let item
-    try {
-        item = JSON.parse(localStorage.getItem(key) || '')
-    } catch (e) { }
-
-    // 只返回使用 Taro.setStorage API 存储的数据
-    if (item && typeof item === 'object' && item.hasOwnProperty('data')) {
-        return { result: true, data: item.data }
-    } else {
-        return { result: false }
-    }
-}
-
-// 数据缓存
-export const setStorageSync = (key, data = '') => {
-    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
-        console.error('setStorageSync does nothing on the server-side.')
+/**
+ * 将数据存储在本地缓存中指定的 key 中。如果之前存在同名 key，会覆盖掉原来该 key 对应的内容。这是一个同步接口。
+ */
+export const setStorageSync: typeof swan.setStorageSync = (key, data) => {
+    if (typeof window === 'undefined') {
+        console.error('`setStorageSync` does nothing on the server-side.')
         return
     }
 
     if (typeof key !== 'string') {
-        console.error(getParameterError({
-            name: 'setStorage',
-            correct: 'String',
-            wrong: key
-        }))
-        return
+        throw new Error(`key should be String instead of ${typeof key}.`)
     }
 
-    const type = typeof data
-    let obj = {}
-
-    if (type === 'symbol') {
-        obj = { data: '' }
-    } else {
-        obj = { data }
-    }
-    localStorage.setItem(key, JSON.stringify(obj))
+    localStorage.setItem(key, JSON.stringify(data))
 }
 
-export const setStorage = ({ key, data, success, fail, complete }) => {
-    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
-        fail?.()
-        complete?.()
-        const msg = 'setStorage is always fail on the server-side.'
-        console.error(msg)
-        return Promise.reject(new Error(msg))
-    }
-
-    const handle = new MethodHandler({ name: 'setStorage', success, fail, complete })
-
-    if (typeof key !== 'string') {
-        return handle.fail({
-            errMsg: getParameterError({
-                para: 'key',
-                correct: 'String',
-                wrong: key
+const setStorageInternal: typeof swan.setStorage = ({key, data, success, fail, complete}) => {
+    if (typeof window === 'undefined') {
+        const err = {
+            errMsg: '`setStorage` is always fail on the server-side.'
+        }
+        fail?.(err)
+    } else {
+        try {
+            setStorageSync(key, data)
+            success?.()
+        } catch(err) {
+            fail?.({
+                errMsg: err.message
             })
-        })
+        }
     }
-
-    setStorageSync(key, data)
-    return handle.success()
+    complete?.()
 }
+
+/**
+ * 将数据存储在本地缓存中指定的 key 中，会覆盖掉原来该 key 对应的内容。
+ */
+export const setStorage = promisify(setStorageInternal)
 
 /**
  * 根据 URL 销毁存在内存中的数据
  */
 export const revokeBufferURL = unsupported._void('revokeBufferURL')
 
-export const removeStorageSync = (key: string) => {
-    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
-        console.error('removeStorageSync does nothing on the server-side.')
+/**
+ * 从本地缓存中同步移除指定 key。
+ */
+export const removeStorageSync: typeof swan.removeStorageSync = key => {
+    if (typeof window === 'undefined') {
+        console.error('`removeStorageSync` does nothing on the server-side.')
         return
     }
 
     if (typeof key !== 'string') {
-        console.error(getParameterError({
-            name: 'removeStorage',
-            correct: 'String',
-            wrong: key
-        }))
-        return
+        throw new Error(`key should be String instead of ${typeof key}.`)
     }
 
     localStorage.removeItem(key)
 }
 
-export const removeStorage = ({ key, success, fail, complete }) => {
-    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
-        fail?.()
-        complete?.()
-        const msg = 'removeStorage is always fail on the server-side.'
-        console.error(msg)
-        return Promise.reject(new Error(msg))
-    }
-
-    const handle = new MethodHandler({ name: 'removeStorage', success, fail, complete })
-
-    if (typeof key !== 'string') {
-        return handle.fail({
-            errMsg: getParameterError({
-                para: 'key',
-                correct: 'String',
-                wrong: key
+const removeStorageInternal: typeof swan.removeStorage = ({key, success, fail, complete}) => {
+    if (typeof window === 'undefined') {
+        const err = {
+            errMsg: '`removeStorage` is always fail on the server-side.'
+        }
+        fail?.(err)
+    } else {
+        try {
+            removeStorageSync(key)
+            success?.()
+        } catch (err) {
+            fail?.({
+                errMsg: err.message
             })
-        })
+        }
     }
-
-    removeStorageSync(key)
-    return handle.success()
+    complete?.()
 }
 
-export const getStorageSync = (key) => {
-    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
-        console.error('getStorageSync does nothing on the server-side.')
+/**
+ * 从本地缓存中同步移除指定 key。
+ */
+export const removeStorage = promisify(removeStorageInternal)
+
+/**
+ * 从本地缓存中同步移除指定 key。
+ */
+export const getStorageSync: typeof swan.getStorageSync = key => {
+    if (typeof window === 'undefined') {
+        console.error('`getStorageSync` does nothing on the server-side.')
         return
     }
 
     if (typeof key !== 'string') {
-        console.error(getParameterError({
-            name: 'getStorageSync',
-            correct: 'String',
-            wrong: key
-        }))
-        return
+        throw new Error(`key should be String instead of ${typeof key}.`)
     }
 
-    const res = getItem(key)
-    if (res.result) return res.data
-
+    const json = localStorage.getItem(key)
+    try {
+        return JSON.parse(json)
+    } catch { }
     return ''
 }
 
-export const getStorageInfoSync = () => {
-    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
-        console.error('getStorageInfoSync does nothing on the server-side.')
+const getStorageInternal = ({key, success, fail, complete}) => {
+    if (typeof window === 'undefined') {
+        const err = {
+            errMsg: '`getStorage` is always fail on the server-side.'
+        }
+        fail?.(err)
+    } else {
+        try {
+            const data = getStorageSync(key)
+            success?.({data})
+        } catch (err) {
+            fail?.({
+                errMsg: err.message
+            })
+        }
+    }
+    complete?.()
+}
+
+/**
+ * 从本地缓存中同步移除指定 key。
+ */
+export const getStorage = promisify(getStorageInternal)
+
+/**
+ * 同步获取当前 storage 的相关信息。
+ */
+export const getStorageInfoSync: typeof swan.getStorageInfoSync = () => {
+    if (typeof window === 'undefined') {
+        console.error('`getStorageInfoSync` does nothing on the server-side.')
         return
     }
 
-    const res = {
-        keys: Object.keys(localStorage),
-        limitSize: NaN,
-        currentSize: NaN
+    const keys: string[] = []
+    let currentSize = 0
+    for (const key in localStorage){
+        keys.push(key)
+        const value = localStorage.getItem(key)
+        currentSize += key.length + value.length
     }
-    return res
+    return {
+        keys,
+        limitSize: Number.MAX_VALUE,
+        currentSize: Math.ceil(currentSize * 2 / 1024)
+    }
 }
 
-export const getStorageInfo = ({ success, fail, complete } = {} as any) => {
-    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
-        fail?.()
-        complete?.()
-        const msg = 'getStorageInfo is always fail on the server-side.'
-        console.error(msg)
-        return Promise.reject(new Error(msg))
-    }
-
-    const handle = new MethodHandler({ name: 'getStorageInfo', success, fail, complete })
-    return handle.success(getStorageInfoSync())
-}
-
-export const getStorage = ({ key, success, fail, complete }) => {
-    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
-        fail?.()
-        complete?.()
-        const msg = 'getStorage is always fail on the server-side.'
-        console.error(msg)
-        return Promise.reject(new Error(msg))
-    }
-
-    const handle = new MethodHandler({ name: 'getStorage', success, fail, complete })
-
-    if (typeof key !== 'string') {
-        return handle.fail({
-            errMsg: getParameterError({
-                para: 'key',
-                correct: 'String',
-                wrong: key
-            })
-        })
-    }
-
-    const { result, data } = getItem(key)
-    if (result) {
-        return handle.success({ data })
+const getStorageInfoInternal = ({success, fail, complete} = {} as any) => {
+    if (typeof window === 'undefined') {
+        const err = {
+            errMsg: '`getStorageInfo` is always fail on the server-side.'
+        }
+        fail?.(err)
     } else {
-        return handle.fail({
-            errMsg: 'data not found'
-        })
+        try {
+            const data = getStorageInfoSync()
+            success?.({data})
+        } catch (err) {
+            fail?.({
+                errMsg: err.message
+            })
+        }
     }
+    complete?.()
 }
+
+/**
+ * 获取当前 storage 的相关信息。
+ */
+export const getStorageInfo = promisify(getStorageInfoInternal)
 
 /**
  * 根据传入的 buffer 创建一个唯一的 URL 存在内存中。
  */
 export const createBufferURL = unsupported._void('createBufferURL')
 
-export const clearStorageSync = () => {
-    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
-        console.error('clearStorageSync does nothing on the server-side.')
+/**
+ * 同步清理本地数据缓存。
+ */
+export const clearStorageSync: typeof swan.clearStorageSync = () => {
+    if (typeof window === 'undefined') {
+        console.error('`clearStorageSync` does nothing on the server-side.')
         return
     }
-
     localStorage.clear()
 }
 
-export const clearStorage = ({ success, fail, complete }) => {
-    if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
-        fail?.()
-        complete?.()
-        const msg = 'clearStorage is always fail on the server-side.'
-        console.error(msg)
-        return Promise.reject(new Error(msg))
+/**
+ * 清理本地数据缓存。
+ */
+const clearStorageInternal: typeof swan.clearStorage = ({success, fail, complete}) => {
+    if (typeof window === 'undefined') {
+        const err = {
+            errMsg: '`clearStorage` is always fail on the server-side.'
+        }
+        fail?.(err)
+    } else {
+        clearStorageSync()
+        success?.()
     }
-
-    const handle = new MethodHandler({ name: 'clearStorage', success, fail, complete })
-    clearStorageSync()
-    return handle.success()
+    complete?.()
 }
+
+export const clearStorage = promisify(clearStorageInternal)

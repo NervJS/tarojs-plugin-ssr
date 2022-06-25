@@ -3576,15 +3576,15 @@ export namespace setStorage {
     /**
      * 接口调用成功的回调函数
      */
-    export type ParamPropSuccess = (res: any) => any
+    export type ParamPropSuccess = () => void
     /**
      * 接口调用失败的回调函数
      */
-    export type ParamPropFail = (err: any) => any
+    export type ParamPropFail = (err: any) => void
     /**
      * 接口调用结束的回调函数（调用成功、失败都会执行）
      */
-    export type ParamPropComplete = () => any
+    export type ParamPropComplete = () => void
 }
 /**
  * 将数据存储在本地缓存中指定的 key 中，会覆盖掉原来该 key 对应的内容，这是一个异步接口。
@@ -3807,15 +3807,15 @@ export namespace removeStorage {
     /**
      * 接口调用的回调函数
      */
-    export type ParamPropSuccess = (res: any) => any
+    export type ParamPropSuccess = () => void
     /**
      * 接口调用失败的回调函数
      */
-    export type ParamPropFail = (err: any) => any
+    export type ParamPropFail = (err: any) => void
     /**
      * 接口调用结束的回调函数（调用成功、失败都会执行）
      */
-    export type ParamPropComplete = () => any
+    export type ParamPropComplete = () => void
 }
 /**
  * 从本地缓存中异步移除指定 key 。
@@ -3850,6 +3850,35 @@ export function removeStorage(OBJECT: removeStorage.Param): void
  */
 export function removeStorageSync(key: string): void
 
+export namespace clearStorage {
+    export type Param = {
+        /**
+         * 接口调用的回调函数
+         */
+        success: ParamPropSuccess
+        /**
+         * 接口调用失败的回调函数
+         */
+        fail?: ParamPropFail
+        /**
+         * 接口调用结束的回调函数（调用成功、失败都会执行）
+         */
+        complete?: ParamPropComplete
+    }
+    /**
+     * 接口调用的回调函数
+     */
+    export type ParamPropSuccess = () => void
+    /**
+     * 接口调用失败的回调函数
+     */
+    export type ParamPropFail = (err: any) => void
+    /**
+     * 接口调用结束的回调函数（调用成功、失败都会执行）
+     */
+    export type ParamPropComplete = () => void
+}
+
 /**
  * 清理本地数据缓存。
  *
@@ -3860,7 +3889,7 @@ export function removeStorageSync(key: string): void
  *     ```
  * 
  */
-export function clearStorage(): void
+export function clearStorage(OBJECT: clearStorage.Param): void
 
 /**
  * 同步清理本地数据缓存
@@ -4857,15 +4886,15 @@ export namespace vibrateShort {
     /**
      * 接口调用成功的回调函数
      */
-    export type ParamPropSuccess = (res: any) => any
+    export type ParamPropSuccess = () => void
     /**
      * 接口调用失败的回调函数
      */
-    export type ParamPropFail = (err: any) => any
+    export type ParamPropFail = (err: any) => void
     /**
      * 接口调用结束的回调函数（调用成功、失败都会执行）
      */
-    export type ParamPropComplete = () => any
+    export type ParamPropComplete = () => void
 }
 /**
  * 
@@ -5134,15 +5163,15 @@ export namespace makePhoneCall {
     /**
      * 接口调用成功的回调
      */
-    export type ParamPropSuccess = (res: any) => any
+    export type ParamPropSuccess = () => void
     /**
      * 接口调用失败的回调函数
      */
-    export type ParamPropFail = (err: any) => any
+    export type ParamPropFail = (err: any) => void
     /**
      * 接口调用结束的回调函数（调用成功、失败都会执行）
      */
-    export type ParamPropComplete = () => any
+    export type ParamPropComplete = () => void
 }
 /**
  *

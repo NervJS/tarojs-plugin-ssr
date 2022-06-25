@@ -1,4 +1,4 @@
-import { fromByteArray, toByteArray } from 'base64-js'
+import {fromByteArray, toByteArray} from 'base64-js'
 import {unsupported} from '../utils'
 
 /**

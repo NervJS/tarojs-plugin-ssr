@@ -18,10 +18,10 @@ export const openAppAuthorizeSetting = unsupported._void('openAppAuthorizeSettin
  */
 export const getWindowInfo = () => {
     if (typeof window === 'undefined') {
-        throw new Error('`getWindowInfo` cannot be called on server-side!');
+        throw new Error('`getWindowInfo` cannot be called on server-side!')
     }
 
-    const info = {
+    return {
         /** 设备像素比 */
         pixelRatio: window.devicePixelRatio,
         /** 屏幕宽度，单位px */
@@ -46,8 +46,6 @@ export const getWindowInfo = () => {
             width: 0
         }
     }
-
-    return info
 }
 
 /**
@@ -55,10 +53,10 @@ export const getWindowInfo = () => {
  */
 export const getSystemSetting = () => {
     if (typeof window === 'undefined') {
-        throw new Error('`getSystemSetting` cannot called on server-side!');
+        throw new Error('`getSystemSetting` cannot be called on server-side!')
     }
 
-    const info = {
+    return {
         /** 蓝牙的系统开关 */
         bluetoothEnabled: false,
         /** 地理位置的系统开关 */
@@ -68,8 +66,6 @@ export const getSystemSetting = () => {
         /** 设备方向 */
         deviceOrientation: window.screen.width >= window.screen.height ? 'landscape' : 'portrait'
     }
-
-    return info
 }
 
 /**
@@ -77,12 +73,11 @@ export const getSystemSetting = () => {
  */
 export const getDeviceInfo = () => {
     if (typeof window === 'undefined') {
-        throw new Error('`getDeviceInfo` cannot be called on server-side!');
+        throw new Error('`getDeviceInfo` cannot be called on server-side!')
     }
 
     const md = new MobileDetect(navigator.userAgent)
-
-    const info = {
+    return {
         /** 应用二进制接口类型（仅 Android 支持） */
         abi: '',
         /** 设备性能等级（仅Android小游戏）。取值为：-2 或 0（该设备无法运行小游戏），-1（性能未知），>=1（设备性能值，该值越高，设备性能越好，目前最高不到50） */
@@ -96,22 +91,20 @@ export const getDeviceInfo = () => {
         /** 客户端平台 */
         platform: navigator.platform
     }
-
-    return info
 }
 
 /** 获取微信APP基础信息 */
 export const getAppBaseInfo = () => {
     if (typeof window === 'undefined') {
-        throw new Error('`getAppBaseInfo` cannot called on server-side!');
+        throw new Error('`getAppBaseInfo` cannot be called on server-side!')
     }
 
     let isDarkMode = false
-    if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         isDarkMode = true
     }
 
-    const info = {
+    return {
         /** 客户端基础库版本 */
         SDKVersion: '',
         /** 是否已打开调试。可通过右上角菜单或 [Taro.setEnableDebug](/docs/apis/base/debug/setEnableDebug) 打开调试。 */
@@ -125,8 +118,6 @@ export const getAppBaseInfo = () => {
         /** 系统当前主题，取值为light或dark，全局配置"darkmode":true时才能获取，否则为 undefined （不支持小游戏） */
         theme: isDarkMode ? 'dark' : 'light'
     }
-
-    return info
 }
 
 /**
@@ -162,7 +153,7 @@ export const getAppAuthorizeSetting = () => ({
  */
 export const getSystemInfoSync = () => {
     if (typeof window === 'undefined') {
-        throw new Error('`getSystemInfoSync` cannot called on server-side!');
+        throw new Error('`getSystemInfoSync` cannot be called on server-side!');
     }
 
     const windowInfo = getWindowInfo()
@@ -172,7 +163,7 @@ export const getSystemInfoSync = () => {
     const appAuthorizeSetting = getAppAuthorizeSetting()
     delete deviceInfo.abi
 
-    const info = {
+    return {
         ...windowInfo,
         ...systemSetting,
         ...deviceInfo,
@@ -202,14 +193,12 @@ export const getSystemInfoSync = () => {
         /** 小程序当前运行环境 */
         environment: ''
     }
-
-    return info
 }
 
-const getSystemInfoInternal: typeof swan.getSystemInfo = param => {
-    const {success} = param
+const getSystemInfoInternal: typeof swan.getSystemInfo = ({success, complete}) => {
     const info = getSystemInfoSync()
-    success(info)
+    success?.(info)
+    complete?.()
 }
 
 /**
