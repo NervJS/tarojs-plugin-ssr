@@ -101,6 +101,9 @@ export const getStorageSync: typeof swan.getStorageSync = key => {
     }
 
     const json = localStorage.getItem(key)
+    if (!json) {
+        return ''
+    }
     try {
         return JSON.parse(json)
     } catch { }

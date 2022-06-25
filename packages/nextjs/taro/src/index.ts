@@ -68,8 +68,8 @@ import {
     getStorage,
     createBufferURL,
     clearStorageSync,
-    clearStorage,
-} from './storage'
+    clearStorage
+} from './dataCache'
 
 import {request} from './network'
 

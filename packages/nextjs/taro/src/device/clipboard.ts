@@ -5,8 +5,8 @@
  * getClipboardData: https://github.com/chameleon-team/chameleon-api/tree/master/src/interfaces/getClipBoardData
  */
 
-import { setStorage, setStorageSync, getStorageSync } from '../storage'
-import { MethodHandler } from '../utils/handler'
+import {setStorage, setStorageSync, getStorageSync} from '../dataCache'
+import {MethodHandler} from '../utils/handler'
 
 const CLIPBOARD_STORAGE_NAME = 'taro_clipboard'
 
