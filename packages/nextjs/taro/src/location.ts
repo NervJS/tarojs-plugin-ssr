@@ -9,8 +9,7 @@ const getLocationInternal: typeof swan.getLocation = ({
     complete
 }) => {
     if (typeof window === 'undefined') {
-        console.error('`getLocation` does nothing on the server-side.')
-        return
+        throw new Error('`getLocation` does nothing on the server-side.')
     }
 
     const positionOptions: PositionOptions = {

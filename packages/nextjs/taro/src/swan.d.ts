@@ -9389,10 +9389,6 @@ export namespace canvasGetImageData {
     export type Param0PropSuccess = (res: Param0PropSuccessParam) => any
     export type Param0PropSuccessParam = {
         /**
-         * errMsg
-         */
-        errMsg: string
-        /**
          * 图像数据矩形的宽度
          */
         width: number
