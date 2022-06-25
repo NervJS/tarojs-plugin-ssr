@@ -1,4 +1,5 @@
 import promisify from 'mpromisify'
+import {limited} from '../utils'
 import type * as swan from '../swan'
 
 const canvasGetImageDataInternal: typeof swan.canvasGetImageData = ({
@@ -11,10 +12,6 @@ const canvasGetImageDataInternal: typeof swan.canvasGetImageData = ({
     width,
     height
 }) => {
-    if (typeof window === 'undefined') {
-        throw new Error('`canvasGetImageData` does nothing on the server-side.')
-    }
-
     if (typeof canvasId !== 'string') {
         fail?.({
             errMsg: `The canvasId param is required.`
@@ -51,4 +48,4 @@ const canvasGetImageDataInternal: typeof swan.canvasGetImageData = ({
 /**
  * 获取 canvas 区域隐含的像素数据。
  */
-export const canvasGetImageData = promisify(canvasGetImageDataInternal)
+export const canvasGetImageData = promisify(limited.async('canvasGetImageData', canvasGetImageDataInternal))

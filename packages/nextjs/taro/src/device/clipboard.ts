@@ -1,13 +1,10 @@
 import promisify from 'mpromisify'
+import {limited} from '../utils'
 import type * as swan from '../swan'
 
 let globalTextArea: HTMLTextAreaElement | null = null
 
 const setClipboardDataInternal: typeof swan.setClipboardData = ({data, success, fail, complete}) => {
-    if (typeof window === 'undefined') {
-        throw new Error('`setClipboardData` cannot be called on server-side!')
-    }
-
     // 使用 try/catch 尝试是否支持 navigator.clipboard，如果不支持会在浏览器中看到 DOMExceptions。
     try {
         navigator.clipboard.writeText(data)
@@ -57,13 +54,9 @@ const setClipboardDataInternal: typeof swan.setClipboardData = ({data, success, 
 /**
  * 设置系统剪贴板的内容
  */
-export const setClipboardData = promisify(setClipboardDataInternal)
+export const setClipboardData = promisify(limited.async('setClipboardData', setClipboardDataInternal))
 
 const getClipboardDataInternal: typeof swan.getClipboardData = ({success, complete}) => {
-    if (typeof window === 'undefined') {
-        throw new Error('`getClipboardData` cannot be called on server-side!')
-    }
-
     const res = {
         data: globalTextArea ? globalTextArea.value : ''
     }
@@ -74,4 +67,4 @@ const getClipboardDataInternal: typeof swan.getClipboardData = ({success, comple
 /**
  * 获取系统剪贴板的内容
  */
-export const getClipboardData = promisify(getClipboardDataInternal)
+export const getClipboardData = promisify(limited.async('getClipboardData', getClipboardDataInternal))

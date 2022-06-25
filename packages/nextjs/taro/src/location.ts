@@ -1,4 +1,5 @@
 import promisify from 'mpromisify'
+import {limited} from './utils'
 import type * as swan from './swan'
 
 const getLocationInternal: typeof swan.getLocation = ({
@@ -8,10 +9,6 @@ const getLocationInternal: typeof swan.getLocation = ({
     fail,
     complete
 }) => {
-    if (typeof window === 'undefined') {
-        throw new Error('`getLocation` does nothing on the server-side.')
-    }
-
     const positionOptions: PositionOptions = {
         enableHighAccuracy: !!altitude, // 海拔定位需要高精度
         timeout: 3_000,
@@ -67,4 +64,4 @@ const getLocationInternal: typeof swan.getLocation = ({
     )
 }
 
-export const getLocation = promisify(getLocationInternal)
+export const getLocation = promisify(limited.async('getLocation', getLocationInternal))

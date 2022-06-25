@@ -1,17 +1,13 @@
 import promisify from 'mpromisify'
 import type * as swan from '../swan'
-import {unsupported} from '../utils'
+import {unsupported, limited} from '../utils'
 
 /**
  * getBatteryInfo 的同步版本。
  */
 export const getBatteryInfoSync = unsupported.never('getBatteryInfoSync')
 
-export const getBatteryInfoInternal: typeof swan.getBatteryInfo = ({success, fail, complete}) => {
-    if (typeof window === 'undefined') {
-        throw new Error('`getBatteryInfo` cannot be called on server-side!')
-    }
-
+const getBatteryInfoInternal: typeof swan.getBatteryInfo = ({success, fail, complete}) => {
     if (!('getBattery' in navigator)) {
         const err = {
             errMsg: 'Your browser does not support getting battery info.'
@@ -40,4 +36,4 @@ export const getBatteryInfoInternal: typeof swan.getBatteryInfo = ({success, fai
 /**
  * 获取设备电量。
  */
-export const getBatteryInfo = promisify(getBatteryInfoInternal)
+export const getBatteryInfo = promisify(limited.async('getBatteryInfo', getBatteryInfoInternal))

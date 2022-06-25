@@ -1,23 +1,14 @@
 import ReactDOM from 'react-dom'
 import promisify from 'mpromisify'
+import {limited} from '../utils'
 import type * as swan from '../swan'
 
 function chooseImageInternal({
     count = 1,
     success,
-    fail,
     complete,
     sourceType = ['album', 'camera']
 }: swan.chooseImage.Param): void {
-    if (typeof window === 'undefined') {
-        const errMsg = 'chooseImage is always fail on the server-side.'
-        fail?.({
-            errMsg
-        })
-        complete?.()
-        return
-    }
-
     const result: swan.chooseImage.ParamPropSuccessParam = {
         tempFilePaths: [],
         tempFiles: []
@@ -75,9 +66,26 @@ function chooseImageInternal({
  * })
  * ```
  */
-export const chooseImage = promisify(chooseImageInternal)
+export const chooseImage = promisify(limited.async('chooseImage', chooseImageInternal))
 
-type PreviewType = React.ComponentType<any>
+interface PreviewProps {
+    /**
+     * 当前显示图片的链接，不填则默认为 urls 的第一张
+     */
+    defaultCurrent?: string
+
+    /**
+     * 需要预览的图片链接列表
+     */
+    urls: string[]
+
+    /**
+     * 关闭时触发
+     */
+    onClose?: () => void;
+}
+
+type PreviewType = React.ComponentType<PreviewProps>
 
 let Preview: PreviewType | null = null
 
@@ -110,7 +118,6 @@ function previewImageInternal({
 
     if (!urls) {
         fail({
-            errCode: 904,
             errMsg: 'The urls param is required.'
         })
         complete()
@@ -121,6 +128,7 @@ function previewImageInternal({
     document.body.appendChild(previewContainer)
     ReactDOM.render(
         <Preview
+            defaultCurrent={current}
             urls={urls}
             onClose={() => {
                 ReactDOM.unmountComponentAtNode(previewContainer)
@@ -143,4 +151,4 @@ function previewImageInternal({
  * })
  * ```
  */
-export  const previewImage = promisify(previewImageInternal)
+export  const previewImage = promisify(limited.async('previewImage', previewImageInternal))

@@ -1,4 +1,5 @@
 import promisify from 'mpromisify'
+import {limited} from '../utils'
 import type * as swan from '../swan'
 
 const canvasToTempFilePathInternal: typeof swan.canvasToTempFilePath = ({
@@ -9,10 +10,6 @@ const canvasToTempFilePathInternal: typeof swan.canvasToTempFilePath = ({
     fail,
     complete
 }) => {
-    if (typeof window === 'undefined') {
-        throw new Error('`canvasPutImageData` does nothing on the server-side.')
-    }
-
     if (typeof canvasId !== 'string') {
         fail?.({
             errMsg: `The canvasId param is required.`
@@ -47,4 +44,4 @@ const canvasToTempFilePathInternal: typeof swan.canvasToTempFilePath = ({
  * 把当前画布指定区域的内容导出生成指定大小的图片。在 draw() 回调里调用该方法才能保证图片导出成功。
  * @todo 暂未支持尺寸相关功能
  */
-export const canvasToTempFilePath = promisify(canvasToTempFilePathInternal)
+export const canvasToTempFilePath = promisify(limited.async('canvasToTempFilePath', canvasToTempFilePathInternal))

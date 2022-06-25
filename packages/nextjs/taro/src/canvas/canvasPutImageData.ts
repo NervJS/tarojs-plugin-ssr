@@ -1,4 +1,5 @@
 import promisify from 'mpromisify'
+import {limited} from '../utils'
 import type * as swan from '../swan'
 
 const canvasPutImageDataInternal: typeof swan.canvasPutImageData = ({
@@ -12,10 +13,6 @@ const canvasPutImageDataInternal: typeof swan.canvasPutImageData = ({
     fail,
     complete
 }) => {
-    if (typeof window === 'undefined') {
-        throw new Error('`canvasPutImageData` does nothing on the server-side.')
-    }
-
     if (typeof canvasId !== 'string') {
         fail?.({
             errMsg: `The canvasId param is required.`
@@ -49,4 +46,4 @@ const canvasPutImageDataInternal: typeof swan.canvasPutImageData = ({
 /**
  * 将像素数据绘制到画布。在自定义组件下，第二个参数传入自定义组件实例 this，以操作组件内 <canvas> 组件
  */
-export const canvasPutImageData = promisify(canvasPutImageDataInternal)
+export const canvasPutImageData = promisify(limited.async('canvasPutImageData', canvasPutImageDataInternal))

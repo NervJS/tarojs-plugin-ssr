@@ -1,4 +1,5 @@
 import Router from 'next/router'
+import {limited} from '../utils'
 import type * as swan from '../swan'
 import type {TaroPage, CustomRoutes} from '../typings'
 
@@ -24,20 +25,19 @@ class TaroApp {
             route: location.pathname
         }
         this.pageStack.push(page)
+
+        this.getCurrentPages = limited.never('getCurrentPages', this.getCurrentPages)
+        this.navigateTo = limited.async('navigateTo', this.navigateTo)
+        this.navigateBack = limited.async('navigateBack', this.navigateBack)
+        this.redirectTo = limited.async('redirectTo', this.redirectTo)
+        this.reLaunch = limited.async('reLaunch', this.reLaunch)
     }
 
     getCurrentPages = (): TaroPage[] => {
-        if (typeof window === 'undefined') {
-            throw new Error('`getCurrentPages` cannot be called on server-side!')
-        }
         return this.pageStack
     }
 
-    navigateTo = ({url, success, fail, complete}: swan.navigateTo.Param): void => {
-        if (typeof window === 'undefined') {
-            throw new Error('`navigateTo` cannot be called on server-side!')
-        }
-
+    navigateTo: typeof swan.navigateTo = ({url, success, fail, complete}) => {
         if (!Router.router) {
             fail()
             complete()
@@ -68,11 +68,7 @@ class TaroApp {
             .finally(complete)
     }
 
-    navigateBack = ({success, fail, complete}: swan.navigateBack.Param): void => {
-        if (typeof window === 'undefined') {
-            throw new Error('`navigateBack` cannot be called on server-side!')
-        }
-
+    navigateBack: typeof swan.navigateBack = ({success, fail, complete}) => {
         if (!Router.router) {
             fail()
             complete()
@@ -87,11 +83,7 @@ class TaroApp {
         complete()
     }
 
-    redirectTo = ({url, complete, fail, success}: swan.redirectTo.Param): void => {
-        if (typeof window === 'undefined') {
-            throw new Error('`redirectTo` cannot be called on server-side!')
-        }
-
+    redirectTo: typeof swan.redirectTo = ({url, complete, fail, success}) => {
         if (!Router.router) {
             fail()
             complete()
@@ -119,11 +111,7 @@ class TaroApp {
             .finally(complete)
     }
 
-    reLaunch = ({url, complete, fail, success}: swan.reLaunch.Param): void => {
-        if (typeof window === 'undefined') {
-            throw new Error('`reLaunch` cannot be called on server-side!')
-        }
-
+    reLaunch: typeof swan.reLaunch = ({url, complete, fail, success}) => {
         if (!Router.router) {
             fail()
             complete()

@@ -1,4 +1,5 @@
 import promisify from 'mpromisify'
+import {limited} from '../utils'
 import {CallbackManager} from '../utils/handler'
 import type * as swan from '../swan'
 
@@ -6,17 +7,11 @@ const callbackManager = new CallbackManager()
 let devicemotionListener
 
 const stopAccelerometerInternal: typeof swan.stopAccelerometer = ({success, fail, complete}) => {
-    if (typeof window === 'undefined') {
-        fail?.({
-            errMsg: '`stopAccelerometerInternal` is always fail on the server-side.'
-        })
-    } else {
-        try {
-            window.removeEventListener('devicemotion', devicemotionListener, true)
-            success?.()
-        } catch (err) {
-            fail?.(err)
-        }
+    try {
+        window.removeEventListener('devicemotion', devicemotionListener, true)
+        success?.()
+    } catch (err) {
+        fail?.(err)
     }
     complete?.()
 }
@@ -24,7 +19,7 @@ const stopAccelerometerInternal: typeof swan.stopAccelerometer = ({success, fail
 /**
  * 停止监听加速度数据。
  */
-export const stopAccelerometer = promisify(stopAccelerometerInternal)
+export const stopAccelerometer = promisify(limited.async('stopAccelerometer', stopAccelerometerInternal))
 
 const INTERVAL_MAP = {
     game: {
@@ -58,11 +53,7 @@ const getDevicemotionListener = interval => {
 }
 
 const startAccelerometerInternal: typeof swan.startAccelerometer = ({interval = 'normal', success, fail, complete}) => {
-    if (typeof window === 'undefined') {
-        fail?.({
-            errMsg: '`startAccelerometer` is always fail on the server-side.'
-        })
-    } else if (window.DeviceMotionEvent) {
+    if (window.DeviceMotionEvent) {
         const err = {
             errMsg: 'accelerometer is not supported'
         }
@@ -88,7 +79,7 @@ const startAccelerometerInternal: typeof swan.startAccelerometer = ({interval = 
 /**
  * 开始监听加速度数据。
  */
-export const startAccelerometer = promisify(startAccelerometerInternal)
+export const startAccelerometer = promisify(limited.async('startAccelerometer', startAccelerometerInternal))
 
 /**
  * 监听加速度数据事件。频率根据 Taro.startAccelerometer() 的 interval 参数。可使用 Taro.stopAccelerometer() 停止监听。

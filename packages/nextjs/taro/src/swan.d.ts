@@ -13501,7 +13501,7 @@ export namespace getBatteryInfo {
     /**
      * 接口调用成功的回调
      */
-    export type ParamPropSuccess = (res: ParamPropSuccessParam) => any
+    export type ParamPropSuccess = (res: ParamPropSuccessParam) => void
     export type ParamPropSuccessParam = {
         /**
          * 设备电量，范围 1 - 100
@@ -13516,11 +13516,11 @@ export namespace getBatteryInfo {
     /**
      * 接口调用失败的回调函数
      */
-    export type ParamPropFail = (err: any) => any
+    export type ParamPropFail = (err: any) => void
     /**
      * 接口调用结束的回调函数（调用成功、失败都会执行）
      */
-    export type ParamPropComplete = () => any
+    export type ParamPropComplete = () => void
 }
 
 /**

@@ -1,7 +1,7 @@
 import MobileDetect from 'mobile-detect'
 import promisify from 'mpromisify'
 import type * as swan from '../swan'
-import {unsupported, isAndroid} from '../utils'
+import {unsupported, limited ,isAndroid} from '../utils'
 
 /**
  * 跳转系统蓝牙设置页
@@ -13,69 +13,54 @@ export const openSystemBluetoothSetting = unsupported._void('openSystemBluetooth
  */
 export const openAppAuthorizeSetting = unsupported._void('openAppAuthorizeSetting')
 
+const getWindowInfoInternal = () => ({
+    /** 设备像素比 */
+    pixelRatio: window.devicePixelRatio,
+    /** 屏幕宽度，单位px */
+    screenWidth: window.screen.width,
+    /** 屏幕高度，单位px */
+    screenHeight: window.screen.height,
+    /** 可使用窗口宽度，单位px */
+    windowWidth: document.documentElement.clientWidth,
+    /** 可使用窗口高度，单位px */
+    windowHeight: document.documentElement.clientHeight,
+    /** 导航栏的高度，单位px */
+    navigationBarHeight: isAndroid() ? 38 : 44,
+    /** 状态栏的高度，单位px */
+    statusBarHeight: 0,
+    /** 在竖屏正方向下的安全区域 */
+    safeArea: {
+        bottom: 0,
+        height: 0,
+        left: 0,
+        right: 0,
+        top: 0,
+        width: 0
+    }
+})
+
 /**
  * 获取窗口信息
  */
-export const getWindowInfo = () => {
-    if (typeof window === 'undefined') {
-        throw new Error('`getWindowInfo` cannot be called on server-side!')
-    }
+export const getWindowInfo = limited.never('getWindowInfo', getWindowInfoInternal)
 
-    return {
-        /** 设备像素比 */
-        pixelRatio: window.devicePixelRatio,
-        /** 屏幕宽度，单位px */
-        screenWidth: window.screen.width,
-        /** 屏幕高度，单位px */
-        screenHeight: window.screen.height,
-        /** 可使用窗口宽度，单位px */
-        windowWidth: document.documentElement.clientWidth,
-        /** 可使用窗口高度，单位px */
-        windowHeight: document.documentElement.clientHeight,
-        /** 导航栏的高度，单位px */
-        navigationBarHeight: isAndroid() ? 38 : 44,
-        /** 状态栏的高度，单位px */
-        statusBarHeight: 0,
-        /** 在竖屏正方向下的安全区域 */
-        safeArea: {
-            bottom: 0,
-            height: 0,
-            left: 0,
-            right: 0,
-            top: 0,
-            width: 0
-        }
-    }
-}
+const getSystemSettingInternal = () => ({
+    /** 蓝牙的系统开关 */
+    bluetoothEnabled: false,
+    /** 地理位置的系统开关 */
+    locationEnabled: false,
+    /** Wi-Fi 的系统开关 */
+    wifiEnabled: false,
+    /** 设备方向 */
+    deviceOrientation: window.screen.width >= window.screen.height ? 'landscape' : 'portrait'
+})
 
 /**
  * 获取设备设置
  */
-export const getSystemSetting = () => {
-    if (typeof window === 'undefined') {
-        throw new Error('`getSystemSetting` cannot be called on server-side!')
-    }
+export const getSystemSetting = limited.never('getSystemSetting', getSystemSettingInternal)
 
-    return {
-        /** 蓝牙的系统开关 */
-        bluetoothEnabled: false,
-        /** 地理位置的系统开关 */
-        locationEnabled: false,
-        /** Wi-Fi 的系统开关 */
-        wifiEnabled: false,
-        /** 设备方向 */
-        deviceOrientation: window.screen.width >= window.screen.height ? 'landscape' : 'portrait'
-    }
-}
-
-/**
- * 获取设备设置
- */
-export const getDeviceInfo = () => {
-    if (typeof window === 'undefined') {
-        throw new Error('`getDeviceInfo` cannot be called on server-side!')
-    }
-
+const getDeviceInfoInternal = () => {
     const md = new MobileDetect(navigator.userAgent)
     return {
         /** 应用二进制接口类型（仅 Android 支持） */
@@ -93,12 +78,12 @@ export const getDeviceInfo = () => {
     }
 }
 
-/** 获取微信APP基础信息 */
-export const getAppBaseInfo = () => {
-    if (typeof window === 'undefined') {
-        throw new Error('`getAppBaseInfo` cannot be called on server-side!')
-    }
+/**
+ * 获取设备设置
+ */
+export const getDeviceInfo = limited.never('getDeviceInfo', getDeviceInfoInternal)
 
+const getAppBaseInfoInternal = () => {
     let isDarkMode = false
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         isDarkMode = true
@@ -119,6 +104,11 @@ export const getAppBaseInfo = () => {
         theme: isDarkMode ? 'dark' : 'light'
     }
 }
+
+/**
+ * 获取微信APP基础信息
+ */
+export const getAppBaseInfo = limited.never('getAppBaseInfo', getAppBaseInfoInternal)
 
 /**
  * 获取微信APP授权设置
@@ -148,18 +138,11 @@ export const getAppAuthorizeSetting = () => ({
     phoneCalendarAuthorized: 'not determined'
 })
 
-/**
- * 获取设备设置
- */
-export const getSystemInfoSync = () => {
-    if (typeof window === 'undefined') {
-        throw new Error('`getSystemInfoSync` cannot be called on server-side!');
-    }
-
-    const windowInfo = getWindowInfo()
-    const systemSetting = getSystemSetting()
+const getSystemInfoSyncInternal = () => {
+    const windowInfo = getWindowInfoInternal()
+    const systemSetting = getSystemSettingInternal()
     const deviceInfo = getDeviceInfo()
-    const appBaseInfo = getAppBaseInfo()
+    const appBaseInfo = getAppBaseInfoInternal()
     const appAuthorizeSetting = getAppAuthorizeSetting()
     delete deviceInfo.abi
 
@@ -195,8 +178,13 @@ export const getSystemInfoSync = () => {
     }
 }
 
+/**
+ * 获取设备设置
+ */
+export const getSystemInfoSync = limited.never('getSystemInfoSync', getSystemInfoSyncInternal)
+
 const getSystemInfoInternal: typeof swan.getSystemInfo = ({success, complete}) => {
-    const info = getSystemInfoSync()
+    const info = getSystemInfoSyncInternal()
     success?.(info)
     complete?.()
 }
@@ -204,9 +192,9 @@ const getSystemInfoInternal: typeof swan.getSystemInfo = ({success, complete}) =
 /**
  * 获取系统信息
  */
- export const getSystemInfoAsync = promisify(getSystemInfoInternal)
+ export const getSystemInfoAsync = promisify(limited.never('getSystemInfoAsync', getSystemInfoInternal))
 
 /**
  * 获取系统信息
  */
-export const getSystemInfo = promisify(getSystemInfoInternal)
+export const getSystemInfo = promisify(limited.never('getSystemInfo', getSystemInfoInternal))
