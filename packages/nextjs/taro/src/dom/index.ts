@@ -1,16 +1,12 @@
-import {unsupported} from '../utils'
+import {unsupported, limited} from '../utils'
 import {SelectorQuery} from './selectorQuery'
+
+const createSelectorQueryInternal = () => new SelectorQuery()
 
 /**
  * 返回一个 SelectorQuery 对象实例
  */
-export const createSelectorQuery = () => {
-    if (typeof window === 'undefined') {
-        throw new Error('`createSelectorQuery` cannot be called on server-side.')
-    }
-
-    return new SelectorQuery()
-}
+export const createSelectorQuery = limited.never('createSelectorQuery', createSelectorQueryInternal)
 
 /**
  * 创建并返回一个 IntersectionObserver 对象实例。

@@ -1,4 +1,4 @@
-import {isAndroid} from '../utils'
+import {isAndroid, limited} from '../utils'
 
 /** 菜单按钮的布局位置信息 */
 interface ClientRect {
@@ -16,11 +16,7 @@ interface ClientRect {
     width: number
 }
 
-export function getMenuButtonBoundingClientRect(): ClientRect {
-    if (typeof window === 'undefined') {
-        throw new Error('`getMenuButtonBoundingClientRect` cannot be called on server-side.')
-    }
-
+function getMenuButtonBoundingClientRectInternal(): ClientRect {
     const android = isAndroid()
 
     return {
@@ -32,3 +28,5 @@ export function getMenuButtonBoundingClientRect(): ClientRect {
         right: window.screen.width - 10
     }
 }
+
+export const getMenuButtonBoundingClientRect = limited.never('getMenuButtonBoundingClientRect', getMenuButtonBoundingClientRectInternal)
