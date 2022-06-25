@@ -1,4 +1,4 @@
-import {getParameterError, temporarilyNotSupport} from './utils'
+import {getParameterError, unsupported} from './utils'
 import { MethodHandler } from './utils/handler'
 
 function getItem(key) {
@@ -67,7 +67,10 @@ export const setStorage = ({ key, data, success, fail, complete }) => {
     return handle.success()
 }
 
-export const revokeBufferURL = temporarilyNotSupport('revokeBufferURL')
+/**
+ * 根据 URL 销毁存在内存中的数据
+ */
+export const revokeBufferURL = unsupported._void('revokeBufferURL')
 
 export const removeStorageSync = (key: string) => {
     if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {
@@ -191,7 +194,10 @@ export const getStorage = ({ key, success, fail, complete }) => {
     }
 }
 
-export const createBufferURL = temporarilyNotSupport('createBufferURL')
+/**
+ * 根据传入的 buffer 创建一个唯一的 URL 存在内存中。
+ */
+export const createBufferURL = unsupported._void('createBufferURL')
 
 export const clearStorageSync = () => {
     if (process.env.NODE_ENV === 'development' && typeof window === 'undefined') {

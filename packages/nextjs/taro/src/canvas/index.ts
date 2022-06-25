@@ -1,9 +1,11 @@
-import { temporarilyNotSupport } from '../utils'
+import { unsupported } from '../utils'
 
 // 画布
 
-/** 创建离屏 canvas 实例 */
-export const createOffscreenCanvas = temporarilyNotSupport('createOffscreenCanvas')
+/**
+ * 创建离屏 canvas 实例
+ */
+export const createOffscreenCanvas = unsupported.never('createOffscreenCanvas')
 
 /** 创建 canvas 的绘图上下文 CanvasContext 对象 */
 export * from './createCanvasContext'

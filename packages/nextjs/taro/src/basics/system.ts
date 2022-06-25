@@ -1,17 +1,24 @@
 import MobileDetect from 'mobile-detect'
-import { temporarilyNotSupport, isAndroid } from '../utils'
-import { MethodHandler } from '../utils/handler'
+import promisify from 'mpromisify'
+import type * as swan from '../swan'
+import {unsupported, isAndroid} from '../utils'
 
-/** 跳转系统蓝牙设置页 */
-export const openSystemBluetoothSetting = temporarilyNotSupport('openSystemBluetoothSetting')
+/**
+ * 跳转系统蓝牙设置页
+ */
+export const openSystemBluetoothSetting = unsupported._void('openSystemBluetoothSetting')
 
-/** 跳转系统微信授权管理页 */
-export const openAppAuthorizeSetting = temporarilyNotSupport('openAppAuthorizeSetting')
+/**
+ * 跳转系统微信授权管理页
+ */
+export const openAppAuthorizeSetting = unsupported._void('openAppAuthorizeSetting')
 
-/** 获取窗口信息 */
+/**
+ * 获取窗口信息
+ */
 export const getWindowInfo = () => {
     if (typeof window === 'undefined') {
-        throw new Error('`getWindowInfo` cannot called on server-side!');
+        throw new Error('`getWindowInfo` cannot be called on server-side!');
     }
 
     const info = {
@@ -43,13 +50,14 @@ export const getWindowInfo = () => {
     return info
 }
 
-/** 获取设备设置 */
+/**
+ * 获取设备设置
+ */
 export const getSystemSetting = () => {
     if (typeof window === 'undefined') {
         throw new Error('`getSystemSetting` cannot called on server-side!');
     }
 
-    const isLandscape = window.screen.width >= window.screen.height
     const info = {
         /** 蓝牙的系统开关 */
         bluetoothEnabled: false,
@@ -58,16 +66,18 @@ export const getSystemSetting = () => {
         /** Wi-Fi 的系统开关 */
         wifiEnabled: false,
         /** 设备方向 */
-        deviceOrientation: isLandscape ? 'landscape' : 'portrait'
+        deviceOrientation: window.screen.width >= window.screen.height ? 'landscape' : 'portrait'
     }
 
     return info
 }
 
-/** 获取设备设置 */
+/**
+ * 获取设备设置
+ */
 export const getDeviceInfo = () => {
     if (typeof window === 'undefined') {
-        throw new Error('`getDeviceInfo` cannot called on server-side!');
+        throw new Error('`getDeviceInfo` cannot be called on server-side!');
     }
 
     const md = new MobileDetect(navigator.userAgent)
@@ -119,37 +129,37 @@ export const getAppBaseInfo = () => {
     return info
 }
 
-/** 获取微信APP授权设置 */
-export const getAppAuthorizeSetting = () => {
-    const info = {
-        /** 允许微信使用相册的开关（仅 iOS 有效） */
-        albumAuthorized: 'not determined',
-        /** 允许微信使用蓝牙的开关（仅 iOS 有效） */
-        bluetoothAuthorized: 'not determined',
-        /** 允许微信使用摄像头的开关 */
-        cameraAuthorized: 'not determined',
-        /** 允许微信使用定位的开关 */
-        locationAuthorized: 'not determined',
-        /** 定位准确度。true 表示模糊定位，false 表示精确定位（仅 iOS 有效） */
-        locationReducedAccuracy: false,
-        /** 允许微信使用麦克风的开关 */
-        microphoneAuthorized: 'not determined',
-        /** 允许微信通知的开关 */
-        notificationAuthorized: 'not determined',
-        /** 允许微信通知带有提醒的开关（仅 iOS 有效） */
-        notificationAlertAuthorized: 'not determined',
-        /** 允许微信通知带有标记的开关（仅 iOS 有效） */
-        notificationBadgeAuthorized: 'not determined',
-        /** 允许微信通知带有声音的开关（仅 iOS 有效） */
-        notificationSoundAuthorized: 'not determined',
-        /** 允许微信使用日历的开关 */
-        phoneCalendarAuthorized: 'not determined'
-    }
+/**
+ * 获取微信APP授权设置
+ */
+export const getAppAuthorizeSetting = () => ({
+    /** 允许微信使用相册的开关（仅 iOS 有效） */
+    albumAuthorized: 'not determined',
+    /** 允许微信使用蓝牙的开关（仅 iOS 有效） */
+    bluetoothAuthorized: 'not determined',
+    /** 允许微信使用摄像头的开关 */
+    cameraAuthorized: 'not determined',
+    /** 允许微信使用定位的开关 */
+    locationAuthorized: 'not determined',
+    /** 定位准确度。true 表示模糊定位，false 表示精确定位（仅 iOS 有效） */
+    locationReducedAccuracy: false,
+    /** 允许微信使用麦克风的开关 */
+    microphoneAuthorized: 'not determined',
+    /** 允许微信通知的开关 */
+    notificationAuthorized: 'not determined',
+    /** 允许微信通知带有提醒的开关（仅 iOS 有效） */
+    notificationAlertAuthorized: 'not determined',
+    /** 允许微信通知带有标记的开关（仅 iOS 有效） */
+    notificationBadgeAuthorized: 'not determined',
+    /** 允许微信通知带有声音的开关（仅 iOS 有效） */
+    notificationSoundAuthorized: 'not determined',
+    /** 允许微信使用日历的开关 */
+    phoneCalendarAuthorized: 'not determined'
+})
 
-    return info
-}
-
-/** 获取设备设置 */
+/**
+ * 获取设备设置
+ */
 export const getSystemInfoSync = () => {
     if (typeof window === 'undefined') {
         throw new Error('`getSystemInfoSync` cannot called on server-side!');
@@ -196,32 +206,18 @@ export const getSystemInfoSync = () => {
     return info
 }
 
-/** 获取系统信息 */
-export const getSystemInfoAsync = async (options = {} as any) => {
-    const {success, fail, complete} = options
-    const handle = new MethodHandler({ name: 'getSystemInfoAsync', success, fail, complete })
-
-    try {
-        const info = await getSystemInfoSync()
-        return handle.success(info)
-    } catch (error) {
-        return handle.fail({
-            errMsg: error
-        })
-    }
+const getSystemInfoInternal: typeof swan.getSystemInfo = param => {
+    const {success} = param
+    const info = getSystemInfoSync()
+    success(info)
 }
 
-/** 获取系统信息 */
-export const getSystemInfo = async (options = {} as any) => {
-    const {success, fail, complete} = options
-    const handle = new MethodHandler({name: 'getSystemInfo', success, fail, complete})
+/**
+ * 获取系统信息
+ */
+ export const getSystemInfoAsync = promisify(getSystemInfoInternal)
 
-    try {
-        const info = await getSystemInfoSync()
-        return handle.success(info)
-    } catch (error) {
-        return handle.fail({
-            errMsg: error
-        })
-    }
-}
+/**
+ * 获取系统信息
+ */
+export const getSystemInfo = promisify(getSystemInfoInternal)

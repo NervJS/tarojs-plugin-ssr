@@ -61,32 +61,51 @@ export function serializeParams(params?: Record<string, any>): string {
         .join('&')
 }
 
-export function temporarilyNotSupport(apiName: string): () => never {
-    return () => {
-        throw new Error(`暂时不支持 API ${apiName}`)
+/**
+ * 显式处理不支持的 API。
+ */
+export namespace unsupported {
+    /**
+     * 处理拥有返回值的函数，直接抛出异常。
+     */
+    export function never(api: string): () => never {
+        return () => {
+            throw new Error(`Taro H5 端不支持 API - ${api}`)
+        }
+    }
+
+    /**
+     * 处理无返回值的函数，给予一个提示即可。
+     */
+    export function _void(api: string): () => void {
+        return () => {
+            console.error(`Taro H5 端不支持 API - ${api}`)
+        }
+    }
+
+    interface AsyncMethodOptionLike {
+        fail?: (err: any) => void
+        complete?: () => void
+    }
+
+    /**
+     * 处理异步函数，触发失败回调。
+     */
+    export function async(api: string): (option: AsyncMethodOptionLike) => void {
+        return ({fail, complete}) => {
+            const err = {
+                errMsg: `Taro H5 端不支持 API - ${api}`
+            }
+            fail?.(err)
+            complete?.()
+            return Promise.reject(err)
+        }
     }
 }
 
 export function weixinCorpSupport(apiName: string) {
     return () => {
         const errMsg = `h5端仅在微信公众号中支持 API ${apiName}`
-        if (process.env.NODE_ENV !== 'production') {
-            console.error(errMsg)
-            return Promise.reject({
-                errMsg
-            })
-        } else {
-            console.warn(errMsg)
-            return Promise.resolve({
-                errMsg
-            })
-        }
-    }
-}
-
-export function permanentlyNotSupport(apiName: string) {
-    return () => {
-        const errMsg = `不支持 API ${apiName}`
         if (process.env.NODE_ENV !== 'production') {
             console.error(errMsg)
             return Promise.reject({

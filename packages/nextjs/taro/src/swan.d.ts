@@ -4372,8 +4372,6 @@ export namespace getSystemInfo {
     export type ParamPropSuccessParam = {
         /**
          * 手机品牌
-         *
-         * 
          */
         brand: any
         /**
@@ -4474,8 +4472,6 @@ export namespace getSystemInfoSync {
     export type Return = {
         /**
          * 手机品牌
-         *
-         * 
          */
         brand: any
         /**
@@ -13461,3 +13457,67 @@ export class  CanvasContext {
      */
     setTransform(): void
 }
+
+export namespace getBatteryInfo {
+    export type Param = {
+        /**
+         * 接口调用成功的回调
+         */
+        success: ParamPropSuccess
+        /**
+         * 接口调用失败的回调函数
+         */
+        fail?: ParamPropFail
+        /**
+         * 接口调用结束的回调函数（调用成功、失败都会执行）
+         */
+        complete?: ParamPropComplete
+    }
+    /**
+     * 接口调用成功的回调
+     */
+    export type ParamPropSuccess = (res: ParamPropSuccessParam) => any
+    export type ParamPropSuccessParam = {
+        /**
+         * 设备电量，范围 1 - 100
+         */
+        level: number
+
+        /**
+         * 是否正在充电中
+         */
+        isCharging: boolean
+    }
+    /**
+     * 接口调用失败的回调函数
+     */
+    export type ParamPropFail = (err: any) => any
+    /**
+     * 接口调用结束的回调函数（调用成功、失败都会执行）
+     */
+    export type ParamPropComplete = () => any
+}
+
+/**
+ * 获取设备电量。
+ */
+export function getBatteryInfo(OBJECT: getBatteryInfo.Param): void
+
+export namespace getBatteryInfoSync {
+    export type Return = {
+        /**
+         * 设备电量，范围 1 - 100
+         */
+        level: number
+
+        /**
+         * 是否正在充电中
+         */
+        isCharging: boolean
+    }
+}
+
+/**
+ * getBatteryInfo 的同步版本。
+ */
+export function getBatteryInfoSync(): getBatteryInfoSync.Return

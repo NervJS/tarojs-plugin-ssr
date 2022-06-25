@@ -1,5 +1,5 @@
 import { CallbackManager, MethodHandler } from '../utils/handler'
-import { temporarilyNotSupport } from '../utils'
+import { unsupported } from '../utils'
 
 function getConnection() {
     // @ts-ignore
@@ -59,13 +59,9 @@ const networkStatusListener = async () => {
 }
 
 /**
- * 在最近的八次网络请求中, 出现下列三个现象之一则判定弱网。
- * - 出现三次以上连接超时
- * - 出现三次 rtt 超过 400
- * - 出现三次以上的丢包
- * > 弱网事件通知规则是: 弱网状态变化时立即通知, 状态不变时 30s 内最多通知一次。
+ * 监听弱网状态变化事件。
  */
-export const onNetworkWeakChange = temporarilyNotSupport('onNetworkWeakChange')
+export const onNetworkWeakChange = unsupported._void('onNetworkWeakChange')
 
 export const onNetworkStatusChange = callback => {
     networkStatusManager.add(callback)
@@ -75,7 +71,10 @@ export const onNetworkStatusChange = callback => {
     }
 }
 
-export const offNetworkWeakChange = temporarilyNotSupport('offNetworkStatusChange')
+/**
+ * 取消监听弱网状态变化事件。
+ */
+export const offNetworkWeakChange = unsupported._void('offNetworkStatusChange')
 
 export const offNetworkStatusChange = callback => {
     networkStatusManager.remove(callback)
@@ -85,4 +84,7 @@ export const offNetworkStatusChange = callback => {
     }
 }
 
-export const getLocalIPAddress = temporarilyNotSupport('getLocalIPAddress')
+/**
+ * 获取局域网 IP 地址
+ */
+export const getLocalIPAddress = unsupported.never('getLocalIPAddress')

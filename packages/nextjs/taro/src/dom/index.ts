@@ -1,6 +1,9 @@
-import { temporarilyNotSupport } from '../utils'
-import { SelectorQuery } from './selectorQuery'
+import {unsupported} from '../utils'
+import {SelectorQuery} from './selectorQuery'
 
+/**
+ * 返回一个 SelectorQuery 对象实例
+ */
 export const createSelectorQuery = () => {
     if (typeof window === 'undefined') {
         throw new Error('`createSelectorQuery` cannot be called on server-side.')
@@ -9,4 +12,7 @@ export const createSelectorQuery = () => {
     return new SelectorQuery()
 }
 
-export const createIntersectionObserver = temporarilyNotSupport('createIntersectionObserver')
+/**
+ * 创建并返回一个 IntersectionObserver 对象实例。
+ */
+export const createIntersectionObserver = unsupported.never('createIntersectionObserver')

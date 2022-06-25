@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
 import promisify from 'mpromisify'
-import type {chooseImage as ci, previewImage as pi} from '../swan'
+import type swan from '../swan'
 
 function chooseImageInternal({
     count = 1,
@@ -8,7 +8,7 @@ function chooseImageInternal({
     fail,
     complete,
     sourceType = ['album', 'camera']
-}: ci.Param): void {
+}: swan.chooseImage.Param): void {
     if (typeof window === 'undefined') {
         const errMsg = 'chooseImage is always fail on the server-side.'
         fail?.({
@@ -18,7 +18,7 @@ function chooseImageInternal({
         return
     }
 
-    const result: ci.ParamPropSuccessParam = {
+    const result: swan.chooseImage.ParamPropSuccessParam = {
         tempFilePaths: [],
         tempFiles: []
     }
@@ -96,7 +96,7 @@ function previewImageInternal({
     success,
     fail,
     complete
-}: pi.Param): void {
+}: swan.previewImage.Param): void {
     if (!Preview) {
         if (process.env.NODE_ENV === 'development') {
             console.error('`Preview` component is not registered.')

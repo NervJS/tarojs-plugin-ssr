@@ -1,4 +1,9 @@
 import {
+    // debug
+    setEnableDebug,
+    getRealtimeLogManager,
+    getLogManager,
+
     getWindowInfo,
     getSystemSetting,
     getDeviceInfo,
@@ -7,7 +12,7 @@ import {
     getSystemInfoSync,
     getSystemInfoAsync,
     getSystemInfo
-} from './base'
+} from './basics'
 
 import {
     createOffscreenCanvas,
@@ -126,6 +131,10 @@ import {getMenuButtonBoundingClientRect} from './ui/menu'
 import {initTaroApp, TaroPage} from './internal'
 
 export {
+    setEnableDebug,
+    getRealtimeLogManager,
+    getLogManager,
+
     getWindowInfo,
     getSystemSetting,
     getDeviceInfo,
@@ -236,6 +245,10 @@ export {
 }
 
 export default {
+    setEnableDebug,
+    getRealtimeLogManager,
+    getLogManager,
+
     getWindowInfo,
     getSystemSetting,
     getDeviceInfo,
