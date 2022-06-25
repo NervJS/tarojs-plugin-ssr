@@ -1,68 +1,77 @@
-/**
- * 剪贴板部分的api参考了Chameleon项目的实现：
- *
- * setClipboardData: https://github.com/chameleon-team/chameleon-api/tree/master/src/interfaces/setClipBoardData
- * getClipboardData: https://github.com/chameleon-team/chameleon-api/tree/master/src/interfaces/getClipBoardData
- */
+import promisify from 'mpromisify'
+import type * as swan from '../swan'
 
-import {setStorage, setStorageSync, getStorageSync} from '../dataCache'
-import {MethodHandler} from '../utils/handler'
+let globalTextArea: HTMLTextAreaElement | null = null
 
-const CLIPBOARD_STORAGE_NAME = 'taro_clipboard'
+const setClipboardDataInternal: typeof swan.setClipboardData = ({data, success, fail, complete}) => {
+    if (typeof window === 'undefined') {
+        throw new Error('`setClipboardData` cannot be called on server-side!')
+    }
 
-if (typeof window !== 'undefined') {
-    document.addEventListener('copy', () => {
-        setStorage({
-            key: CLIPBOARD_STORAGE_NAME,
-            data: window.getSelection()?.toString()
-        }).catch(e => {
-            console.error(e)
-        })
-    })
+    // 使用 try/catch 尝试是否支持 navigator.clipboard，如果不支持会在浏览器中看到 DOMExceptions。
+    try {
+        navigator.clipboard.writeText(data)
+            .then(() => {
+                success?.()
+            })
+            .catch(err => {
+                fail?.({
+                    errMsg: err.message
+                })
+            })
+            .finally(() => {
+                complete?.()
+            })
+        return
+    }
+    catch { }
+
+    // 回退 textarea 和 execCommand 方案解决
+    const activeElement = document.activeElement
+
+    if (!globalTextArea) {
+        globalTextArea = document.createElement('textarea')
+        globalTextArea.setAttribute('aria-hidden', 'true')
+        const textArea: HTMLTextAreaElement = document.body.appendChild(globalTextArea)
+        textArea.style.height = '1px'
+        textArea.style.width = '1px'
+        textArea.style.position = 'absolute'
+    }
+
+    globalTextArea.value = data
+    globalTextArea.focus()
+    globalTextArea.select()
+
+    document.execCommand('copy')
+
+    if (activeElement instanceof HTMLElement) {
+        activeElement.focus()
+    }
+
+    document.body.removeChild(globalTextArea)
+
+    success?.()
+    complete?.()
 }
 
 /**
  * 设置系统剪贴板的内容
  */
-export const setClipboardData = async ({ data, success, fail, complete }) => {
-    const handle = new MethodHandler({ name: 'setClipboardData', success, fail, complete })
-    try {
-        setStorageSync(CLIPBOARD_STORAGE_NAME, data)
-        /**
-         * 已于 iPhone 6s Plus iOS 13.1.3 上的 Safari 测试通过
-         * iOS < 10 的系统可能无法使用编程方式访问剪贴板，参考：
-         * https://stackoverflow.com/questions/34045777/copy-to-clipboard-using-javascript-in-ios/34046084
-         */
-        if (typeof document.execCommand === 'function') {
-            const textarea = document.createElement('textarea')
-            textarea.readOnly = true
-            textarea.value = data
-            textarea.style.position = 'absolute'
-            textarea.style.width = '100px'
-            textarea.style.left = '-10000px'
-            document.body.appendChild(textarea)
-            textarea.select()
-            textarea.setSelectionRange(0, textarea.value.length)
-            document.execCommand('copy')
-            document.body.removeChild(textarea)
-        } else {
-            throw new Error('Unsupported Function: \'document.execCommand\'.')
-        }
-        return handle.success()
-    } catch (e) {
-        return handle.fail({ errMsg: (e as any).message })
+export const setClipboardData = promisify(setClipboardDataInternal)
+
+const getClipboardDataInternal: typeof swan.getClipboardData = ({success, complete}) => {
+    if (typeof window === 'undefined') {
+        throw new Error('`getClipboardData` cannot be called on server-side!')
     }
+
+    const res = {
+        data: globalTextArea ? globalTextArea.value : ''
+    }
+    success?.(res)
+    complete?.()
 }
 
 /**
  * 获取系统剪贴板的内容
  */
-export const getClipboardData = async ({ success, fail, complete } = {} as any) => {
-    const handle = new MethodHandler({ name: 'getClipboardData', success, fail, complete })
-    try {
-        const data: string = getStorageSync(CLIPBOARD_STORAGE_NAME)
-        return handle.success({ data })
-    } catch (e) {
-        return handle.fail({ errMsg: (e as any).message })
-    }
-}
+export const getClipboardData = promisify(getClipboardDataInternal)
