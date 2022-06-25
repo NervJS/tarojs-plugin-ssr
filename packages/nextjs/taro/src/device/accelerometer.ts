@@ -1,22 +1,30 @@
-import { CallbackManager, MethodHandler } from '../utils/handler'
+import promisify from 'mpromisify'
+import {CallbackManager} from '../utils/handler'
+import type * as swan from '../swan'
 
 const callbackManager = new CallbackManager()
 let devicemotionListener
 
+const stopAccelerometerInternal: typeof swan.stopAccelerometer = ({success, fail, complete}) => {
+    if (typeof window === 'undefined') {
+        fail?.({
+            errMsg: '`stopAccelerometerInternal` is always fail on the server-side.'
+        })
+    } else {
+        try {
+            window.removeEventListener('devicemotion', devicemotionListener, true)
+            success?.()
+        } catch (err) {
+            fail?.(err)
+        }
+    }
+    complete?.()
+}
+
 /**
  * 停止监听加速度数据。
  */
-export const stopAccelerometer = ({success, fail, complete} = {} as any) => {
-    const res: any = {}
-    const handle = new MethodHandler({ name: 'stopAccelerometer', success, fail, complete })
-    try {
-        window.removeEventListener('devicemotion', devicemotionListener, true)
-        return handle.success(res)
-    } catch (e) {
-        res.errMsg = e.message
-        return handle.fail(res)
-    }
-}
+export const stopAccelerometer = promisify(stopAccelerometerInternal)
 
 const INTERVAL_MAP = {
     game: {
@@ -49,27 +57,38 @@ const getDevicemotionListener = interval => {
     }
 }
 
-/**
- * 开始监听加速度数据。
- */
-export const startAccelerometer = ({ interval = 'normal', success, fail, complete } = {} as any) => {
-    const handle = new MethodHandler({ name: 'startAccelerometer', success, fail, complete })
-    try {
-        if (window.DeviceMotionEvent) {
+const startAccelerometerInternal: typeof swan.startAccelerometer = ({interval = 'normal', success, fail, complete}) => {
+    if (typeof window === 'undefined') {
+        fail?.({
+            errMsg: '`startAccelerometer` is always fail on the server-side.'
+        })
+    } else if (window.DeviceMotionEvent) {
+        const err = {
+            errMsg: 'accelerometer is not supported'
+        }
+        fail?.(err)
+    } else {
+        try {
             const intervalObj = INTERVAL_MAP[interval]
             if (devicemotionListener) {
                 stopAccelerometer()
             }
             devicemotionListener = getDevicemotionListener(intervalObj.interval)
             window.addEventListener('devicemotion', devicemotionListener, true)
-        } else {
-            throw new Error('accelerometer is not supported')
+            success?.()
+        } catch (err) {
+            fail?.({
+                errMsg: err.message
+            })
         }
-        return handle.success()
-    } catch (e) {
-        return handle.fail({ errMsg: (e as any).message })
     }
+    complete?.()
 }
+
+/**
+ * 开始监听加速度数据。
+ */
+export const startAccelerometer = promisify(startAccelerometerInternal)
 
 /**
  * 监听加速度数据事件。频率根据 Taro.startAccelerometer() 的 interval 参数。可使用 Taro.stopAccelerometer() 停止监听。
