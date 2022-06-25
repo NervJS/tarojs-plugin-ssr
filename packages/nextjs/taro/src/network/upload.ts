@@ -1,8 +1,9 @@
 import {CallbackManager} from '../_util/handler'
+import type * as swan from '../swan'
 
 export const NETWORK_TIMEOUT = 60000
 
-const convertObjectUrlToBlob = url => {
+const url2Blob = (url: string): Promise<Blob> => {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
         xhr.open('GET', url, true)
@@ -18,20 +19,21 @@ const convertObjectUrlToBlob = url => {
     })
 }
 
-const createUploadTask = ({
+/**
+ * 将本地资源上传到服务器。客户端发起一个 HTTPS POST 请求，其中 content-type 为 multipart/form-data。使用前请注意阅读相关说明。
+ */
+export const uploadFile: typeof swan.uploadFile = ({
     url,
     filePath,
-    formData = {},
     name,
     header,
-    timeout,
-    fileName,
+    formData,
     success,
-    error
-}): Taro.UploadTask => {
-    let timeoutInter
+    fail,
+    complete
+}) => {
+    let timeoutTimer: ReturnType<typeof setTimeout> | null = null
     let formKey
-    const apiName = 'uploadFile'
     const xhr = new XMLHttpRequest()
     const form = new FormData()
     const callbackManager = {
@@ -49,8 +51,7 @@ const createUploadTask = ({
         form.append(formKey, formData[formKey])
     }
 
-    xhr.upload.onprogress = e => {
-        const { loaded, total } = e
+    xhr.upload.onprogress = ({loaded, total}) => {
         callbackManager.progressUpdate.trigger({
             progress: Math.round(loaded / total * 100),
             totalBytesSent: loaded,
@@ -67,86 +68,87 @@ const createUploadTask = ({
 
     xhr.onload = () => {
         const status = xhr.status
-        clearTimeout(timeoutInter)
-        success({
-            errMsg: `${apiName}:ok`,
+        clearTimeout(timeoutTimer)
+        success?.({
             statusCode: status,
             data: xhr.responseText || xhr.response
         })
+        complete?.()
     }
 
     xhr.onabort = () => {
-        clearTimeout(timeoutInter)
-        error({
-            errMsg: `${apiName}:fail abort`
+        clearTimeout(timeoutTimer)
+        fail?.({
+            errMsg: 'uploadFile:fail abort'
         })
+        complete?.()
     }
 
     xhr.onerror = (e: ProgressEvent<EventTarget> & { message?: string }) => {
-        clearTimeout(timeoutInter)
-        error({
-            errMsg: `${apiName}:fail ${e.message}`
+        clearTimeout(timeoutTimer)
+        fail?.({
+            errMsg: `uploadFile:fail ${e.message}`
         })
+        complete?.()
     }
 
     /**
      * 中断任务
      */
     const abort = () => {
-        clearTimeout(timeoutInter)
+        clearTimeout(timeoutTimer)
         xhr.abort()
     }
 
     const send = () => {
         xhr.send(form)
-        timeoutInter = setTimeout(() => {
+        timeoutTimer = setTimeout(() => {
             xhr.onabort = null
             xhr.onload = null
             xhr.upload.onprogress = null
             xhr.onreadystatechange = null
             xhr.onerror = null
             abort()
-            error({
-                errMsg: `${apiName}:fail timeout`
+            fail?.({
+                errMsg: 'uploadFile:fail timeout'
             })
-        }, timeout || NETWORK_TIMEOUT)
+            complete?.()
+        }, NETWORK_TIMEOUT)
     }
 
-    convertObjectUrlToBlob(filePath)
-        .then((fileObj: string | (Blob & { name?: string })) => {
-            if (!fileName) {
-                fileName = typeof fileObj !== 'string' && fileObj.name
-            }
-            form.append(name, fileObj, fileName || `file-${Date.now()}`)
+    url2Blob(filePath)
+        .then((fileObj) => {
+            form.append(name, fileObj, (fileObj as any).name || `file-${Date.now()}`)
             send()
         })
         .catch(e => {
-            error({
-                errMsg: `${apiName}:fail ${e.message}`
+            fail?.({
+                errMsg: `uploadFile:fail ${e.message}`
             })
+            complete?.()
         })
 
     /**
      * 监听 HTTP Response Header 事件。会比请求完成事件更早
      * @param {HeadersReceivedCallback} callback HTTP Response Header 事件的回调函数
      */
-    const onHeadersReceived = callbackManager.headersReceived.add
+    const onHeadersReceived = callbackManager.headersReceived.add as any
     /**
      * 取消监听 HTTP Response Header 事件
      * @param {HeadersReceivedCallback} callback HTTP Response Header 事件的回调函数
      */
-    const offHeadersReceived = callbackManager.headersReceived.remove
+    const offHeadersReceived = callbackManager.headersReceived.remove as any
 
     /**
      * 监听进度变化事件
      * @param {ProgressUpdateCallback} callback HTTP Response Header 事件的回调函数
      */
-    const onProgressUpdate = callbackManager.progressUpdate.add
+    const onProgressUpdate = callbackManager.progressUpdate.add as any
     /**
      * 取消监听进度变化事件
      * @param {ProgressUpdateCallback} callback HTTP Response Header 事件的回调函数
      */
-    const offProgressUpdate = callbackManager.progressUpdate.remove
+    const offProgressUpdate = callbackManager.progressUpdate.remove as any
 
     return {
         abort,
@@ -155,49 +157,4 @@ const createUploadTask = ({
         onProgressUpdate,
         offProgressUpdate
     }
-}
-
-/**
- * 将本地资源上传到服务器。客户端发起一个 HTTPS POST 请求，其中 content-type 为 multipart/form-data。使用前请注意阅读相关说明。
- */
-export const uploadFile = ({
-    url,
-    filePath,
-    name,
-    header,
-    formData,
-    timeout,
-    fileName,
-    success,
-    fail,
-    complete
-}) => {
-    let task!: Taro.UploadTask
-    const result = new Promise((resolve, reject) => {
-        task = createUploadTask({
-            url,
-            header,
-            name,
-            filePath,
-            formData,
-            timeout,
-            fileName,
-            success: res => {
-                success && success(res)
-                complete && complete(res)
-                resolve(res)
-            },
-            error: res => {
-                fail && fail(res)
-                complete && complete(res)
-                reject(res)
-            }
-        })
-    }) as any
-
-    result.headersReceive = task.onHeadersReceived
-    result.progress = task.onProgressUpdate
-    result.abort = task.abort
-
-    return result
 }

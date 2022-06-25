@@ -204,12 +204,26 @@ export namespace uploadFile {
     export type Return = {
         /**
          * 监听上传进度变化
-         *
          */
         onProgressUpdate: ReturnPropOnProgressUpdate
+
+        /**
+         * 取消监听下载进度变化。
+         */
+        offProgressUpdate: ReturnPropOnProgressUpdate
+
+        /**
+         * 监听上传的 HTTP Response Header 事件，一次连接只会触发一次，早于上传请求完成事件。
+         */
+        onHeadersReceived: ReturnPropOnHeadersReceived
+
+        /**
+         * 取消监听上传的 HTTP Response Header 事件。
+         */
+        offHeadersReceived: ReturnPropOnHeadersReceived
+
         /**
          * 中断上传任务
-         *
          */
         abort: ReturnPropAbort
     }
@@ -232,6 +246,17 @@ export namespace uploadFile {
          */
         totalBytesExpectedToSend: number
     }
+    /**
+     * 监听上传的 HTTP Response Header 事件
+     */
+     export type ReturnPropOnHeadersReceived = (callback: ReturnPropOnProgressUpdateParam) => any
+     export type ReturnPropOnHeadersReceivedParam = (res: ReturnPropOnProgressUpdateParamParam) => any
+     export type ReturnPropOnHeadersReceivedParamParam = {
+        /**
+         * 开发者服务器返回的 HTTP Response Header
+         */
+        header: Record<string, string>
+     }
     /**
      * 中断上传任务
      */
