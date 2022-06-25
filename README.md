@@ -24,7 +24,7 @@ pnpm install tarojs-plugin-platform-nextjs next
 
 ### 配置
 
-在 Taro 项目的[编译配置](https://taro-docs.jd.com/taro/docs/config)中添加本插件。
+在 Taro 项目的 `config/index.js` 中添加插件。
 
 ```javascript
 const config = {
@@ -106,6 +106,20 @@ export async function getStaticProps() {
 ```
 
 > 阅读 Next.js 文档了解更多：[Incremental Static Regeneration](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)。
+
+### 自定义 Next.js 配置
+
+可以在项目的 `config` 目录下添加 `next.config.js` 文件来自定义 Next.js 应用的相关配置。
+
+如自定义 H5 应用的基本路径（basePath）：
+
+```javascript
+module.exports = {
+    basePath: '/swan'
+}
+```
+
+> 阅读 Next.js 文档了解更多：[next.config.js](https://nextjs.org/docs/api-reference/next.config.js/introduction)。
 
 ## 注意事项
 
