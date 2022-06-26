@@ -82,7 +82,7 @@ export async function getServerSideProps(context) {
 }
 ```
 
-示例 - [Data Fetch](https://github.com/SyMind/tarojs-plugin-platform-nextjs/tree/main/examples/data-fetch)
+示例 - [Data Fetch Demo](https://github.com/SyMind/tarojs-plugin-platform-nextjs/tree/main/examples/data-fetch)
 
 > 阅读 Next.js 文档了解更多：[getServerSideProps](https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props)。
 
