@@ -66,6 +66,8 @@ npx next start dist -p 10086
 
 插件默认 Pre-rendering 所有页面。这意味着提前为每个页面生成 HTML，而不是让浏览器端 JavaScript 完成所有工作。预渲染可以带来更好的性能和搜索引擎优化。
 
+示例 - [房贷计算器](https://github.com/SyMind/Taro-Mortgage-Calculator)
+
 > 阅读 Next.js 文档了解更多：[Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)。
 
 ### SSR - 服务端渲染
@@ -79,6 +81,8 @@ export async function getServerSideProps(context) {
     }
 }
 ```
+
+示例 - [Data Fetch](https://github.com/SyMind/tarojs-plugin-platform-nextjs/tree/main/examples/data-fetch)
 
 > 阅读 Next.js 文档了解更多：[getServerSideProps](https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props)。
 
@@ -191,10 +195,6 @@ class MyComponent extends Component {
 - export default MyComponent
 + export default withRouter(MyComponent)
 ```
-
-## 示例
-
-[房贷计算器](https://github.com/SyMind/Taro-Mortgage-Calculator)
 
 ## License
 

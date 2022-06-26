@@ -1,11 +1,12 @@
 const config = {
     projectName: 'data',
     date: '2022-4-16',
-    designWidth: 640,
+    designWidth: 375,
     deviceRatio: {
         640: 1,
         750: 1,
-        828: 1.81 / 2
+        828: 1.81 / 2,
+        375: 2 / 1
     },
     sourceRoot: 'src',
     outputRoot: 'dist',

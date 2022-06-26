@@ -1,3 +1,3 @@
-export default definePageConfig({
+export default {
   navigationBarTitleText: '首页'
-})
+}
