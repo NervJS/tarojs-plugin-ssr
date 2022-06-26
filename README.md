@@ -4,8 +4,6 @@ Taro 插件，让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-f
 
 > 请 Star 🌟 这个项目来表达你的喜爱 ❤️ 和支持。
 
-<strong>⚠️ 本插件目前处于早期建设中，不建议用于生产环境！</strong>
-
 ## 安装与使用
 
 你需要先拥有一个 Taro 项目，如果你还不知该如何创建一个 Taro 项目，请先从这里开始：[Taro 安装及使用](https://taro-docs.jd.com/taro/docs/)。

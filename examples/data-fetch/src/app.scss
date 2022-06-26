@@ -1,8 +1,8 @@
 body {
-    font-size: 16px;
-    margin: 8px;
-    font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-    line-height: 1.5;
+    font-size: 16px!important;
+    margin: 8px!important;
+    font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji!important;
+    line-height: 1.5!important;
 }
 
 .paragraph {
@@ -10,5 +10,5 @@ body {
 }
 
 .taro-nav {
-    text-decoration: underline;
+    text-decoration: underline!important;
 }

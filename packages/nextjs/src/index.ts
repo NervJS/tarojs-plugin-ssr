@@ -9,6 +9,7 @@ import ejs from 'ejs'
 import chalk from 'chalk'
 import spawn from 'cross-spawn'
 import open from 'open'
+import * as babel from '@babel/core'
 import type {IPluginContext} from '@tarojs/service'
 import {getNextExportedFunctions, resolveDynamicPagesToRewrites, isDynamicRoute} from './nextUtils'
 import getNextSassOptions from './scssUtils'
@@ -173,12 +174,23 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
 
                     let contents: string
                     if (fs.existsSync(configAbsolutePath)) {
-                        const configPath = path.relative(nextjsPageDir, `${originRequest}.config`)
+                        // 读取 Taro 页面配置
+                        // 注意：需要处理 definePageConfig 宏函数
+                        const res = babel.transformFileSync(configAbsolutePath, {
+                            presets: [['@babel/preset-env']],
+                            plugins: ['@babel/plugin-proposal-class-properties']
+                        })
+                        const macro = 'function definePageConfig(config) { return config }\n'
+                        const code = macro + res!.code as string
+                        const pageConfig = eval(code)
 
                         contents = unIndent`
                             import {TaroPage} from 'tarojs-plugin-platform-nextjs/taro'
                             import Page from '${modulePath}'
-                            import pageConfig from '${configPath}'
+                            
+                            const pageConfig = {
+                                backgroundColor: ${JSON.stringify(pageConfig.backgroundColor)}
+                            }
 
                             export default function NextPage(props) {
                                 return <TaroPage {...props} Page={Page} pageConfig={pageConfig} />
