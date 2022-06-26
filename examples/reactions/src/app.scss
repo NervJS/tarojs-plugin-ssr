@@ -5,7 +5,8 @@ body, html {
     line-height: 1.5;
 }
 
-a {
+.taro-nav {
+    display: inline-block;
     color: #0070f3;
     text-decoration: none;
 }
