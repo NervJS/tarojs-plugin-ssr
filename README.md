@@ -1,6 +1,9 @@
 # tarojs-plugin-platform-nextjs
 
-Taro 插件，让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，提升页面首屏速度🚀，利于 SEO🔍，基于 Next.js。
+Taro 插件，用于编译为 Next.js 应用。
+
+让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，提升页面首屏速度🚀，利于 SEO🔍。
+
 
 > 请 Star 🌟 这个项目来表达你的喜爱 ❤️ 和支持。
 
@@ -129,7 +132,7 @@ module.exports = {
 
 ### 功能限制
 
-插件受 Next.js 框架的约束，有以下限制：
+插件基于 Next.js 框架，故受其影响，有以下限制：
 
 1. 仅支持 `browser` 路由模式。
 2. 组件级样式必须使用 CSS Module。
