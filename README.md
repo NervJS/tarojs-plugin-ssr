@@ -105,6 +105,8 @@ export async function getStaticProps() {
 }
 ```
 
+示例 - [GitHub Reactions Demo](https://github.com/SyMind/tarojs-plugin-platform-nextjs/tree/main/examples/reactions)
+
 > 阅读 Next.js 文档了解更多：[Incremental Static Regeneration](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)。
 
 ### 自定义 Next.js 配置

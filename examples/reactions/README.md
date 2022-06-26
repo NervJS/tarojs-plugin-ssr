@@ -1,6 +1,6 @@
 # 数据请求示例
 
-通过导出 `getStaticProps` Next.js 将在构建阶段获取数据，并将页面预渲染为静态页面。
+这个演示展示了 Next.js 的 ISR 功能，使用 GitHub Issues 作为数据源。
 
 ## 执行 Next.js
 
