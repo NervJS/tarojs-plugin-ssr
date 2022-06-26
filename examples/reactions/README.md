@@ -5,11 +5,11 @@
 ## 执行 Next.js
 
 ```bash
-yarn dev:nextjs
+GITHUB_TOKEN=<Your GitHub Token> && yarn dev:nextjs
 ```
 
 ## 执行小程序
 
 ```bash
-yarn dev:swan
+GITHUB_TOKEN=<Your GitHub Token> && yarn dev:swan
 ```

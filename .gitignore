@@ -107,3 +107,6 @@ Thumbs.db
 es
 lib
 dist
+
+# examples
+examples/**/yarn.lock

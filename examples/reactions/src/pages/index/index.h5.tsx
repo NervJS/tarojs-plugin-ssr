@@ -21,33 +21,27 @@ export async function getStaticProps() {
     //     }
     //   }
     // }
-    let res
-    try {
-        res = await request({
-            url: 'https://api.github.com/graphql',
-            method: 'POST',
-            header: {
-                Authorization: `bearer ${process.env.GITHUB_TOKEN}`,
-            },
-            data: {
-                query: `query {
-                repository(owner:"vercel", name:"reactions") {
-                issue(number:1) {
-                    reactionGroups {
-                    content
-                    users(first: 0) {
-                        totalCount
-                    }
-                    }
+    const res = await request({
+        url: 'https://api.github.com/graphql',
+        method: 'POST',
+        header: {
+            Authorization: `bearer ${process.env.GITHUB_TOKEN}`,
+        },
+        data: {
+            query: `query {
+            repository(owner:"vercel", name:"reactions") {
+            issue(number:1) {
+                reactionGroups {
+                content
+                users(first: 0) {
+                    totalCount
                 }
                 }
-            }`
             }
-        })
-    } catch(error) {
-        console.error(error)
-        throw new Error('Failed to fetch API')
-    }
+            }
+        }`
+        }
+    })
 
     const reactions = res.data.data.repository.issue.reactionGroups
         .map(item => item.users.totalCount)

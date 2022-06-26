@@ -15,17 +15,17 @@ function Index() {
             },
             data: {
                 query: `query {
-                repository(owner:"vercel", name:"reactions") {
-                issue(number:1) {
-                    reactionGroups {
-                    content
-                    users(first: 0) {
-                        totalCount
+                    repository(owner:"vercel", name:"reactions") {
+                        issue(number:1) {
+                            reactionGroups {
+                                content
+                                users(first: 0) {
+                                    totalCount
+                                }
+                            }
+                        }
                     }
-                    }
-                }
-                }
-            }`
+                }`
             }
         })
 
