@@ -134,7 +134,15 @@ import {
     nextTick
 } from './framework'
 
-import {chooseImage, registerPreviewComponent, previewImage} from './media/image'
+import {
+    // image
+    chooseImage,
+    registerPreviewComponent,
+    previewImage,
+
+    // video
+    createVideoContext
+} from './media'
 
 import {uploadFile} from './network/upload'
 
@@ -255,6 +263,7 @@ export {
     chooseImage,
     registerPreviewComponent,
     previewImage,
+    createVideoContext,
 
     uploadFile,
 
@@ -377,6 +386,7 @@ export default {
     chooseImage,
     registerPreviewComponent,
     previewImage,
+    createVideoContext,
 
     uploadFile,
 

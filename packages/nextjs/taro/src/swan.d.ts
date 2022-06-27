@@ -2439,53 +2439,53 @@ export function saveVideoToPhotosAlbum(OBJECT: saveVideoToPhotosAlbum.Param): vo
  */
 export function createVideoContext(videoId: any, instance?: any): VideoContext
 
-export class  VideoContext {
+export class VideoContext {
     /**
      * 播放
      */
-    play(): any
+    play(): void
     /**
      * 暂停
      */
-    pause(): any
+    pause(): void
     /**
      * 跳转到指定位置，单位 s
      */
-    seek(position: any): any
+    seek(position: number): void
     /**
      * 发送弹幕，danmu 包含两个属性 text, color。
      */
-    sendDanmu(danmu: any): any
+    sendDanmu(danmu: any): void
     /**
      * 设置倍速播放，支持的倍率有 0.5/0.8/1.0/1.25/1.5
      *
      * 
      */
-    playbackRate(rate: any): any
+    playbackRate(rate: number): void
     /**
      * 进入全屏，可传入{direction}参数（1.7.0起支持），详见video组件文档
      *
      * 
      */
-    requestFullScreen(): any
+    requestFullScreen(): void
     /**
      * 退出全屏
      *
      * 
      */
-    exitFullScreen(): any
+    exitFullScreen(): void
     /**
      * 显示状态栏，仅在iOS全屏下有效
      *
      * 
      */
-    showStatusBar(): any
+    showStatusBar(): void
     /**
      * 隐藏状态栏，仅在iOS全屏下有效
      *
      * 
      */
-    hideStatusBar(): any
+    hideStatusBar(): void
 }
 /**
  * 
