@@ -5,7 +5,8 @@ import {
     TaroEvent,
     TaroFocusEvent,
     TaroBlurEvent,
-    TaroConfirmEvent
+    TaroConfirmEvent,
+    TaroVideoEvent
 } from './typings'
 
 export function createTaroMouseEvent(taroEventType: string, reactEvent: React.TouchEvent | React.MouseEvent): TaroMouseEvent {
@@ -145,7 +146,28 @@ export function createTaroConfirmEvent<T extends HTMLTextAreaElement | HTMLInput
             value: el.value
         },
         timeStamp,
-        type: 'blur',
+        type: 'confirm',
+        preventDefault,
+        stopPropagation
+    }
+}
+
+export function createTaroVideoEvent(taroEventType: string, reactEvent: React.SyntheticEvent<HTMLVideoElement>): TaroVideoEvent {
+    const {
+        timeStamp,
+        target,
+        currentTarget,
+        preventDefault,
+        stopPropagation
+    } = reactEvent
+    return {
+        currentTarget,
+        target,
+        detail: {
+            videoId: currentTarget.id
+        },
+        timeStamp,
+        type: taroEventType,
         preventDefault,
         stopPropagation
     }
