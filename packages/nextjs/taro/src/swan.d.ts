@@ -9226,6 +9226,7 @@ export class  Animation {
      */
     matrix3d(): any
 }
+
 export namespace pageScrollTo {
     export type Param = {
         /**
@@ -9236,8 +9237,36 @@ export namespace pageScrollTo {
          * 滚动动画的时长，默认300ms，单位 ms
          */
         duration?: number
+
+         /**
+         * 接口调用成功的回调函数
+         */
+        success?: ParamPropSuccess
+        /**
+         * 接口调用失败的回调函数
+         */
+        fail?: ParamPropFail
+        /**
+         * 接口调用结束的回调函数（调用成功、失败都会执行）
+         */
+        complete?: ParamPropComplete
     }
+
+    /**
+     * 接口调用成功的回调函数
+     */
+    export type ParamPropSuccess = () => void
+    /**
+     * 接口调用失败的回调函数
+     */
+    export type ParamPropFail = (err: any) => void
+
+    /**
+     * 接口调用结束的回调函数（调用成功、失败都会执行）
+     */
+    export type ParamPropComplete = () => void
 }
+
 /**
  * 
  *

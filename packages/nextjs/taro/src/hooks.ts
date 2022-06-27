@@ -1,6 +1,6 @@
 import {useEffect, useRef} from 'react'
 import {useRouter as useNextRouter} from 'next/router'
-import type {TaroRouter} from './typings'
+import type {TaroRouter} from './_util/typings'
 
 function useDepRef<T = any>(prop: T) {
     const ref = useRef(prop)

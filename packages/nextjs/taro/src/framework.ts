@@ -1,7 +1,7 @@
 import {ReactElement} from 'react'
 import Router from 'next/router'
 import {getTaroApp} from './internal'
-import type {TaroPage, TaroRouter} from './typings'
+import type {TaroPage, TaroRouter} from './_util/typings'
 
 interface TaroInstance {
     router: TaroRouter
