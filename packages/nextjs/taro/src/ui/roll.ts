@@ -1,8 +1,9 @@
-import {easeInOutCubic} from '../_util'
+import promisify from 'mpromisify'
+import {easeInOutCubic, limited} from '../_util'
 import raf from '../_util/raf'
 import * as swan from '../swan'
 
-const pageScrollTo: typeof swan.pageScrollTo = ({scrollTop, duration = 300, success, complete}) => {
+const pageScrollToInternal: typeof swan.pageScrollTo = ({scrollTop, duration = 300, success, complete}) => {
     const pageYOffset = window.pageYOffset
     const startTime = Date.now()
 
@@ -21,4 +22,4 @@ const pageScrollTo: typeof swan.pageScrollTo = ({scrollTop, duration = 300, succ
     raf(frameFunc)
 }
 
-export default pageScrollTo
+export const pageScrollTo = promisify(limited.async('pageScrollTo', pageScrollToInternal))

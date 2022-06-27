@@ -88,21 +88,23 @@ import {
 import {request} from './network'
 
 import {
+    // interaction
     registerToastComponent,
     showToast,
     hideToat,
     showLoading,
-    hideLoading
-} from './ui/interaction'
+    hideLoading,
 
-import {
     setNavigationBarColor,
     showNavigationBarLoading,
     hideNavigationBarLoading,
-    setNavigationBarTitle
-} from './ui/navigationBar'
+    setNavigationBarTitle,
 
-import pageScrollTo from './ui/pageScrollTo'
+    // menu
+    getMenuButtonBoundingClientRect,
+
+    pageScrollTo
+} from './ui'
 
 import {
     switchTab,
@@ -147,8 +149,6 @@ import {
 import {uploadFile} from './network/upload'
 
 import {getLocation} from './location'
-
-import {getMenuButtonBoundingClientRect} from './ui/menu'
 
 import {initTaroApp, TaroPage} from './internal'
 
