@@ -1,5 +1,4 @@
 import React, {forwardRef} from 'react'
-import {useRouter} from 'next/router'
 import classNames from 'classnames'
 import type {TaroEventHandler, TaroEvent, TaroHoverableProps} from '../_util/typings'
 import useTaroHoverableEvents from '../_util/hooks/useTaroHoverableEvents'
@@ -72,9 +71,39 @@ interface NavigatorProps extends TaroHoverableProps {
     onFail?: TaroEventHandler<TaroEvent<{errMsg: string}>>
 }
 
+type CustomRoutes = Record<string, string>
+
+type navigateToType = (param?: any) => void
+
+type navigateBackType = (param?: any) => void
+
+interface NavigatorOptions {
+    customRoutes: CustomRoutes
+    navigateTo: navigateToType
+    navigateBack: navigateBackType
+}
+
+let customRoutes: CustomRoutes = {}
+
+let navigateTo: navigateToType | null = null
+
+let navigateBack: navigateBackType | null = null
+
+export function initNavigatorComponent(opts: NavigatorOptions) {
+    customRoutes = opts.customRoutes
+    navigateTo = opts.navigateTo
+}
+
+function isAbsoluteUrl(url?: string): boolean {
+    if (!url) {
+        return false;
+    }
+    return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+}
+
 const Navigator: React.ForwardRefRenderFunction<HTMLAnchorElement, NavigatorProps> = ({
     target = 'self',
-    url,
+    url: originUrl,
     openType = 'navigate',
     delta,
     appId,
@@ -86,22 +115,31 @@ const Navigator: React.ForwardRefRenderFunction<HTMLAnchorElement, NavigatorProp
     onFail,
     ...rest
 }, ref) => {
-    const router = useRouter()
     const props = useTaroHoverableEvents(rest, 'navigator-hover')
+
+    let targetUrl = originUrl
+    if (!isAbsoluteUrl(originUrl)) {
+        const urlObj = new URL(originUrl, 'http://0.0.0.0')
+        const customRoute = customRoutes[urlObj.pathname]
+        if (customRoute) {
+            urlObj.pathname = customRoute
+        }
+        targetUrl = urlObj.pathname + urlObj.search + urlObj.hash
+    }
 
     return (
         <a
             {...props}
             ref={ref}
             className={classNames('taro-nav', props.className)}
-            href={url}
+            href={targetUrl}
             onClick={event => {
                 event.preventDefault()
                 if (target === 'self') {
                     if (openType === 'navigate') {
-                        router.push(url)
+                        navigateTo?.({url: targetUrl})
                     } else if (openType === 'navigateBack') {
-                        router.back()
+                        navigateBack?.()
                     }
                 }
             }}

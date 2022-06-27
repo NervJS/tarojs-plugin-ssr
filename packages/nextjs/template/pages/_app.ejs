@@ -3,15 +3,22 @@ import {
     initTaroApp,
     initPxTransform,
     registerToastComponent,
-    registerPreviewComponent
+    registerPreviewComponent,
+    navigateTo,
+    navigateBack
 } from 'tarojs-plugin-platform-nextjs/taro'
-import {Toast, Preview} from 'tarojs-plugin-platform-nextjs/components'
+import {Toast, Preview, initNavigatorComponent} from 'tarojs-plugin-platform-nextjs/components'
 import 'tarojs-plugin-platform-nextjs/components/dist/lilin.css'
 import TaroApp from '../src/app'
 import customRoutes from '../customRoutes.json'
 
 initTaroApp(customRoutes)
 initPxTransform({designWidth: <%- designWidth %>})
+initNavigatorComponent({
+    customRoutes,
+    navigateTo,
+    navigateBack
+})
 registerToastComponent(Toast)
 registerPreviewComponent(Preview)
 
