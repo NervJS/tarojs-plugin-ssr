@@ -19,6 +19,7 @@ import {
     unIndent,
     resolveAliasToTSConfigPaths
 } from './utils'
+import {SCRIPT_EXT} from './constants'
 import openBrowser from './openBrowser'
 
 const isWindows = process.platform === 'win32'
@@ -119,6 +120,18 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     for (const page of pkg.pages) {
                         taroPages.push(ensureLeadingSlash(`${pkg.root}/${page}`))
                     }
+                }
+            }
+
+            // 处理 next.js 错误处理页面
+            for (const errorPage of ['_error', '404', '500']) {
+                if (
+                    SCRIPT_EXT.some(ext => {
+                        const errorPagePath = path.join(sourcePath, `${errorPage}${ext}`)
+                        return fs.existsSync(errorPagePath)
+                    })
+                ) {
+                    taroPages.push(`/${errorPage}`)
                 }
             }
 
