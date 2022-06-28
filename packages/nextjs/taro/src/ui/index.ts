@@ -1,3 +1,4 @@
+export * from './background'
 export * from './interactive'
 export * from './menu'
 export * from './navigationBar'

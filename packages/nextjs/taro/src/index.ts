@@ -97,6 +97,7 @@ import {
     hideLoading,
     showModal,
 
+    // navigation bar
     setNavigationBarColor,
     showNavigationBarLoading,
     hideNavigationBarLoading,
@@ -105,7 +106,12 @@ import {
     // menu
     getMenuButtonBoundingClientRect,
 
-    pageScrollTo
+    // roll
+    pageScrollTo,
+
+    // background
+    setBackgroundColor,
+    setBackgroundTextStyle
 } from './ui'
 
 import {
@@ -238,6 +244,9 @@ export {
 
     pageScrollTo,
 
+    setBackgroundColor,
+    setBackgroundTextStyle,
+
     useDidShow,
     useDidHide,
     useReachBottom,
@@ -362,6 +371,9 @@ export default {
     setNavigationBarTitle,
 
     pageScrollTo,
+
+    setBackgroundColor,
+    setBackgroundTextStyle,
 
     useDidShow,
     useDidHide,

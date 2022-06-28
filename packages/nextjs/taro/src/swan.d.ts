@@ -8767,7 +8767,31 @@ export namespace setBackgroundColor {
          * 底部窗口的背景色，仅 iOS 支持
          */
         backgroundColorBottom?: string
+        /**
+         * 接口调用成功的回调函数
+         */
+        success?: ParamPropSuccess
+        /**
+         * 接口调用失败的回调函数
+         */
+        fail?: ParamPropFail
+        /**
+         * 接口调用结束的回调函数（调用成功、失败都会执行）
+         */
+        complete?: ParamPropComplete
     }
+    /**
+     * 接口调用成功的回调函数
+     */
+    export type ParamPropSuccess = () => any
+    /**
+     * 接口调用失败的回调函数
+     */
+    export type ParamPropFail = () => any
+    /**
+     * 接口调用结束的回调函数（调用成功、失败都会执行）
+     */
+    export type ParamPropComplete = () => any
 }
 /**
  * 
@@ -8798,6 +8822,7 @@ export namespace setBackgroundTextStyle {
         textStyle?: string
     }
 }
+
 /**
  * 
  *
@@ -8836,15 +8861,15 @@ export namespace navigateTo {
     /**
      * 接口调用成功的回调函数
      */
-    export type ParamPropSuccess = () => any
+    export type ParamPropSuccess = () => void
     /**
      * 接口调用失败的回调函数
      */
-    export type ParamPropFail = () => any
+    export type ParamPropFail = () => void
     /**
      * 接口调用结束的回调函数（调用成功、失败都会执行）
      */
-    export type ParamPropComplete = () => any
+    export type ParamPropComplete = () => void
 }
 /**
  * 保留当前页面，跳转到应用内的某个页面，使用`swan.navigateBack`可以返回到原页面。
