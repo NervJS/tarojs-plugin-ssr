@@ -17,3 +17,4 @@ export {default as WebView} from './web-view'
 // internal components
 export {default as Icon} from './icon'
 export {default as Preview} from './preview'
+export {default as Modal} from './modal'

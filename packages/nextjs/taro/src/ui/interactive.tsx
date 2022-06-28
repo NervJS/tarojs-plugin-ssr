@@ -29,10 +29,10 @@ interface ToastProps {
     children?: React.ReactNode
 }
 
-type ToastComponentType = React.ComponentType<ToastProps>
+class Portals<T> {
+    name: string
 
-class GlobalToast {
-    component?: ToastComponentType
+    component?: React.ComponentType<T>
 
     container?: HTMLDivElement
 
@@ -40,33 +40,34 @@ class GlobalToast {
 
     unmountedCallback?: () => void
 
-    constructor() {
+    constructor(name: string) {
+        this.name = name
         this.container = document.createElement('div')
     }
 
-    registerToastComponent(toastComponent: ToastComponentType): void {
-        this.component = toastComponent
+    registerComponent = (component: React.ComponentType<T>): void => {
+        this.component = component
     }
 
-    new({duration, ...rest}: ToastProps & {duration?: number}, callback?: () => void): void {
+    new = ({duration, ...rest}: T & {duration?: number}, callback?: () => void): void => {
         if (!this.component) {
-            throw new Error('`Toast` component is not registered.')
+            throw new Error(`\`${this.name}\` component is not registered.`)
         }
 
         this.destroy()
         document.body.appendChild(this.container)
-        const Toast = this.component
+        const Target = this.component
 
-        const ToastContainer: React.FC = () => {
+        const Container: React.FC = () => {
             useEffect(() => () => {
                 this.unmountedCallback?.()
             }, [])
 
-            return <Toast visible {...rest} />
+            return <Target {...rest as T} />
         }
 
         ReactDOM.render(
-            <Toast visible {...rest} />,
+            <Container />,
             this.container,
             () => {
                 callback?.()
@@ -79,7 +80,7 @@ class GlobalToast {
         )
     }
 
-    destroy(callback?: () => void): void {
+    destroy = (callback?: () => void): void => {
         if (this.timer) {
             clearTimeout(this.timer)
         }
@@ -90,13 +91,13 @@ class GlobalToast {
     }
 }
 
-let globalToast = typeof window !== 'undefined' ? new GlobalToast() : null
+let globalToast = typeof window !== 'undefined' ? new Portals<ToastProps>('Toast') : null
 
 /**
  * 内部方法，注册 Toast 组件
  */
 export const registerToastComponent = toastComponent => {
-    globalToast?.registerToastComponent(toastComponent)
+    globalToast?.registerComponent(toastComponent)
 }
 
 const showToastInternal: typeof swan.showToast = ({title, icon, duration = 1500, success, fail, complete}) => {
@@ -166,3 +167,111 @@ const hideLoadingInternal: typeof swan.hideLoading = ({success, complete}) => {
  * 隐藏 loading 提示框。
  */
 export const hideLoading = promisify(limited.async('hideLoading', hideLoadingInternal))
+
+/**
+ * Modal 组件必要的属性
+ */
+interface ModalProps {
+    /**
+     * Display Modal
+     */
+    visible?: boolean
+
+    /**
+     * 提示的标题
+     */
+    title?: string
+
+    /**
+     * 是否显示取消按钮
+     * @default true
+     */
+    showCancel?: boolean
+
+    /**
+     * 取消按钮的文字，最多 4 个字符
+     */
+    cancelText?: string
+
+    /**
+     * 取消按钮的文字颜色，必须是 16 进制格式的颜色字符串
+     * @default '#000'
+     */
+    cancelColor?: string
+
+    /**
+     * 确认按钮的文字颜色，必须是 16 进制格式的颜色字符串
+     */
+    confirmColor?: string
+
+    /**
+     * 确认按钮的文字，最多 4 个字符
+     */
+    confirmText?: string
+
+    /**
+     * 提示的内容
+     */
+    children?: React.ReactNode
+
+    /**
+     * 点击取消
+     */
+    onCancel?: () => void
+
+    /**
+     * 点击确定
+     */
+    onConfirm?: () => void
+}
+
+
+let globalModal = typeof window !== 'undefined' ? new Portals<ModalProps>('Modal') : null
+
+/**
+ * 内部方法，注册 Modal 组件
+ */
+export const registerModalComponent = modalComponent => {
+    globalModal?.registerComponent(modalComponent)
+}
+
+const showModalInternal: typeof swan.showModal = ({
+    title,
+    content,
+    showCancel,
+    cancelText,
+    cancelColor,
+    confirmText,
+    confirmColor,
+    success,
+    complete
+}) => {
+    globalModal.new({
+        title,
+        children: content,
+        showCancel,
+        cancelText,
+        cancelColor,
+        confirmText,
+        confirmColor,
+        onCancel() {
+            success?.({
+                confirm: false,
+                cancel: true
+            })
+            complete?.()
+        },
+        onConfirm() {
+            success?.({
+                confirm: true,
+                cancel: false
+            })
+            complete?.()
+        }
+    })
+}
+
+/**
+ * 显示模态弹窗。
+ */
+export const showModal = promisify(limited.async('showModal', showModalInternal))

@@ -8069,8 +8069,6 @@ export namespace showModal {
         confirm: boolean
         /**
          * 为 true 时，表示用户点击了取消（用于 Android 系统区分点击蒙层关闭还是点击取消按钮关闭）
-         *
-         * 
          */
         cancel: boolean
     }

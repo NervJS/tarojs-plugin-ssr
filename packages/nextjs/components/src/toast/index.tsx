@@ -25,7 +25,7 @@ export interface ToastProps {
     children?: React.ReactNode
 }
 
-const Toast: React.FC<ToastProps> = ({icon, iconSize, visible, children}) => (
+const Toast: React.FC<ToastProps> = ({icon, iconSize, visible = true, children}) => (
     <div style={{display: visible ? 'block' : 'none'}}>
         <Mask transparent />
         <div

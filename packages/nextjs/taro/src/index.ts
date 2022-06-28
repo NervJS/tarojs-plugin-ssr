@@ -90,10 +90,12 @@ import {request} from './network'
 import {
     // interaction
     registerToastComponent,
+    registerModalComponent,
     showToast,
     hideToast,
     showLoading,
     hideLoading,
+    showModal,
 
     setNavigationBarColor,
     showNavigationBarLoading,
@@ -222,10 +224,12 @@ export {
     clearStorage,
 
     registerToastComponent,
+    registerModalComponent,
     showToast,
     hideToast,
     showLoading,
     hideLoading,
+    showModal,
 
     setNavigationBarColor,
     showNavigationBarLoading,
@@ -345,10 +349,12 @@ export default {
     clearStorage,
 
     registerToastComponent,
+    registerModalComponent,
     showToast,
     hideToast,
     showLoading,
     hideLoading,
+    showModal,
 
     setNavigationBarColor,
     showNavigationBarLoading,
