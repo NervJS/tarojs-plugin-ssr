@@ -91,7 +91,7 @@ import {
     // interaction
     registerToastComponent,
     showToast,
-    hideToat,
+    hideToast,
     showLoading,
     hideLoading,
 
@@ -223,7 +223,7 @@ export {
 
     registerToastComponent,
     showToast,
-    hideToat,
+    hideToast,
     showLoading,
     hideLoading,
 
@@ -346,7 +346,7 @@ export default {
 
     registerToastComponent,
     showToast,
-    hideToat,
+    hideToast,
     showLoading,
     hideLoading,
 

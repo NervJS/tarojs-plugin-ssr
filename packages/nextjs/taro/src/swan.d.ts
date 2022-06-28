@@ -7867,15 +7867,15 @@ export namespace showToast {
     /**
      * 接口调用成功的回调函数
      */
-    export type ParamPropSuccess = (res: any) => any
+    export type ParamPropSuccess = () => void
     /**
      * 接口调用失败的回调函数
      */
-    export type ParamPropFail = (err: any) => any
+    export type ParamPropFail = (err: any) => void
     /**
      * 接口调用结束的回调函数（调用成功、失败都会执行）
      */
-    export type ParamPropComplete = () => any
+    export type ParamPropComplete = () => void
 }
 /**
  * 显示消息提示框
@@ -7919,15 +7919,15 @@ export namespace showLoading {
     /**
      * 接口调用成功的回调函数
      */
-    export type ParamPropSuccess = (res: any) => any
+    export type ParamPropSuccess = () => void
     /**
      * 接口调用失败的回调函数
      */
-    export type ParamPropFail = (err: any) => any
+    export type ParamPropFail = (err: any) => void
     /**
      * 接口调用结束的回调函数（调用成功、失败都会执行）
      */
-    export type ParamPropComplete = () => any
+    export type ParamPropComplete = () => void
 }
 /**
  * 
@@ -7937,31 +7937,83 @@ export namespace showLoading {
  */
 export function showLoading(OBJECT: showLoading.Param): void
 
+export namespace hideToast {
+    export type Param = {
+        /**
+         * 接口调用成功的回调函数
+         */
+        success?: ParamPropSuccess
+        /**
+         * 接口调用失败的回调函数
+         */
+        fail?: ParamPropFail
+        /**
+         * 接口调用结束的回调函数（调用成功、失败都会执行）
+         */
+        complete?: ParamPropComplete
+    }
+    /**
+     * 接口调用成功的回调函数
+     */
+    export type ParamPropSuccess = () => void
+    /**
+     * 接口调用失败的回调函数
+     */
+    export type ParamPropFail = (err: any) => void
+    /**
+     * 接口调用结束的回调函数（调用成功、失败都会执行）
+     */
+    export type ParamPropComplete = () => void
+}
 /**
  * 隐藏消息提示框
- * 
  */
-export function hideToast(): void
+export function hideToast(OBJECT: hideToast.Param): void
 
+export namespace hideLoading {
+    export type Param = {
+        /**
+         * 接口调用成功的回调函数
+         */
+        success?: ParamPropSuccess
+        /**
+         * 接口调用失败的回调函数
+         */
+        fail?: ParamPropFail
+        /**
+         * 接口调用结束的回调函数（调用成功、失败都会执行）
+         */
+        complete?: ParamPropComplete
+    }
+    /**
+     * 接口调用成功的回调函数
+     */
+    export type ParamPropSuccess = () => void
+    /**
+     * 接口调用失败的回调函数
+     */
+    export type ParamPropFail = (err: any) => void
+    /**
+     * 接口调用结束的回调函数（调用成功、失败都会执行）
+     */
+    export type ParamPropComplete = () => void
+}
 /**
- * 
- *
  * 隐藏 loading 提示框
  *
  * **示例：**
  *
- *     ```javascript
- *     swan.showLoading({
- *       title: '加载中',
- *     })
+ * ```javascript
+ * swan.showLoading({
+ *   title: '加载中',
+ * })
  *
- *     setTimeout(function(){
- *       swan.hideLoading()
- *     },2000)
- *     ```
- * 
+ * setTimeout(function(){
+ *   swan.hideLoading()
+ * }, 2000)
+ * ```
  */
-export function hideLoading(): void
+export function hideLoading(OBJECT: hideLoading.Param): void
 
 export namespace showModal {
     export type Param = {
