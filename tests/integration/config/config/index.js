@@ -6,7 +6,7 @@ const config = {
     plugins: [
         ['tarojs-plugin-platform-nextjs', {
             runNextjs: false,
-            openBrowser: false
+            browser: false
         }]
     ]
 }

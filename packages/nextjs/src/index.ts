@@ -8,7 +8,6 @@ import {merge} from 'lodash'
 import ejs from 'ejs'
 import chalk from 'chalk'
 import spawn from 'cross-spawn'
-import open from 'open'
 import * as babel from '@babel/core'
 import type {IPluginContext} from '@tarojs/service'
 import {getNextExportedFunctions, resolveDynamicPagesToRewrites, isDynamicRoute} from './nextUtils'
@@ -20,6 +19,7 @@ import {
     unIndent,
     resolveAliasToTSConfigPaths
 } from './utils'
+import openBrowser from './openBrowser'
 
 const isWindows = process.platform === 'win32'
 
@@ -47,7 +47,7 @@ interface PluginOptions {
     /**
      * 是否打开浏览器
      */
-    openBrowser?: boolean
+    browser?: boolean
 }
 
 export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
@@ -55,7 +55,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
     const {appPath, outputPath, sourcePath, configPath} = paths
 
     const runNextjs = pluginOpts.runNextjs == null && true
-    const openBrowser = pluginOpts.openBrowser == null && true
+    const browser = pluginOpts.browser == null && true
 
     ctx.registerCommand({
         name: 'start',
@@ -380,16 +380,18 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                 }
 
                 if (isWatch) {
-                    if (openBrowser) {
+                    if (browser) {
                         const indexRoute = customRoutes[taroPages[0]] || taroPages[0]
                         if (indexRoute) {
                             const nextConfigPath = path.resolve(outputPath, 'next.config.js')
                             const {basePath} = require(nextConfigPath)
-                            if (![undefined, '', '/'].includes(basePath)) {
-                                open(`http://127.0.0.1:${port}${basePath}${indexRoute}`)
-                            } else {
-                                open(`http://127.0.0.1:${port}${indexRoute}`)
+                            let url = [undefined, '', '/'].includes(basePath)
+                                ? `http://127.0.0.1:${port}${indexRoute}`
+                                : `http://127.0.0.1:${port}${basePath}${indexRoute}`
+                            if (url.endsWith('/')) {
+                                url = url.substring(0, url.length - 1)
                             }
+                            openBrowser(url)
                         }
                     }
 
@@ -491,7 +493,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     }
 
                     const watcher = watch(`${sourcePath}/**`, {delay: 200})
-                    watcher.on('ready', () => console.log(chalk.blue('Watching for file changes...\n')))
+                    watcher.on('ready', () => console.log(chalk.blue('\nWatching for file changes...\n')))
                     watcher.on('change', filePath => handleWatch('changed', filePath))
                     watcher.on('add', filePath => handleWatch('added', filePath))
                     watcher.on('unlink', filePath => handleWatch('removed', filePath))
