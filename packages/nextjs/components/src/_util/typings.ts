@@ -62,7 +62,12 @@ export interface TaroConfirmEvent extends TaroEvent<TaroConfirmEventDetail> { }
 export interface TaroVideoEventDetail {
     videoId: string | undefined
 }
-export interface TaroVideoEvent extends TaroEvent<TaroVideoEventDetail> {}
+export interface TaroVideoEvent extends TaroEvent<TaroVideoEventDetail> { }
+
+export interface TaroSwitchEventDetail {
+    checked: boolean
+}
+export interface TaroSwitchEvent extends TaroEvent<TaroSwitchEventDetail> { }
 
 export type TaroEventHandler<E extends TaroEvent<{}>> = (event: E) => void
 
@@ -74,6 +79,7 @@ export type TaroFocusEventHandler = TaroEventHandler<TaroFocusEvent>
 export type TaroBlurEventHandler = TaroEventHandler<TaroBlurEvent>
 export type TaroConfirmEventHandler = TaroEventHandler<TaroConfirmEvent>
 export type TaroVideoEventHandler = TaroEventHandler<TaroVideoEvent>
+export type TaroSwitchEventHanlder = TaroEventHandler<TaroSwitchEvent>
 
 export interface TaroBaseEvents {
     /**
