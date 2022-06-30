@@ -3,71 +3,72 @@
     display: inline-block;
     width: 300px;
     height: 225px;
-}
 
-.taro-img > div {
-    height: 100%;
-    width: 100%;
-    background-repeat: no-repeat;
-    background-size: contain;
-}
+    &__content {
+        height: 100%;
+        width: 100%;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
 
-.taro-img__scale-to-fill {
-    background-size: 100% 100%;
-    background-position: 0% 0%;
-}
+    &__scale-to-fill {
+        background-size: 100% 100%;
+        background-position: 0% 0%;
+    }
+    
+    &__aspect-fit {
+        background-size: contain;
+        background-position: center center;
+    }
+    
+    &__aspect-fill {
+        background-size: cover;
+        background-position: center center;
+    }
+    
+    &__width-fix {
+        background-size: 100% 100%;
+        background-position: 0% 0%;
+    }
+    
+    &__height-fix {
+        background-size: 100% 100%;
+        background-position: 0% 0%;
+    }
+    
+    &__top {
+        background-position: top center;
+    }
+    
+    &__bottom {
+        background-position: bottom center;
+    }
+    
+    &__center {
+        background-position: center center;
+    }
 
-.taro-img__aspect-fit {
-    background-size: contain;
-    background-position: center center;
-}
-
-.taro-img__aspect-fill {
-    background-size: cover;
-    background-position: center center;
-}
-
-.taro-img__width-fix {
-    background-size: 100% 100%;
-    background-position: 0% 0%;
-}
-
-.taro-img__height-fix {
-    background-size: 100% 100%;
-    background-position: 0% 0%;
-}
-
-.taro-img__top {
-    background-position: top center;
-}
-
-.taro-img__bottom {
-    background-position: bottom center;
-}
-
-.taro-img__center {
-    background-position: center center;
-}
-.taro-img__left {
-    background-position: center left;
-}
-
-.taro-img__right {
-    background-position: center right;
-}
-
-.taro-img__top-left {
-    background-position: top left;
-}
-
-.taro-img__top-right {
-    background-position: top right;
-}
-
-.taro-img__bottom-left {
-    background-position: bottom left;
-}
-
-.taro-img__bottom-right {
-    background-position: bottom right;
+    &__left {
+        background-position: center left;
+    }
+    
+    &__right {
+        background-position: center right;
+    }
+    
+    &__top-left {
+        background-position: top left;
+    }
+    
+    &__top-right {
+        background-position: top right;
+    }
+    
+    &__bottom-left {
+        background-position: bottom left;
+    }
+    
+    &__bottom-right {
+        background-position: bottom right;
+    }
 }

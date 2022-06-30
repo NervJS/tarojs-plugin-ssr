@@ -117,7 +117,7 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
                     div.current = el
                     setRef(el)
                 }}
-                className={classNames({
+                className={classNames('taro-img__content', {
                     'taro-img__scale-to-fill': mode === 'scaleToFill',
                     'taro-img__aspect-fit': mode === 'aspectFit',
                     'taro-img__aspect-fill': mode === 'aspectFill',
