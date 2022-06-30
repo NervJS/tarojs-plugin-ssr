@@ -1,13 +1,50 @@
-@import '~swiper/dist/css/swiper.min.css';
+.taro-swiper {
+    &__dots {
+        position: absolute;
+        font-size: 0;
+        z-index: 1;
 
-.swiper-container {
-    height: 100%;
-}
+        &-horizontal {
+            bottom: 8px;
+            left: 50%;
+            text-align: center;
+            white-space: nowrap;
+            transform: translate(-50%);
 
-.swiper-pagination {
-    font-size: 0;
-}
+            .taro-swiper__dot {
+                margin-right: 8px;
+            }
 
-.swiper-pagination-bullet {
-    opacity: 1
+            .taro-swiper__dot:last-child {
+                margin-right: 0;
+            }
+        }
+
+        &-vertical {
+            top: 50%;
+            right: 8px;
+            text-align: right;
+            transform: translateY(-50%);
+
+            .taro-swiper__dot {
+                display: block;
+                margin-bottom: 9px;
+            }
+
+            .taro-swiper__dot:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &__dot {
+        width: 5px;
+        height: 5px;
+        display: inline-block;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, .3);
+        transition-timing-function: ease;
+        transition-property: background-color;
+        will-change: transform;
+    }
 }

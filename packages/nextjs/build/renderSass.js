@@ -5,7 +5,7 @@ const postcss = require('postcss')
 const autoprefixer = require('autoprefixer')
 
 function renderSass(sassFile, config = {}) {
-    const { cwd = process.cwd() } = config
+    const {cwd = process.cwd()} = config
     const resolvedSassFile = path.resolve(cwd, sassFile)
 
     const sassOpts = {
