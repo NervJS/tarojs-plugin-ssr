@@ -132,14 +132,19 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
             const {additionalData} = await getNextSassOptions(sass)
 
             function createNextjsPages() {
-                const result: string[] = []
+                const dynamicPages: string[] = []
+                const multipleRoutePages: string[][] = []
 
                 const nextjsPagesDir = `${outputPath}/pages`
 
                 for (const taroPage of taroPages) {
                     const taroPageFilePath = resolveScriptPath(path.join(sourcePath, taroPage))
                     const taroPageDir = path.dirname(taroPageFilePath)
-                    const taroRoute = customRoutes[taroPage] || taroPage
+                    let taroRoute = customRoutes[taroPage] || taroPage
+                    if (Array.isArray(taroRoute)) {
+                        multipleRoutePages.push(taroRoute)
+                        taroRoute = taroRoute[0]
+                    }
 
                     const files = fs.readdirSync(taroPageDir)
                     const dynamicPageFileName = files.find(name => isDynamicRoute(name))
@@ -147,7 +152,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     if (dynamicPageFileName) {
                         const dynamicPageFileExt = path.extname(dynamicPageFileName)
                         dynamicPageFileBaseName = path.basename(dynamicPageFileName, dynamicPageFileExt)
-                        result.push(`${taroRoute}/${dynamicPageFileBaseName}`)
+                        dynamicPages.push(`${taroRoute}/${dynamicPageFileBaseName}`)
                     }
 
                     const targetPageFile = dynamicPageFileBaseName ? `${dynamicPageFileBaseName}.js` : 'index.js'
@@ -227,10 +232,10 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     }
                 }
 
-                return result
+                return {dynamicPages, multipleRoutePages}
             }
 
-            const dynamicPages = createNextjsPages()
+            const {dynamicPages, multipleRoutePages} = createNextjsPages()
 
             function scaffold() {
                 return es.merge(
@@ -281,6 +286,15 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                             let customNextConfig: string | null = null
                             if (fs.existsSync(customNextConfigPath)) {
                                 customNextConfig = path.relative(outputPath, customNextConfigPath)
+                            }
+
+                            for (const multipleRoute of multipleRoutePages) {
+                                for (const source of multipleRoute.slice(1)) {
+                                    rewrites.push({
+                                        source: ensureLeadingSlash(source),
+                                        destination: ensureLeadingSlash(multipleRoute[0])
+                                    })
+                                }
                             }
 
                             const ejsData = {
@@ -393,7 +407,10 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
 
                 if (isWatch) {
                     if (browser) {
-                        const indexRoute = customRoutes[taroPages[0]] || taroPages[0]
+                        let indexRoute: string | undefined = customRoutes[taroPages[0]] || taroPages[0]
+                        if (Array.isArray(indexRoute)) {
+                            indexRoute = indexRoute[0]
+                        }
                         if (indexRoute) {
                             const nextConfigPath = path.resolve(outputPath, 'next.config.js')
                             const {basePath} = require(nextConfigPath)
