@@ -1,4 +1,5 @@
 import React from 'react'
+import Swiper from 'swiper'
 import {
     TaroMouseEvent,
     TaroTouchEvent,
@@ -7,7 +8,8 @@ import {
     TaroBlurEvent,
     TaroConfirmEvent,
     TaroVideoEvent,
-    TaroSwitchEvent
+    TaroSwitchEvent,
+    TaroSwiperEvent
 } from './typings'
 
 export function createTaroMouseEvent(taroEventType: string, reactEvent: React.TouchEvent | React.MouseEvent): TaroMouseEvent {
@@ -192,5 +194,24 @@ export function createTaroSwitchEvent(reactEvent: React.SyntheticEvent<HTMLInput
         type: 'change',
         preventDefault,
         stopPropagation
+    }
+}
+
+export function createTaroSwiperEvent(taroEventType: string, swiper: Swiper): TaroSwiperEvent {
+    const {
+        el,
+        realIndex
+    } = swiper
+
+    return {
+        currentTarget: el,
+        target: el,
+        detail: {
+            current: realIndex
+        },
+        timeStamp: Date.now(),
+        type: taroEventType,
+        preventDefault() { },
+        stopPropagation() { }
     }
 }
