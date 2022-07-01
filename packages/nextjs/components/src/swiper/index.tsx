@@ -255,6 +255,7 @@ const Swiper: React.FC<SwiperProps> = ({
                 >
                     {items.map((_, index) => (
                         <div
+                            key={index}
                             className='taro-swiper__dot'
                             style={{
                                 backgroundColor: mergedCurrent === index
