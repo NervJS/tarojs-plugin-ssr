@@ -65,9 +65,9 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
         synopsisList: [
             'taro start -p <port>'
         ],
-        async fn () {
+        fn () {
             const port = runOpts.port || runOpts.p || DEFAULT_PORT
-            spawn('next', ['start', outputPath, '-p', port], {
+            spawn.sync('next', ['start', outputPath, '-p', port], {
                 stdio: 'inherit'
             })
         }
@@ -396,13 +396,22 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     if (mode === 'development') {
                         args.push('dev')
                         args.push('-p', port)
+                        spawn('next', args, {
+                            cwd: outputPath,
+                            stdio: 'inherit'
+                        })
                     } else {
                         args.push('build')
+                        const next = spawn('next', args, {
+                            cwd: outputPath,
+                            stdio: 'inherit'
+                        })
+                        next.on('close', code => {
+                            if (code !== 0) {
+                                process.exit(code || 1)
+                            }
+                        });
                     }
-                    spawn('next', args, {
-                        cwd: outputPath,
-                        stdio: 'inherit'
-                    })
                 }
 
                 if (isWatch) {
