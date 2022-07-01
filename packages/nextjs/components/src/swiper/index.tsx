@@ -6,6 +6,8 @@ import useMergedState from '../_util/hooks/useMergedState'
 import toArray from '../_util/children/toArray'
 import {TaroBaseProps, TaroSwiperEventHandler} from '../_util/typings'
 
+SwiperCore.use([Autoplay])
+
 /**
  * 指定 swiper 切换缓动动画类型
  */
@@ -197,7 +199,6 @@ const Swiper: React.FC<SwiperProps> = ({
         }
 
         const options: SwiperOptions = {
-            modules: [Autoplay],
             direction: vertical ? 'vertical' : 'horizontal',
             loop: circular,
             slidesPerView: displayMultipleItems,
@@ -241,7 +242,7 @@ const Swiper: React.FC<SwiperProps> = ({
             ref={swiperElRef}
             id={id}
             style={style}
-            className={classNames('swiper', className)}
+            className={classNames('swiper-container', className)}
         >
             <div className='swiper-wrapper'>
                 {children}

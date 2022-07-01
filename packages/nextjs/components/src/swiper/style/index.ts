@@ -1,4 +1,3 @@
-import 'swiper/scss'
-import 'swiper/css/autoplay'
+import 'swiper/swiper.scss'
 import '../../style/index.scss'
 import './index.scss'
