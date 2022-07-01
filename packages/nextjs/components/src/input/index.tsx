@@ -67,6 +67,13 @@ export interface InputProps extends TaroBaseProps {
     focus?: boolean
 
     /**
+     * 设置键盘右下角按钮的文字
+     * @default "done"
+     * @unsupported
+     */
+    confirmType?: 'send' | 'search' | 'next' | 'go' | 'done'
+
+    /**
      * 点击键盘右下角按钮时是否保持键盘不收起
      * @default false
      */
@@ -88,6 +95,77 @@ export interface InputProps extends TaroBaseProps {
      * @default -1
      */
     selectionEnd?: number
+
+    /**
+     * 键盘弹起时，是否自动上推页面
+     * @default false
+     * @unsupported
+     */
+    adjustPosition?: boolean
+
+    /**
+     * focus 时，点击页面的时候不收起键盘
+     * @default false
+     * @unsupported
+     */
+    holdKeyboard?: boolean
+
+    /**
+     * 强制 input 处于同层状态，默认 focus 时 input 会切到非同层状态 (仅在 iOS 下生效)
+     * @default false
+     * @unsupported
+     */
+    alwaysEmbed?: boolean
+
+    /**
+     * 安全键盘加密公钥的路径，只支持包内路径
+     * @unsupported
+     */
+    safePasswordCertPath?: string
+
+    /**
+     * 安全键盘输入密码长度
+     * @unsupported
+     */
+    safePasswordLength?: number
+
+    /**
+     * 安全键盘加密时间戳
+     * @unsupported
+     */
+    safePasswordTimeStamp?: number
+
+    /**
+     * 安全键盘加密盐值
+     * @unsupported
+     */
+    safePasswordNonce?: string
+
+    /**
+     * 安全键盘计算hash盐值，若指定custom-hash 则无效
+     * @unsupported
+     */
+    safePasswordSalt?: string
+
+    /**
+     * 安全键盘计算hash的算法表达式，如 `md5(sha1('foo' + sha256(sm3(password + 'bar'))))`
+     * @unsupported
+     */
+    safePasswordCustomHash?: string
+
+    /**
+     * 当 type 为 number, digit, idcard 数字键盘是否随机排列
+     * @default false
+     * @unsupported
+     */
+    randomNumber?: boolean
+
+    /**
+     * 是否为受控组件
+     * @default false
+     * @unsupported
+     */
+    controlled?: boolean
 
     /**
      * 当键盘输入时，触发input事件，event.detail = {value, cursor, keyCode}，处理函数可以直接 return 一个字符串，将替换输入框的内容
@@ -136,6 +214,21 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
     onFocus,
     onBlur,
     onConfirm,
+
+    // unsupported props
+    confirmType,
+    adjustPosition,
+    holdKeyboard,
+    alwaysEmbed,
+    safePasswordCertPath,
+    safePasswordLength,
+    safePasswordTimeStamp,
+    safePasswordNonce,
+    safePasswordSalt,
+    safePasswordCustomHash,
+    randomNumber,
+    controlled,
+
     ...rest
 }, ref) => {
     const props = useTaroBaseEvents(rest)
