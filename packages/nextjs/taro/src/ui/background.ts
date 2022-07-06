@@ -2,7 +2,7 @@ import promisify from 'mpromisify'
 import {unsupported, limited} from '../_util'
 import * as swan from '../swan'
 
-const setBackgroundColorInternal: typeof swan.setBackgroundColor = ({backgroundColor, success, complete}) => {
+const setBackgroundColorInternal: typeof swan.setBackgroundColor = ({backgroundColor = '', success, complete}) => {
     document.documentElement.style.backgroundColor = backgroundColor
     success?.()
     complete?.()

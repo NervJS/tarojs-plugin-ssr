@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import Mask from '../mask'
-import {Swiper, SwiperItem} from '../swiper'
+import Swiper from '../swiper'
+import SwiperItem from '../swiper-item'
 
 interface PreviewProps {
     /**

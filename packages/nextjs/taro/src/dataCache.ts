@@ -110,7 +110,9 @@ const getStorageInfoSyncInternal: typeof swan.getStorageInfoSync = () => {
     for (const key in localStorage){
         keys.push(key)
         const value = localStorage.getItem(key)
-        currentSize += key.length + value.length
+        if (value != null) {
+            currentSize += key.length + value.length
+        }
     }
     return {
         keys,

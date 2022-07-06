@@ -144,7 +144,6 @@ const getSystemInfoSyncInternal = () => {
     const deviceInfo = getDeviceInfo()
     const appBaseInfo = getAppBaseInfoInternal()
     const appAuthorizeSetting = getAppAuthorizeSetting()
-    delete deviceInfo.abi
 
     return {
         ...windowInfo,
