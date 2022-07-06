@@ -3,12 +3,12 @@ import promisify from 'mpromisify'
 import {limited} from '../_util'
 import type * as swan from '../swan'
 
-function chooseImageInternal({
+const chooseImageInternal: typeof swan.chooseImage = ({
     count = 1,
     success,
     complete,
     sourceType = ['album', 'camera']
-}: swan.chooseImage.Param): void {
+}) => {
     const result: swan.chooseImage.ParamPropSuccessParam = {
         tempFilePaths: [],
         tempFiles: []
@@ -98,13 +98,13 @@ export function registerPreviewComponent(Target: PreviewType): void {
 
 let previewContainer: HTMLDivElement | null = null
 
-function previewImageInternal({
+const previewImageInternal: typeof swan.previewImage = ({
     current,
     urls,
     success,
     fail,
     complete
-}: swan.previewImage.Param): void {
+}) => {
     if (!Preview) {
         if (process.env.NODE_ENV === 'development') {
             console.error('`Preview` component is not registered.')
