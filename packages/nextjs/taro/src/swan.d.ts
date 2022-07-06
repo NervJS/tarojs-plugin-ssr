@@ -1163,8 +1163,6 @@ export namespace saveImageToPhotosAlbum {
     export type ParamPropComplete = () => any
 }
 /**
- * 
- *
  * 保存图片到系统相册。需要用户授权scope.writePhotosAlbum
  *
  * **示例代码：**
@@ -1175,7 +1173,6 @@ export namespace saveImageToPhotosAlbum {
  *         }
  *     })
  *     ```
- * 
  */
 export function saveImageToPhotosAlbum(OBJECT: saveImageToPhotosAlbum.Param): void
 
