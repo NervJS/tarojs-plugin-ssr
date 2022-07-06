@@ -29,8 +29,16 @@ const canvasGetImageDataInternal: typeof swan.canvasGetImageData = ({
         return
     }
 
+    const ctx = canvas.getContext('2d')
+    if (!ctx) {
+        fail?.({
+            errMsg: 'Your browser does not support canvas api.'
+        })
+        complete?.()
+        return
+    }
+
     try {
-        const ctx = canvas.getContext('2d')
         const imageData = ctx.getImageData(x, y, width, height)
         success?.({
             width,

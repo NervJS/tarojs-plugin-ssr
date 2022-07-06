@@ -68,7 +68,9 @@ export const uploadFile: typeof swan.uploadFile = ({
 
     xhr.onload = () => {
         const status = xhr.status
-        clearTimeout(timeoutTimer)
+        if (timeoutTimer) {
+            clearTimeout(timeoutTimer)
+        }
         success?.({
             statusCode: status,
             data: xhr.responseText || xhr.response
@@ -77,7 +79,9 @@ export const uploadFile: typeof swan.uploadFile = ({
     }
 
     xhr.onabort = () => {
-        clearTimeout(timeoutTimer)
+        if (timeoutTimer) {
+            clearTimeout(timeoutTimer)
+        }
         fail?.({
             errMsg: 'uploadFile:fail abort'
         })
@@ -85,7 +89,9 @@ export const uploadFile: typeof swan.uploadFile = ({
     }
 
     xhr.onerror = (e: ProgressEvent<EventTarget> & { message?: string }) => {
-        clearTimeout(timeoutTimer)
+        if (timeoutTimer) {
+            clearTimeout(timeoutTimer)
+        }
         fail?.({
             errMsg: `uploadFile:fail ${e.message}`
         })
@@ -96,7 +102,9 @@ export const uploadFile: typeof swan.uploadFile = ({
      * 中断任务
      */
     const abort = () => {
-        clearTimeout(timeoutTimer)
+        if (timeoutTimer) {
+            clearTimeout(timeoutTimer)
+        }
         xhr.abort()
     }
 

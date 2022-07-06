@@ -117,10 +117,10 @@ function previewImageInternal({
     }
 
     if (!urls) {
-        fail({
+        fail?.({
             errMsg: 'The urls param is required.'
         })
-        complete()
+        complete?.()
         return
     }
 
@@ -131,13 +131,13 @@ function previewImageInternal({
             defaultCurrent={current}
             urls={urls}
             onClose={() => {
-                ReactDOM.unmountComponentAtNode(previewContainer)
+                ReactDOM.unmountComponentAtNode(previewContainer!)
                 previewContainer = null
             }}
         />,
         previewContainer
     )
-    success({})
+    success?.({})
 }
 
 /**

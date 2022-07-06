@@ -15,7 +15,7 @@ export interface SwiperItemProps extends TaroBaseProps {
     children?: React.ReactNode
 }
 
-const SwiperItem = ({className, itemId, children, ...rest}) => {
+const SwiperItem: React.FC<SwiperItemProps> = ({className, itemId, children, ...rest}) => {
     const props = useTaroBaseEvents(rest)
 
     return (

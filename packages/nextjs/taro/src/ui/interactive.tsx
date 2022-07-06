@@ -34,7 +34,7 @@ class Portals<T> {
 
     component?: React.ComponentType<T>
 
-    container?: HTMLDivElement
+    container: HTMLDivElement
 
     timer?: ReturnType<typeof setTimeout>
 
@@ -102,7 +102,7 @@ export const registerToastComponent = toastComponent => {
 
 const showToastInternal: typeof swan.showToast = ({title, icon, duration = 1500, success, fail, complete}) => {
     try {
-        globalToast.new(
+        globalToast?.new(
             {
                 icon: icon === 'none' ? undefined : icon,
                 children: title,
@@ -127,7 +127,7 @@ const showToastInternal: typeof swan.showToast = ({title, icon, duration = 1500,
 export const showToast = promisify(limited.async('showToast', showToastInternal))
 
 const hideToastInternal: typeof swan.hideToast = ({success, complete}) => {
-    globalToast.destroy(() => {
+    globalToast?.destroy(() => {
         success?.()
         complete?.()
     })
@@ -139,7 +139,7 @@ const hideToastInternal: typeof swan.hideToast = ({success, complete}) => {
 export const hideToast = promisify(limited.async('hideToast', hideToastInternal))
 
 const showLoadingInternal: typeof swan.showLoading = ({title = '正在加载...', success, complete}) => {
-    globalToast.new(
+    globalToast?.new(
         {
             icon: 'loading',
             children: title
@@ -157,7 +157,7 @@ const showLoadingInternal: typeof swan.showLoading = ({title = '正在加载...'
 export const showLoading = promisify(limited.async('showLoading', showLoadingInternal))
 
 const hideLoadingInternal: typeof swan.hideLoading = ({success, complete}) => {
-    globalToast.destroy(() => {
+    globalToast?.destroy(() => {
         success?.()
         complete?.()
     })
@@ -246,7 +246,7 @@ const showModalInternal: typeof swan.showModal = ({
     success,
     complete
 }) => {
-    globalModal.new({
+    globalModal?.new({
         title,
         children: content,
         showCancel,
