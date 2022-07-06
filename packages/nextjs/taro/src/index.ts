@@ -151,7 +151,8 @@ import {
     previewImage,
 
     // video
-    createVideoContext
+    createVideoContext,
+    chooseVideo
 } from './media'
 
 import {uploadFile} from './network/upload'
@@ -277,6 +278,7 @@ export {
     registerPreviewComponent,
     previewImage,
     createVideoContext,
+    chooseVideo,
 
     uploadFile,
 
@@ -405,6 +407,7 @@ export default {
     registerPreviewComponent,
     previewImage,
     createVideoContext,
+    chooseVideo,
 
     uploadFile,
 

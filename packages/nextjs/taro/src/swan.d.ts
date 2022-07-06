@@ -969,7 +969,6 @@ export namespace chooseImage {
  *       }
  *     })
  *     ```
- * 
  */
 export function chooseImage(OBJECT: chooseImage.Param): void
 
@@ -2231,8 +2230,6 @@ export namespace chooseVideo {
         sourceType?: string[]
         /**
          * 是否压缩所选的视频源文件，默认值为true，需要压缩
-         *
-         * 
          */
         compressed?: boolean
         /**
