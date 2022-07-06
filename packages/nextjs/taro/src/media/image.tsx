@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
 import promisify from 'mpromisify'
-import {limited} from '../_util'
+import {limited, unsupported} from '../_util'
 import type * as swan from '../swan'
 
 const chooseImageInternal: typeof swan.chooseImage = ({
@@ -144,7 +144,7 @@ const previewImageInternal: typeof swan.previewImage = ({
  * 在新页面中全屏预览图片。预览的过程中用户可以进行保存图片、发送给朋友等操作。
  *
  * @example
- * ```tsx
+ * ```javascript
  * Taro.previewImage({
  *   current: '', // 当前显示图片的http链接
  *   urls: [] // 需要预览的图片http链接列表
@@ -152,3 +152,73 @@ const previewImageInternal: typeof swan.previewImage = ({
  * ```
  */
 export  const previewImage = promisify(limited.async('previewImage', previewImageInternal))
+
+/**
+ * 获取图片信息
+ *
+ * **示例代码：**
+ *
+ * ```javascript
+ * Taro.getImageInfo({
+ *   src: 'images/a.jpg',
+ *   success: export function (res) {
+ *     console.log(res.width)
+ *     console.log(res.height)
+ *   }
+ * })
+ *
+ * Taro.chooseImage({
+ *   success: export function (res) {
+ *     Taro.getImageInfo({
+ *       src: res.tempFilePaths[0],
+ *       success: export function (res) {
+ *         console.log(res.width)
+ *         console.log(res.height)
+ *       }
+ *     })
+ *   }
+ * })
+ * ```
+ */
+const getImageInfoInternal: typeof swan.getImageInfo = ({
+    src,
+    success,
+    fail,
+    complete
+}) => {
+    fetch(src)
+        .then(res => res.blob())
+        .then(blob => {
+            const url = URL.createObjectURL(blob)
+            const image = new Image()
+            image.onload = () => {
+                success?.({
+                    width: image.naturalWidth,
+                    height: image.naturalHeight,
+                    path: url,
+                    orientation: 'up',
+                    type: blob.type
+                })
+                complete?.()
+            }
+            image.onerror = (e: any) => {
+                fail?.({
+                    errMsg: e.message
+                })
+                complete?.()
+            }
+            image.src = url
+        })
+        .catch(err => {
+            fail?.({
+                errMsg: err.message
+            })
+            complete?.()
+        })
+}
+
+export const getImageInfo = limited.async('getImageInfo', getImageInfoInternal)
+
+export const saveImageToPhotosAlbum = unsupported.async('saveImageToPhotosAlbum')
+
+export const compressImage = unsupported.async('compressImage')

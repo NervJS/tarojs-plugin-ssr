@@ -149,6 +149,9 @@ import {
     chooseImage,
     registerPreviewComponent,
     previewImage,
+    getImageInfo,
+    saveImageToPhotosAlbum,
+    compressImage,
 
     // video
     createVideoContext,
@@ -277,6 +280,9 @@ export {
     chooseImage,
     registerPreviewComponent,
     previewImage,
+    getImageInfo,
+    saveImageToPhotosAlbum,
+    compressImage,
     createVideoContext,
     chooseVideo,
 
@@ -406,6 +412,9 @@ export default {
     chooseImage,
     registerPreviewComponent,
     previewImage,
+    getImageInfo,
+    saveImageToPhotosAlbum,
+    compressImage,
     createVideoContext,
     chooseVideo,
 
