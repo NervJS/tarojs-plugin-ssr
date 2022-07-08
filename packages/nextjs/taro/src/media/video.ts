@@ -1,5 +1,6 @@
 import promisify from 'mpromisify'
 import {limited} from '../_util'
+import {createInput} from '../_util/dom'
 import type * as swan from '../swan'
 
 const chooseVideoInternal: typeof swan.chooseVideo = ({
@@ -7,20 +8,8 @@ const chooseVideoInternal: typeof swan.chooseVideo = ({
     success,
     complete
 }) => {
-    const result: swan.chooseImage.ParamPropSuccessParam = {
-        tempFilePaths: [],
-        tempFiles: []
-    }
-
-    const el = document.createElement('input')
-    el.setAttribute('type', 'file')
-    if (Array.isArray(sourceType) && sourceType.length) {
-        el.setAttribute('capture', sourceType.join(','))
-    }
+    const el = createInput(sourceType)
     el.setAttribute('accept', 'video/*')
-    el.setAttribute('style', 'position: fixed; top: -4000px; left: -3000px; z-index: -300;')
-    document.body.appendChild(el)
-
     el.onchange = e => {
         const target = e.target as HTMLInputElement
         const file = target.files ? Array.from(target.files)[0] : null

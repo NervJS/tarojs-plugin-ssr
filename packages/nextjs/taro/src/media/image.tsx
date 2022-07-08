@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom'
 import promisify from 'mpromisify'
 import {limited, unsupported} from '../_util'
+import {createInput} from '../_util/dom'
 import type * as swan from '../swan'
 
 const chooseImageInternal: typeof swan.chooseImage = ({
@@ -9,24 +10,17 @@ const chooseImageInternal: typeof swan.chooseImage = ({
     complete,
     sourceType = ['album', 'camera']
 }) => {
-    const result: swan.chooseImage.ParamPropSuccessParam = {
-        tempFilePaths: [],
-        tempFiles: []
-    }
-
-    const el = document.createElement('input')
-    el.setAttribute('type', 'file')
+    const el = createInput(sourceType)
     if (count > 1) {
         el.setAttribute('multiple', 'multiple')
     }
-    if (Array.isArray(sourceType) && sourceType.length) {
-        el.setAttribute('capture', sourceType.join(','))
-    }
     el.setAttribute('accept', 'image/*')
-    el.setAttribute('style', 'position: fixed; top: -4000px; left: -3000px; z-index: -300;')
-    document.body.appendChild(el)
 
     el.onchange = e => {
+        const result: swan.chooseImage.ParamPropSuccessParam = {
+            tempFilePaths: [],
+            tempFiles: []
+        }
         const target = e.target as HTMLInputElement
         const files = target.files ? Array.from(target.files) : []
         for (const file of files) {
