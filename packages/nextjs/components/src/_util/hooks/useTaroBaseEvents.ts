@@ -28,6 +28,8 @@ export interface UseTaroBaseEventsReturn extends TaroBaseAttributes {
 
     onMouseLeave: React.MouseEventHandler
     onTouchCancel: React.TouchEventHandler
+
+    onClick: React.MouseEventHandler
 }
 
 function useTaroBaseEvents({
@@ -47,7 +49,7 @@ function useTaroBaseEvents({
 
     const touchHasMoved = useCallback((reactEvent: React.TouchEvent | React.MouseEvent) => {
         const start = 'targetTouches' in reactEvent ? reactEvent.targetTouches[0] : reactEvent
-        const end = touchStartInfo.current
+        const end = touchStartInfo.current!
 
         return Math.sqrt(Math.pow(end.screenX - start.screenX, 2) + Math.pow(end.screenY - start.screenY, 2))
     }, [])
@@ -120,14 +122,7 @@ function useTaroBaseEvents({
             const taroEvent = createTaroTouchEvent('touchend', reactEvent)
             onTouchEnd(taroEvent)
         }
-        const endTime = Date.now()
-        if (trackingTap.current && onClick && endTime - startTime.current < 350) {
-            const taroEvent = createTaroMouseEvent('tap', reactEvent)
-            setTimeout(() => {
-                onClick(taroEvent)
-            })
-        }
-    }, [onTouchEnd, onClick])
+    }, [onTouchEnd])
 
     const handleCancel = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
         const eventType = EVENT_TYPE_MAPPINGS[reactEvent.type]
@@ -144,6 +139,14 @@ function useTaroBaseEvents({
         }
     }, [onTouchCancel])
 
+    const handleClick = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
+        const endTime = Date.now()
+        if (trackingTap.current && onClick && endTime - startTime.current < 350) {
+            const taroEvent = createTaroMouseEvent('tap', reactEvent)
+            onClick(taroEvent)
+        }
+    }, [])
+
     return {
         onMouseDown: handleStart,
         onTouchStart: handleStart,
@@ -156,6 +159,8 @@ function useTaroBaseEvents({
 
         onMouseLeave: handleCancel,
         onTouchCancel: handleCancel,
+
+        onClick: handleClick,
 
         ...rest
     }

@@ -123,7 +123,7 @@ export function createTaroBlurEvent<T extends HTMLTextAreaElement | HTMLInputEle
         currentTarget,
         target,
         detail: {
-            cursor: el.selectionEnd,
+            cursor: el.selectionEnd || 0,
             value: el.value
         },
         timeStamp,
