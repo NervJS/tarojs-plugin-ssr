@@ -36,6 +36,20 @@ Taro H5 官方的 API 库不考虑 Node 端且依赖官方自己的 H5 运行时
 
 Taro H5 端会通过使用 PostCSS 插件将 px 单位转换为 rem 单位的方式来还原设计稿，在 Next.js 项目中添加相同的 PostCSS 插件保持功能一致，代码位于 `nextjs/postcss` 目录下。
 
+## 关于 Next.js 项目模板
+
+Next.js 的项目模板位于 `nextjs/template` 目录下，其中使用 ejs 来编写各文件，便于插件向其中注入必要的参数。
+
+* babel.config.ejs
+
+Babel 的配置文件，其中包含 Next.js 项目本身预设 `next/babel`，在该预设的前后分别配置两个自定义预设，用于在其中添加自定义的 Babel 插件。注意 Babel 配置文件中，预设的执行顺序是反的，从后到前，插件的执行顺序是从前到后。
+
+自定义的 Babel 预设和插件位于 `nextjs/babel` 目录中。
+
+* next.config.ejs
+
+Next.js 框架的配置文件。在其中根据 Taro 项目的编译配置，配置相关的环境变量还自定义 webpack 的配置，比如使用 url-loader 来支持直接在 js 文件中导入图片。
+
 ## 关于 Taro 组件库
 
 在 `nextjs/components` 目录下实现的 React 版本的 Taro 组件库，部分代码参考 Taro 2 中的实现，需要考虑对 SSR 的支持。
@@ -50,12 +64,10 @@ import classNames from 'classnames'
 import type {TaroBaseProps} from '../_util/typings'
 import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 
-export interface TextProps extends TaroBaseProps {
-    // other props
-}
+export interface TextProps extends TaroBaseProps { }
 
-const Text: React.ForwardRefRenderFunction<HTMLDivElement, TextProps> = ({
-    // other props
+const Text: React.FC<TextProps> = ({
+    children,
     ...rest
 }, ref) => {
     const props = useTaroBaseEvents(rest)
