@@ -38,7 +38,7 @@ Taro H5 端会通过使用 PostCSS 插件将 px 单位转换为 rem 单位的方
 
 ## 关于 Taro 组件库
 
-在 `nextjs/components` 目录下实现的 React 版本的 Taro 组件库，需要支持 SSR。
+在 `nextjs/components` 目录下实现的 React 版本的 Taro 组件库，部分代码参考 Taro 2 中的实现，需要考虑对 SSR 的支持。
 
 ### TaroBaseProps 接口和 useTaroBaseProps Hook
 
@@ -82,15 +82,15 @@ export default Text
 
 为了让异步 API 支持 Promise 调用方式，均使用 `mpromisify` 工具方法进行包装。
 
-### 分类
+### 对环境的支持
 
-根据 API 支持的调用环境，对它们进行以下分类：
+Next.js 项目中的代码不仅会运行在浏览器端，还会运行在 Node 端。所以根据 API 所支持的调用环境，对它们进行以下分类：
 
-#### 浏览器端和 Node 端均可调用
+#### 浏览器端和 Node 端都支持
 
 这些函数内部实现不依赖浏览器端的 DOM 或 BOM API，开发时无需进行任何特殊处理。
 
-#### 仅可在浏览器端调用
+#### 仅支持浏览器端
 
 这些函数内部实现会依赖浏览器端的 DOM 或 BOM API，开发时需要对其进行一些额外处理，让该函数不慎在 Node 端调用时给开发者明确的提示信息。可以分成以下几种情况来处理：
 

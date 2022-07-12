@@ -193,8 +193,6 @@ export interface InputProps extends TaroBaseProps {
 }
 
 const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
-    id,
-    style,
     className,
     name,
     value,
@@ -284,8 +282,6 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
 
     return (
         <div
-            id={id}
-            style={style}
             className={classNames('taro-input', className)}
             {...props}
         >

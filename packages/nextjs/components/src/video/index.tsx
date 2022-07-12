@@ -331,6 +331,7 @@ const Video: React.ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
     return (
         <video
             ref={video}
+            id={id}
             className={classNames('video-js', className)}
             style={mergedStyle}
             playsInline

@@ -15,7 +15,6 @@ export interface SwitchProps extends TaroBaseProps {
 }
 
 const Switch: React.ForwardRefRenderFunction<HTMLInputElement, SwitchProps> = ({
-    id,
     style,
     className,
     name,
@@ -42,7 +41,6 @@ const Switch: React.ForwardRefRenderFunction<HTMLInputElement, SwitchProps> = ({
 
     return (
         <input
-            id={id}
             type='checkbox'
             className={classNames({
                 'weui-switch': type === 'switch',

@@ -23,9 +23,7 @@ export interface TextProps extends TaroBaseProps {
 }
 
 const Text: React.ForwardRefRenderFunction<HTMLDivElement, TextProps> = ({
-    id,
     className,
-    style,
     space = false,
     selectable = false,
     children,
