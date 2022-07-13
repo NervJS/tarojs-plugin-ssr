@@ -296,9 +296,7 @@ const Video: React.ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
             const {
                 timeStamp,
                 target,
-                currentTarget,
-                preventDefault,
-                stopPropagation
+                currentTarget
             } = event
             const taroEvent: TaroFullscreenChangeEvent = {
                 type: 'fullscreenchange',
@@ -309,10 +307,10 @@ const Video: React.ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
                 timeStamp,
                 target,
                 currentTarget,
-                preventDefault,
-                stopPropagation
+                preventDefault: () => event.preventDefault(),
+                stopPropagation: () => event.stopPropagation()
             }
-            onFullscreenChange(taroEvent)
+            onFullscreenChange?.(taroEvent)
         }
         const videoEl = video.current
         videoEl.addEventListener('webkitfullscreenchange', handle)
@@ -401,15 +399,13 @@ const Video: React.ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
                     onError(taroEvent)
                 }
             }}
-            onLoadedMetadata={() => {
+            onLoadedMetadata={event => {
                 if (onLoadedMetaData) {
                     const videoEl = video.current!
                     const {
                         timeStamp,
                         target,
-                        currentTarget,
-                        preventDefault,
-                        stopPropagation
+                        currentTarget
                     } = event
                     const taroEvent: TaroLoadedMetaDataEvent = {
                         type: 'loadedmetadata',
@@ -422,8 +418,8 @@ const Video: React.ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
                         timeStamp,
                         target,
                         currentTarget,
-                        preventDefault,
-                        stopPropagation
+                        preventDefault: () => event.preventDefault(),
+                        stopPropagation: () => event.stopPropagation()
                     }
                     onLoadedMetaData(taroEvent)
                 }

@@ -256,9 +256,7 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
                             const {
                                 timeStamp,
                                 target,
-                                currentTarget,
-                                preventDefault,
-                                stopPropagation
+                                currentTarget
                             } = event
                             const el = event.target as HTMLTextAreaElement
                             const taroEvent: TaroInputEvent = {
@@ -271,8 +269,8 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
                                 },
                                 timeStamp,
                                 type: 'input',
-                                preventDefault,
-                                stopPropagation
+                                preventDefault: () => event.preventDefault(),
+                                stopPropagation: () => event.stopPropagation()
                             }
                             onInput(taroEvent)
                         }

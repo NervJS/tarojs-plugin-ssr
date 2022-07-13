@@ -145,7 +145,7 @@ function useTaroBaseEvents({
             const taroEvent = createTaroMouseEvent('tap', reactEvent)
             onClick(taroEvent)
         }
-    }, [])
+    }, [onClick])
 
     return {
         onMouseDown: handleStart,

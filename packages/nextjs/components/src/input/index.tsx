@@ -307,9 +307,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
                             const {
                                 timeStamp,
                                 target,
-                                currentTarget,
-                                preventDefault,
-                                stopPropagation
+                                currentTarget
                             } = event
                             const el = event.target as HTMLInputElement
                             const taroEvent: TaroInputEvent = {
@@ -322,8 +320,8 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
                                 },
                                 timeStamp,
                                 type: 'input',
-                                preventDefault,
-                                stopPropagation
+                                preventDefault: () => event.preventDefault(),
+                                stopPropagation: () => event.stopPropagation()
                             }
                             onInput(taroEvent)
                         }

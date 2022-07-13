@@ -54,7 +54,7 @@ function useTaroHoverableEvents(
         timer.current = setTimeout(() => {
             setHovered(false)
         }, hoverStayTime)
-    }, [])
+    }, [hoverStayTime])
 
     const handleMouseDown = useCallback((reactEvent: React.MouseEvent): void => {
         if (!('ontouchstart' in window)) {

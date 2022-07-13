@@ -16,9 +16,7 @@ export function createTaroMouseEvent(taroEventType: string, reactEvent: React.To
     const {
         timeStamp,
         target,
-        currentTarget,
-        preventDefault,
-        stopPropagation
+        currentTarget
     } = reactEvent
 
     const changedTouches = 'changedTouches' in reactEvent
@@ -40,8 +38,8 @@ export function createTaroMouseEvent(taroEventType: string, reactEvent: React.To
         type: taroEventType,
         changedTouches,
         touches,
-        preventDefault,
-        stopPropagation
+        preventDefault: () => reactEvent.preventDefault(),
+        stopPropagation: () => reactEvent.stopPropagation()
     }
 }
 
@@ -49,9 +47,7 @@ export function createTaroTouchEvent(taroEventType: string, reactEvent: React.To
     const {
         timeStamp,
         target,
-        currentTarget,
-        preventDefault,
-        stopPropagation
+        currentTarget
     } = reactEvent
 
     const changedTouches = 'changedTouches' in reactEvent
@@ -70,8 +66,8 @@ export function createTaroTouchEvent(taroEventType: string, reactEvent: React.To
         type: taroEventType,
         changedTouches,
         touches,
-        preventDefault,
-        stopPropagation
+        preventDefault: () => reactEvent.preventDefault(),
+        stopPropagation: () => reactEvent.stopPropagation()
     }
 }
 
@@ -91,9 +87,7 @@ export function createTaroFocusEvent<T extends HTMLTextAreaElement | HTMLInputEl
     const {
         timeStamp,
         target,
-        currentTarget,
-        preventDefault,
-        stopPropagation
+        currentTarget
     } = reactEvent
     const el = target as T
     return {
@@ -105,8 +99,8 @@ export function createTaroFocusEvent<T extends HTMLTextAreaElement | HTMLInputEl
         },
         timeStamp,
         type: 'focus',
-        preventDefault,
-        stopPropagation
+        preventDefault: () => reactEvent.preventDefault(),
+        stopPropagation: () => reactEvent.stopPropagation()
     }
 }
 
@@ -114,9 +108,7 @@ export function createTaroBlurEvent<T extends HTMLTextAreaElement | HTMLInputEle
     const {
         timeStamp,
         target,
-        currentTarget,
-        preventDefault,
-        stopPropagation
+        currentTarget
     } = reactEvent
     const el = target as T
     return {
@@ -128,8 +120,8 @@ export function createTaroBlurEvent<T extends HTMLTextAreaElement | HTMLInputEle
         },
         timeStamp,
         type: 'blur',
-        preventDefault,
-        stopPropagation
+        preventDefault: () => reactEvent.preventDefault(),
+        stopPropagation: () => reactEvent.stopPropagation()
     }
 }
 
@@ -137,9 +129,7 @@ export function createTaroConfirmEvent<T extends HTMLTextAreaElement | HTMLInput
     const {
         timeStamp,
         target,
-        currentTarget,
-        preventDefault,
-        stopPropagation
+        currentTarget
     } = reactEvent
     const el = target as T
     return {
@@ -150,8 +140,8 @@ export function createTaroConfirmEvent<T extends HTMLTextAreaElement | HTMLInput
         },
         timeStamp,
         type: 'confirm',
-        preventDefault,
-        stopPropagation
+        preventDefault: () => reactEvent.preventDefault(),
+        stopPropagation: () => reactEvent.stopPropagation()
     }
 }
 
@@ -159,9 +149,7 @@ export function createTaroVideoEvent(taroEventType: string, reactEvent: React.Sy
     const {
         timeStamp,
         target,
-        currentTarget,
-        preventDefault,
-        stopPropagation
+        currentTarget
     } = reactEvent
     return {
         currentTarget,
@@ -171,8 +159,8 @@ export function createTaroVideoEvent(taroEventType: string, reactEvent: React.Sy
         },
         timeStamp,
         type: taroEventType,
-        preventDefault,
-        stopPropagation
+        preventDefault: () => reactEvent.preventDefault(),
+        stopPropagation: () => reactEvent.stopPropagation()
     }
 }
 
@@ -180,9 +168,7 @@ export function createTaroSwitchEvent(reactEvent: React.SyntheticEvent<HTMLInput
     const {
         timeStamp,
         target,
-        currentTarget,
-        preventDefault,
-        stopPropagation
+        currentTarget
     } = reactEvent
     return {
         currentTarget,
@@ -192,8 +178,8 @@ export function createTaroSwitchEvent(reactEvent: React.SyntheticEvent<HTMLInput
         },
         timeStamp,
         type: 'change',
-        preventDefault,
-        stopPropagation
+        preventDefault: () => reactEvent.preventDefault(),
+        stopPropagation: () => reactEvent.stopPropagation()
     }
 }
 

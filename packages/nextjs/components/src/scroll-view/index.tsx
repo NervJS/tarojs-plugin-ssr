@@ -147,9 +147,7 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
         const {
             timeStamp,
             target,
-            currentTarget,
-            preventDefault,
-            stopPropagation
+            currentTarget
         } = reactEvent
 
         const {scrollLeft, scrollTop, scrollHeight, scrollWidth} = target as HTMLDivElement
@@ -166,8 +164,8 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
                 deltaX: lastLeft.current - scrollLeft,
                 deltaY: lastTop.current - scrollTop
             },
-            preventDefault,
-            stopPropagation
+            preventDefault: () => reactEvent.preventDefault(),
+            stopPropagation: () => reactEvent.stopPropagation()
         }
         return taroEvent
     }
