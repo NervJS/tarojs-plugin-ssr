@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "baseUrl": "./",
+        "outDir": "lib",
         "strictNullChecks": true,
         "module": "esnext",
         "moduleResolution": "node",
@@ -20,6 +21,9 @@
         "allowJs": true
     },
     "include": [
-        "src"
+        "src/**/*",
+        "components/src/**/*",
+        "taro/src/**/*",
+        "router/src/**/*"
     ]
 }
