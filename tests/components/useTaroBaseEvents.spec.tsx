@@ -27,6 +27,7 @@ describe('useTaroBaseEvents', () => {
     const handleParentTouchStart = jest.fn()
     const handleParentTouchEnd = jest.fn()
     const handleParentClick = jest.fn()
+    const handleParentLongPress = jest.fn()
 
     beforeEach(() => {
         render(
@@ -35,6 +36,7 @@ describe('useTaroBaseEvents', () => {
                 onTouchStart={handleParentTouchStart}
                 onTouchEnd={handleParentTouchEnd}
                 onClick={handleParentClick}
+                onLongPress={handleParentLongPress}
             >
                 <TestComponent ref={childRef1} />
                 <TestComponent
@@ -55,32 +57,49 @@ describe('useTaroBaseEvents', () => {
         handleParentTouchStart.mockClear()
         handleParentTouchEnd.mockClear()
         handleParentClick.mockClear()
+        handleParentLongPress.mockClear()
     })
 
-    it('basic', () => {
+    it('basic events', () => {
         fireEvent.mouseDown(parentRef.current)
-        fireEvent.click(parentRef.current)
         fireEvent.mouseUp(parentRef.current)
+        fireEvent.click(parentRef.current)
         expect(handleParentTouchStart.mock.calls.length).toBe(1)
         expect(handleParentTouchEnd.mock.calls.length).toBe(1)
         expect(handleParentClick.mock.calls.length).toBe(1)
+        expect(handleParentLongPress.mock.calls.length).toBe(0)
+    })
+
+    it('longpress event', cb => {
+        fireEvent.mouseDown(parentRef.current)
+        setTimeout(() => {
+            fireEvent.mouseUp(parentRef.current)
+            fireEvent.click(parentRef.current)
+            expect(handleParentTouchStart.mock.calls.length).toBe(1)
+            expect(handleParentTouchEnd.mock.calls.length).toBe(1)
+            expect(handleParentClick.mock.calls.length).toBe(0)
+            expect(handleParentLongPress.mock.calls.length).toBe(1)
+            cb()
+        }, 500)
     })
 
     it('default event propagation', () => {
         fireEvent.mouseDown(childRef1.current)
-        fireEvent.click(childRef1.current)
         fireEvent.mouseUp(childRef1.current)
+        fireEvent.click(childRef1.current)
         expect(handleParentTouchStart.mock.calls.length).toBe(1)
         expect(handleParentTouchEnd.mock.calls.length).toBe(1)
         expect(handleParentClick.mock.calls.length).toBe(1)
+        expect(handleParentLongPress.mock.calls.length).toBe(0)
     })
 
     it('can stop event propagation', () => {
         fireEvent.mouseDown(childRef2.current)
-        fireEvent.click(childRef2.current)
         fireEvent.mouseUp(childRef2.current)
+        fireEvent.click(childRef2.current)
         expect(handleParentTouchStart.mock.calls.length).toBe(1)
         expect(handleParentTouchEnd.mock.calls.length).toBe(1)
         expect(handleParentClick.mock.calls.length).toBe(0)
+        expect(handleParentLongPress.mock.calls.length).toBe(0)
     })
 })
