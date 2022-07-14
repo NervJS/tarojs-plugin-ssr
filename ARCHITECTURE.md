@@ -54,9 +54,9 @@ Next.js 框架的配置文件。在其中根据 Taro 项目的编译配置，配
 
 在 `nextjs/components` 目录下实现的 React 版本的 Taro 组件库，部分代码参考 Taro 2 中的实现，需要考虑对 SSR 的支持。
 
-### TaroBaseProps 接口和 useTaroBaseProps Hook
+### TaroBaseProps 接口和 useTaroBaseEvents Hook
 
-各组件的属性类型均继承 TaroBaseProps 接口，该接口声明所有组件都需要实现的基本属性。而 useTaroBaseProps Hook 来实现这些属性所定义的功能，使用示例如下：
+各组件的属性类型均继承 TaroBaseProps 接口，该接口声明所有组件都需要实现的基本属性。而 useTaroBaseEvents Hook 来实现这些属性所定义的功能，使用示例如下：
 
 ```TypeScript
 import React, {forwardRef} from 'react'
@@ -71,7 +71,6 @@ const Text: React.FC<TextProps> = ({
     ...rest
 }, ref) => {
     const props = useTaroBaseEvents(rest)
-
     return (
         <span {...props}>
             {children}
@@ -84,7 +83,7 @@ export default Text
 
 ### TaroHoverableProps 接口和 useTaroHoverableEvents Hook
 
-支持 hover 相关功能的组件，其属性类型继承 TaroHoverableProps 接口，而 TaroHoverableProps 接口继承 TaroBaseProps 接口。而 useTaroHoverableEvents Hook 来进行具体的实现，其内部依赖 useTaroBaseProps Hook。
+支持 hover 相关功能的组件，其属性类型继承 TaroHoverableProps 接口，而 TaroHoverableProps 接口继承 TaroBaseProps 接口。而 useTaroHoverableEvents Hook 来进行具体的实现，其内部依赖 useTaroBaseEvents Hook。
 
 ## 关于 Taro API
 
