@@ -45,7 +45,6 @@
         "autoprefixer": "^10.4.4",
         "base64-js": "^1.5.1",
         "chalk": "^4.1.2",
-        "classnames": "^2.3.1",
         "cross-spawn": "^7.0.3",
         "ejs": "^3.1.6",
         "event-stream": "^4.0.1",
@@ -84,30 +83,18 @@
         "@types/through": "^0.0.30",
         "babel-loader": "^8.2.4",
         "babel-plugin-tester": "^10.1.0",
-        "css-loader": "^6.7.1",
         "gulp-babel": "^8.0.0",
-        "gulp-typescript": "^6.0.0-alpha.1",
-        "merge2": "^1.4.1",
-        "mini-css-extract-plugin": "^2.6.0",
+        "gulp-typescript": "^5.0.1",
         "next": "^11.1.4",
         "object-assign": "^4.1.1",
-        "postcss": "^8.4.12",
-        "postcss-loader": "^6.2.1",
         "react": "^17.0.2",
-        "react-dom": "^17.0.2",
-        "resolve-url-loader": "^5.0.0",
-        "sass": "^1.50.0",
-        "sass-loader": "^12.6.0",
-        "through2": "^4.0.2",
-        "ts-loader": "^9.3.0",
-        "webpack": "^5.72.0"
+        "react-dom": "^17.0.2"
     },
     "peerDependencies": {
         "fibers": ">= 3.1.0",
         "next": "^11.1.4",
         "node-sass": "^4.0.0 || ^5.0.0",
         "react": "^17.0.2",
-        "react-dom": "^17.0.2",
-        "sass": "^1.3.0"
+        "react-dom": "^17.0.2"
     }
 }
