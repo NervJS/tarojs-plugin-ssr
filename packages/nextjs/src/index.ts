@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'upath'
 import fs from 'fs'
 import {src, dest, watch} from 'gulp'
 import rename from 'gulp-rename'
@@ -173,7 +173,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     if (dynamicPageFileBaseName) {
                         request = path.join(path.dirname(request), dynamicPageFileBaseName)
                     }
-                    const modulePath = path.relative(nextjsPageDir, request)
+                    const modulePath = path.normalize(path.relative(nextjsPageDir, request))
 
                     const configAbsolutePath = helper.resolveMainFilePath(`${originRequest}.config`)
 
@@ -225,7 +225,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                 for (const errorPage of ['_error', '404', '500']) {
                     const pagePath = resolveScriptPath(path.join(sourcePath, errorPage))
                     if (fs.existsSync(pagePath)) {
-                        const modulePath = path.relative(nextjsPagesDir, path.join(outputSourcePath, errorPage))
+                        const modulePath = path.normalize(path.relative(nextjsPagesDir, path.join(outputSourcePath, errorPage)))
                         const contents = `export {default} from '${modulePath}'`
                         const nextjsErrorPagePath = path.join(nextjsPagesDir, `${errorPage}.js`)
                         fs.writeFileSync(nextjsErrorPagePath, contents, {encoding: 'utf-8'})

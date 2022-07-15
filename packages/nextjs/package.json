@@ -57,12 +57,11 @@
         "lodash": "^4.17.21",
         "mobile-detect": "^1.4.5",
         "mpromisify": "^1.0.4",
-        "next-transpile-modules": "^9.0.0",
         "open": "^8.4.0",
         "postcss-pxtorem": "^6.0.0",
         "scss-bundle": "^3.1.2",
-        "url-loader": "^4.1.1",
-        "weui": "^1.1.2"
+        "upath": "^2.0.1",
+        "url-loader": "^4.1.1"
     },
     "devDependencies": {
         "@babel/plugin-syntax-jsx": "^7.16.7",
