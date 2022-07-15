@@ -1,11 +1,12 @@
-import React, {useEffect, forwardRef} from 'react'
-import {Swiper as InternalSwiper, SwiperSlide, useSwiper} from 'swiper/react/swiper-react'
+import React, {useEffect, useRef, useMemo} from 'react'
 import classNames from 'classnames'
-import type {BaseProps} from '../_util/types'
-import useBaseEvents from '../_util/hooks/useBaseEvents'
+import SwiperCore, {Autoplay, SwiperOptions} from 'swiper'
+import {createTaroSwiperEvent} from '../_util/taroEvent'
 import useMergedState from '../_util/hooks/useMergedState'
 import toArray from '../_util/children/toArray'
-import type {SwiperItemProps} from '../swiper-item'
+import {TaroBaseProps, TaroSwiperEventHandler} from '../_util/typings'
+
+SwiperCore.use([Autoplay])
 
 /**
  * 指定 swiper 切换缓动动画类型
@@ -33,7 +34,7 @@ interface EasingFunction {
     easeInOutCubic
 }
 
-interface SwiperProps extends BaseProps {
+interface SwiperProps extends TaroBaseProps {
     /**
      * 是否显示面板指示点
      * @default false
@@ -131,20 +132,20 @@ interface SwiperProps extends BaseProps {
      */
     easingFunction?: keyof EasingFunction
 
-    // /**
-    //  * current 改变时会触发 change 事件
-    //  */
-    // onChange?: CommonEventFunction<SwiperProps.onChangeEventDetail>
+    /**
+     * current 改变时会触发 change 事件
+     */
+    onChange?: TaroSwiperEventHandler
 
-    // /**
-    //  * swiper-item 的位置发生改变时会触发 transition 事件
-    //  */
-    // onTransition?: CommonEventFunction<SwiperProps.onTransitionEventDetail>
+    /**
+     * swiper-item 的位置发生改变时会触发 transition 事件
+     */
+    onTransition?: TaroSwiperEventHandler
 
-    // /**
-    //  * 动画结束时会触发 animationfinish 事件
-    //  */
-    // onAnimationFinish?: SwiperProps['onChange']
+    /**
+     * 动画结束时会触发 animationfinish 事件
+     */
+    onAnimationFinish?: TaroSwiperEventHandler
 
     /**
      * 是否禁止用户 touch 操作
@@ -158,103 +159,116 @@ interface SwiperProps extends BaseProps {
     children?: React.ReactNode
 }
 
-const Swiper: React.ForwardRefRenderFunction<HTMLDivElement, SwiperProps> = ({
+const Swiper: React.FC<SwiperProps> = ({
     id,
     className,
     style,
     indicatorDots = false,
-    indicatorColor,
-    indicatorActiveColor,
+    indicatorColor = 'rgba(0, 0, 0, .3)',
+    indicatorActiveColor = '#333',
     autoplay,
     current,
-    currentItemId,
+    // currentItemId,
     interval = 5000,
     duration = 500,
     circular = false,
     vertical = false,
-    previousMargin = '0px',
-    nextMargin = '0px',
-    snapToEdge = false,
+    // previousMargin = '0px',
+    // nextMargin = '0px',
+    // snapToEdge = false,
     displayMultipleItems = 1,
-    skipHiddenItemLayout = false,
-    easingFunction = 'default',
-    // onChange?: CommonEventFunction<SwiperProps.onChangeEventDetail>
-    // onTransition?: CommonEventFunction<SwiperProps.onTransitionEventDetail>
-    // onAnimationFinish?: SwiperProps['onChange']
-    // disableTouch?: boolean
+    // skipHiddenItemLayout = false,
+    // easingFunction = 'default',
     children,
-    ...eventProps
-}, ref) => {
-    const swiper = useSwiper()
+    onChange,
+    onAnimationFinish
+}) => {
+    const swiperElRef = useRef<HTMLDivElement | null>(null)
+    const swiperRef = useRef<SwiperCore | null>(null)
 
-    const handles = useBaseEvents(eventProps)
-
-    const [mergedCurrent, setMergedCurrent] = useMergedState(0, {
-        value: current
-    })
-
-    const items = toArray(children) as React.ReactElement<SwiperItemProps>[]
-
-    const slides = items.map(child => {
-        const itemId = child.props.itemId
-        return (
-            <SwiperSlide key={itemId}>
-                {child}
-            </SwiperSlide>
-        )
-    })
-
-    const pagination = items.map((_, i) => {
-        const clx = classNames('weui-swiper__pagination-bullet', {
-            active: i === mergedCurrent
-        });
-        return <span className={clx} key={i}></span>
+    const onChangeRef = useRef<TaroSwiperEventHandler | undefined>(onChange)
+    const onAnimationFinishRef = useRef<TaroSwiperEventHandler | undefined>(onAnimationFinish)
+    
+    const [mergedCurrent, setMergedCurrent] = useMergedState(current, {
+        defaultValue: 0
     })
 
     useEffect(() => {
-        if (!swiper) {
+        if (!swiperElRef.current) {
             return
         }
-        if (typeof current === 'number') {
-            swiper.slideTo(current)
-        }
-    }, [swiper, current])
 
-    useEffect(() => {
-        if (!swiper) {
-            return
+        const options: SwiperOptions = {
+            direction: vertical ? 'vertical' : 'horizontal',
+            loop: circular,
+            slidesPerView: displayMultipleItems,
+            initialSlide: mergedCurrent,
+            speed: duration,
+            observer: true,
+            observeParents: true,
+            on: {
+                slideChange(swiper) {
+                    const taroEvent = createTaroSwiperEvent('change', swiper)
+                    setMergedCurrent(taroEvent.detail.current)
+                    onChangeRef.current?.(taroEvent)
+                },
+                transitionEnd(swiper) {
+                    const taroEvent = createTaroSwiperEvent('animationfinish', swiper)
+                    onAnimationFinishRef.current?.(taroEvent)
+                }
+            }
         }
-        if (typeof currentItemId !== 'string') {
-            return
+
+        if (autoplay) {
+            options.autoplay = {
+                delay: interval,
+                stopOnLastSlide: true,
+                disableOnInteraction: false
+            }
         }
-        const index = items.findIndex(child => child.props.itemId === currentItemId)
-        if (index === -1) {
-            return
+
+        const swiper = swiperRef.current = new SwiperCore(swiperElRef.current, options)
+        swiper.slideNext()
+
+        return () => {
+            swiper.destroy()
         }
-        swiper.slideTo(index)
-    }, [swiper, currentItemId])
+    }, [])
+
+    const items = useMemo(() => toArray(children), [children])
 
     return (
         <div
-            ref={ref}
+            ref={swiperElRef}
             id={id}
-            className={className}
             style={style}
-            {...handles}
+            className={classNames('swiper-container', className)}
         >
-            <InternalSwiper
-                tabIndex={mergedCurrent}
-                spaceBetween={0}
-                slidesPerView={1}
-                onActiveIndexChange={event => {
-                    setMergedCurrent(event.activeIndex)
-                }}
-            >
-                {slides}
-            </InternalSwiper>
-            {pagination}
+            <div className='swiper-wrapper'>
+                {children}
+            </div>
+           {indicatorDots && (
+                <div
+                    className={classNames('taro-swiper__dots', {
+                        'taro-swiper__dots-vertical': vertical,
+                        'taro-swiper__dots-horizontal': !vertical
+                    })}
+                >
+                    {items.map((_, index) => (
+                        <div
+                            key={index}
+                            className='taro-swiper__dot'
+                            style={{
+                                backgroundColor: mergedCurrent === index
+                                    ? indicatorActiveColor
+                                    : indicatorColor
+                            }}
+                        />
+                    ))}
+                </div>
+           )}
         </div>
     )
 }
 
-export default forwardRef(Swiper)
+export default Swiper

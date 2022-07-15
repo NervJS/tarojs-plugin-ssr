@@ -61,7 +61,6 @@
         "open": "^8.4.0",
         "postcss-pxtorem": "^6.0.0",
         "scss-bundle": "^3.1.2",
-        "swiper": "^6.8.4",
         "url-loader": "^4.1.1",
         "weui": "^1.1.2"
     },

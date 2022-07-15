@@ -1,5 +1,6 @@
 import React from 'react'
-import Mask from './mask'
+import classNames from 'classnames'
+import Mask from '../mask'
 import Icon from '../icon'
 
 export interface ToastProps {
@@ -24,12 +25,16 @@ export interface ToastProps {
     children?: React.ReactNode
 }
 
-const Toast = ({icon, iconSize, visible, children}) => (
+const Toast: React.FC<ToastProps> = ({icon, iconSize, visible = true, children}) => (
     <div style={{display: visible ? 'block' : 'none'}}>
-        <Mask transparent={true}/>
-        <div className='weui-toast'>
-            <Icon type={icon} size={iconSize} className='weui-icon_toast' />
-            <p className='weui-toast_content'>{children}</p>
+        <Mask transparent />
+        <div
+            className={classNames('taro-toast', {
+                'taro-toast_none': !icon
+            })}
+        >
+            {!!icon && <Icon className='taro-toast_icon' type={icon} size={iconSize} />}
+            <p className='taro-toast_content'>{children}</p>
         </div>
     </div>
 )

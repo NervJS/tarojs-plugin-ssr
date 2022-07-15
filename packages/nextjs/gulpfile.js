@@ -207,6 +207,5 @@ gulp.task('plugin', gulp.series(
 gulp.task('default', gulp.parallel(
     'plugin',
     'taro',
-    'components',
     'router'
 ))

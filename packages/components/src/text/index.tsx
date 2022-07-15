@@ -1,9 +1,9 @@
 import React, {forwardRef} from 'react'
 import classNames from 'classnames'
-import type {BaseProps} from '../_util/types'
-import useBaseEvents from '../_util/hooks/useBaseEvents'
+import type {TaroBaseProps} from '../_util/typings'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 
-export interface TextProps extends BaseProps {
+export interface TextProps extends TaroBaseProps {
     /**
      * 显示连续空格
      * @default false
@@ -23,15 +23,13 @@ export interface TextProps extends BaseProps {
 }
 
 const Text: React.ForwardRefRenderFunction<HTMLDivElement, TextProps> = ({
-    id,
     className,
-    style,
     space = false,
     selectable = false,
     children,
-    ...eventProps
+    ...rest
 }, ref) => {
-    const handles = useBaseEvents(eventProps)
+    const props = useTaroBaseEvents(rest)
 
     if (typeof children === 'string') {
         if (space === 'nbsp') {
@@ -48,10 +46,10 @@ const Text: React.ForwardRefRenderFunction<HTMLDivElement, TextProps> = ({
             ref={ref}
             className={classNames(
                 'taro-text',
-                {'taro-text__selectable': selectable},
+                {'taro-text_selectable': selectable},
                 className
             )}
-            {...handles}
+            {...props}
         >
             {children}
         </span>

@@ -1,9 +1,9 @@
 import React, {forwardRef} from 'react'
 import classNames from 'classnames'
-import type {BaseProps} from '../_util/types'
-import useBaseEvents from '../_util/hooks/useBaseEvents'
+import type {TaroBaseProps} from '../_util/typings'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 
-export interface IconProps extends BaseProps {
+export interface IconProps extends TaroBaseProps {
     /**
      * 图标
      */
@@ -21,15 +21,14 @@ export interface IconProps extends BaseProps {
 }
 
 const Icon: React.ForwardRefRenderFunction<HTMLElement, IconProps> = ({
-    id,
     style,
     className,
     type,
     size = 30,
     color,
-    ...eventProps
+    ...rest
 }, ref) => {
-    const handles = useBaseEvents(eventProps)
+    const props = useTaroBaseEvents(rest)
 
     const mergedStyle: React.CSSProperties = Object.assign({}, style, {
         fontSize: size ? `${size}px` : undefined,
@@ -39,13 +38,12 @@ const Icon: React.ForwardRefRenderFunction<HTMLElement, IconProps> = ({
     return (
         <i
             ref={ref}
-            id={id}
             style={mergedStyle}
             className={classNames({
                 ['weui-icon-' + type]: type !== 'loading',
                 'weui-loading': type === 'loading'
             }, className)}
-            {...handles}
+            {...props}
         />
     )
 }

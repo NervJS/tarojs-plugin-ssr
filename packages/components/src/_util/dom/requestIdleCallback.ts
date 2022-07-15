@@ -11,7 +11,7 @@ export const requestIdleCallback = globalThis.requestIdleCallback
         }, 1) as any as number
     }
 
-export const cancelIdleCallback = self.cancelIdleCallback
+export const cancelIdleCallback = globalThis.cancelIdleCallback
     || function (id: number) {
         return clearTimeout(id)
     }

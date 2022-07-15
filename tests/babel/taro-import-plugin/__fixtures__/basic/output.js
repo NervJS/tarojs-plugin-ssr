@@ -1,6 +1,6 @@
 import { createElement, Component } from "react";
 import Taro from "tarojs-plugin-platform-nextjs/taro";
-import { View } from "tarojs-plugin-platform-nextjs/components";
+import { View } from "@taror/components";
 
 class Index extends Component {
   handleClick() {

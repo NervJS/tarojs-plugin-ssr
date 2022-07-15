@@ -9,7 +9,7 @@ module.exports = function (babel) {
                 if (source.isStringLiteral()) {
                     if (source.node.value === '@tarojs/components') {
                         source.replaceWith(
-                            t.stringLiteral('tarojs-plugin-platform-nextjs/components')
+                            t.stringLiteral('@taror/components')
                         )
                     } else if (source.node.value === '@tarojs/taro') {
                         source.replaceWith(

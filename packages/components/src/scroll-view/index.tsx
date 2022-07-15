@@ -1,9 +1,9 @@
 import React, {useImperativeHandle, useRef, useEffect, forwardRef} from 'react'
 import classNames from 'classnames'
-import type {BaseProps, TaroScrollEvent} from '../_util/types'
-import useBaseEvents from '../_util/hooks/useBaseEvents'
+import type {TaroBaseProps, TaroUIEventHandler, TaroUIEvent} from '../_util/typings'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 
-export interface ScrollViewProps extends BaseProps {
+export interface ScrollViewProps extends TaroBaseProps {
     /**
      * 允许横向滚动
      * @default false
@@ -63,24 +63,23 @@ export interface ScrollViewProps extends BaseProps {
     /**
      * 滚动到顶部/左边，会触发 scrolltoupper 事件
      */
-    onScrollToUpper?: (event: TaroScrollEvent) => void
+    onScrollToUpper?: TaroUIEventHandler
 
     /**
      * 滚动到底部/右边，会触发 scrolltolower 事件
      */
-    onScrollToLower?: (event: TaroScrollEvent) => void
+    onScrollToLower?: TaroUIEventHandler
 
     /**
      * 滚动时触发
      * `event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}`
      */
-    onScroll?: (event: TaroScrollEvent) => void
+    onScroll?: TaroUIEventHandler
 
 }
 
 const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps> = ({
     className,
-    style,
     scrollX,
     scrollY,
     upperThreshold = 50,
@@ -95,12 +94,12 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
     onScrollToUpper,
     onScrollToLower,
     onScroll,
-    ...eventProps
+    ...rest
 }, ref) => {
     const el = useRef<HTMLDivElement | null>(null)
     const lastTop = useRef(0)
     const lastLeft = useRef(0)
-    const handles = useBaseEvents(eventProps)
+    const props = useTaroBaseEvents(rest)
 
     useImperativeHandle(ref, () => el.current!)
 
@@ -144,17 +143,16 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
         })
     }, [scrollIntoView])
 
-    function getTaroScrollEvent(uiEvent: React.UIEvent) {
+    function createTaroUIEvent(taroEventType: string, reactEvent: React.UIEvent): TaroUIEvent {
         const {
             timeStamp,
             target,
-            currentTarget,
-            preventDefault,
-            stopPropagation
-        } = uiEvent
+            currentTarget
+        } = reactEvent
+
         const {scrollLeft, scrollTop, scrollHeight, scrollWidth} = target as HTMLDivElement
-        const taroEvent: TaroScrollEvent = {
-            type: 'tap',
+        const taroEvent: TaroUIEvent = {
+            type: taroEventType,
             timeStamp,
             target,
             currentTarget,
@@ -166,16 +164,15 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
                 deltaX: lastLeft.current - scrollLeft,
                 deltaY: lastTop.current - scrollTop
             },
-            preventDefault,
-            stopPropagation
+            preventDefault: () => reactEvent.preventDefault(),
+            stopPropagation: () => reactEvent.stopPropagation()
         }
-        lastTop.current = scrollTop
-        lastLeft.current = scrollLeft
         return taroEvent
     }
 
     return (
         <div
+            {...props}
             ref={el}
             className={classNames(
                 'taro-scroll',
@@ -185,10 +182,9 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
                 },
                 className
             )}
-            style={style}
-            onScroll={uiEvent => {
-                const taroEvent = getTaroScrollEvent(uiEvent)
+            onScroll={event => {
                 if (onScroll) {
+                    const taroEvent = createTaroUIEvent('scroll', event)
                     onScroll(taroEvent)
                 }
                 const {
@@ -203,19 +199,23 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
                     if (
                         (scrollY && offsetHeight + scrollTop + lowerThreshold >= scrollHeight) ||
                         (scrollX && offsetWidth + scrollLeft + lowerThreshold >= scrollWidth)
-                    )
-                    onScrollToLower(taroEvent)
+                    ) {
+                        const taroEvent = createTaroUIEvent('scrolltolower', event)
+                        onScrollToLower(taroEvent)
+                    }
                 }
                 if (onScrollToUpper) {
                     if (
                         (scrollY && scrollTop <= upperThreshold) ||
                         (scrollX && scrollLeft <= upperThreshold)
                     ) {
+                        const taroEvent = createTaroUIEvent('scrolltoupper', event)
                         onScrollToUpper(taroEvent)
                     }
                 }
+                lastTop.current = scrollTop
+                lastLeft.current = scrollLeft
             }}
-            {...handles}
         >
             {children}
         </div>

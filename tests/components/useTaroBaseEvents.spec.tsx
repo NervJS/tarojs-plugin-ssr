@@ -4,7 +4,7 @@
 
 import React, {forwardRef} from 'react'
 import {render, fireEvent} from '@testing-library/react'
-import useTaroBaseEvents from 'tarojs-plugin-platform-nextjs/components/lib/_util/hooks/useTaroBaseEvents'
+import useTaroBaseEvents from '@taror/components/lib/_util/hooks/useTaroBaseEvents'
 
 const TestComponentInternal: React.ForwardRefRenderFunction<HTMLDivElement, any> = (
     {children, ...rest},

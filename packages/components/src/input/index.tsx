@@ -1,28 +1,18 @@
 import React, {useEffect, useRef, useImperativeHandle, forwardRef} from 'react'
 import classNames from 'classnames'
-import type {BaseProps, TaroBaseEvent} from '../_util/types'
-import useBaseEvents from '../_util/hooks/useBaseEvents'
+import type {
+    TaroBaseProps,
+    TaroInputEventHandler,
+    TaroInputEvent,
+    TaroFocusEventHandler,
+    TaroBlurEventHandler,
+    TaroConfirmEventHandler
+} from '../_util/typings'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 import useMergedState from '../_util/hooks/useMergedState'
+import {createTaroFocusEvent, createTaroBlurEvent, createTaroConfirmEvent} from '../_util/taroEvent'
 
-interface TaroInputEvent extends TaroBaseEvent<{
-    cursor: number
-    keyCode: number
-    value: string
-}> {}
-
-interface TaroInputFocusEvent extends TaroBaseEvent<{
-    value: string
-}> {}
-
-interface TaroInputBlurEvent extends TaroBaseEvent<{
-    value: string
-}> {}
-
-interface TaroInputConfirmEvent extends TaroBaseEvent<{
-    value: string
-}> {}
-
-export interface InputProps extends BaseProps {
+export interface InputProps extends TaroBaseProps {
     /**
      * 在表单组件中加上 name 来作为 key 
      */
@@ -77,6 +67,13 @@ export interface InputProps extends BaseProps {
     focus?: boolean
 
     /**
+     * 设置键盘右下角按钮的文字
+     * @default "done"
+     * @unsupported
+     */
+    confirmType?: 'send' | 'search' | 'next' | 'go' | 'done'
+
+    /**
      * 点击键盘右下角按钮时是否保持键盘不收起
      * @default false
      */
@@ -100,33 +97,102 @@ export interface InputProps extends BaseProps {
     selectionEnd?: number
 
     /**
+     * 键盘弹起时，是否自动上推页面
+     * @default false
+     * @unsupported
+     */
+    adjustPosition?: boolean
+
+    /**
+     * focus 时，点击页面的时候不收起键盘
+     * @default false
+     * @unsupported
+     */
+    holdKeyboard?: boolean
+
+    /**
+     * 强制 input 处于同层状态，默认 focus 时 input 会切到非同层状态 (仅在 iOS 下生效)
+     * @default false
+     * @unsupported
+     */
+    alwaysEmbed?: boolean
+
+    /**
+     * 安全键盘加密公钥的路径，只支持包内路径
+     * @unsupported
+     */
+    safePasswordCertPath?: string
+
+    /**
+     * 安全键盘输入密码长度
+     * @unsupported
+     */
+    safePasswordLength?: number
+
+    /**
+     * 安全键盘加密时间戳
+     * @unsupported
+     */
+    safePasswordTimeStamp?: number
+
+    /**
+     * 安全键盘加密盐值
+     * @unsupported
+     */
+    safePasswordNonce?: string
+
+    /**
+     * 安全键盘计算hash盐值，若指定custom-hash 则无效
+     * @unsupported
+     */
+    safePasswordSalt?: string
+
+    /**
+     * 安全键盘计算hash的算法表达式，如 `md5(sha1('foo' + sha256(sm3(password + 'bar'))))`
+     * @unsupported
+     */
+    safePasswordCustomHash?: string
+
+    /**
+     * 当 type 为 number, digit, idcard 数字键盘是否随机排列
+     * @default false
+     * @unsupported
+     */
+    randomNumber?: boolean
+
+    /**
+     * 是否为受控组件
+     * @default false
+     * @unsupported
+     */
+    controlled?: boolean
+
+    /**
      * 当键盘输入时，触发input事件，event.detail = {value, cursor, keyCode}，处理函数可以直接 return 一个字符串，将替换输入框的内容
      */
-    onInput?: (event: TaroInputEvent) => void
+    onInput?: TaroInputEventHandler
 
     /**
      * 输入框聚焦时触发，event.detail = { value, height }，height 为键盘高度
      */
-    onFocus?: (event: TaroInputFocusEvent) => void
+    onFocus?: TaroFocusEventHandler
 
     /**
      * 输入框失去焦点时触发
      *
      * event.detail = {value: value}
      */
-    onBlur?: (event: TaroInputBlurEvent) => void
+    onBlur?: TaroBlurEventHandler
 
     /**
      * 点击完成按钮时触发
      *
      * event.detail = {value: value}
      */
-    onConfirm?: (event: TaroInputConfirmEvent) => void
+    onConfirm?: TaroConfirmEventHandler
 }
 
 const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
-    id,
-    style,
     className,
     name,
     value,
@@ -146,12 +212,28 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
     onFocus,
     onBlur,
     onConfirm,
-    ...eventProps
+
+    // unsupported props
+    confirmType,
+    adjustPosition,
+    holdKeyboard,
+    alwaysEmbed,
+    safePasswordCertPath,
+    safePasswordLength,
+    safePasswordTimeStamp,
+    safePasswordNonce,
+    safePasswordSalt,
+    safePasswordCustomHash,
+    randomNumber,
+    controlled,
+
+    ...rest
 }, ref) => {
-    const handles = useBaseEvents(eventProps)
+    const props = useTaroBaseEvents(rest)
 
     const inputEl = useRef<HTMLInputElement | null>(null)
     const placeholderEl = useRef<HTMLDivElement | null>(null)
+    const keyCode = useRef<number | null>(null)
 
     useImperativeHandle(ref, () => inputEl.current!);
 
@@ -200,22 +282,20 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
 
     return (
         <div
-            id={id}
-            style={style}
             className={classNames('taro-input', className)}
-            {...handles}
+            {...props}
         >
-            <div className='taro-input__content'>
+            <div className='taro-input_content'>
                 <div
                     ref={placeholderEl}
-                    className={classNames('taro-input__placeholder', placeholderClass)}
+                    className={classNames('taro-input_placeholder', placeholderClass)}
                     style={placeholderStyle}
                 >
                     {placeholder}
                 </div>
                 <input
                     ref={inputEl}
-                    className='taro-input__main'
+                    className='taro-input_main'
                     name={name}
                     value={mergedValue}
                     type={password ? 'password' : type}
@@ -224,13 +304,24 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
                     onChange={event => {
                         const el = event.target
                         if (onInput) {
+                            const {
+                                timeStamp,
+                                target,
+                                currentTarget
+                            } = event
+                            const el = event.target as HTMLInputElement
                             const taroEvent: TaroInputEvent = {
-                                type: 'input',
+                                currentTarget,
+                                target,
                                 detail: {
                                     cursor: el.selectionStart || 0,
-                                    keyCode: (event.nativeEvent as any).data.charCodeAt(0),
+                                    keyCode: keyCode.current!,
                                     value: el.value
-                                }
+                                },
+                                timeStamp,
+                                type: 'input',
+                                preventDefault: () => event.preventDefault(),
+                                stopPropagation: () => event.stopPropagation()
                             }
                             onInput(taroEvent)
                         }
@@ -238,39 +329,24 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
                     }}
                     onFocus={event => {
                         if (onFocus) {
-                            const el = event.target
-                            const taroEvent: TaroInputFocusEvent = {
-                                type: 'focus',
-                                detail: {
-                                    value: el.value
-                                }
-                            }
+                            const taroEvent = createTaroFocusEvent(event)
                             onFocus(taroEvent)
                         }
                     }}
                     onBlur={event => {
                         if (onBlur) {
-                            const el = event.target
-                            const taroEvent: TaroInputFocusEvent = {
-                                type: 'blur',
-                                detail: {
-                                    value: el.value
-                                }
-                            }
+                            const taroEvent = createTaroBlurEvent(event)
                             onBlur(taroEvent)
                         }
                     }}
                     onKeyDown={event => {
+                        keyCode.current = event.keyCode
                         if (onConfirm && 'Enter' === event.key) {
+                            const el = event.target as HTMLInputElement
                             if (!confirmHold) {
-                                (event.target as HTMLInputElement).blur()
+                                el.blur()
                             }
-                            const taroEvent: TaroInputFocusEvent = {
-                                type: 'confirm',
-                                detail: {
-                                    value: mergedValue
-                                }
-                            }
+                            const taroEvent = createTaroConfirmEvent(event)
                             onConfirm(taroEvent)
                         }
                     }}

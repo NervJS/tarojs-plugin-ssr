@@ -1,9 +1,9 @@
 import React, {useRef, forwardRef} from 'react'
 import classNames from 'classnames'
-import type {BaseProps} from '../_util/types'
-import useBaseEvents from '../_util/hooks/useBaseEvents'
+import type {TaroBaseProps} from '../_util/typings'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 
-export interface ProgressProps extends BaseProps {
+export interface ProgressProps extends TaroBaseProps {
     /**
      * 百分比 0~100
      */
@@ -73,8 +73,6 @@ export interface ProgressProps extends BaseProps {
 }
     
 const Progress: React.ForwardRefRenderFunction<HTMLDivElement, ProgressProps> = ({
-    id,
-    style,
     className,
     percent = 0,
     showInfo = false,
@@ -87,9 +85,9 @@ const Progress: React.ForwardRefRenderFunction<HTMLDivElement, ProgressProps> = 
     active = false,
     activeMode = 'backwards',
     duration = 30,
-    ...eventProps
+    ...rest
 }, ref) => {
-    const handles = useBaseEvents(eventProps)
+    const props = useTaroBaseEvents(rest)
 
     const prePercent = useRef(percent)
 
@@ -111,10 +109,8 @@ const Progress: React.ForwardRefRenderFunction<HTMLDivElement, ProgressProps> = 
     return (
         <div
             ref={ref}
-            id={id}
-            style={style}
             className={classNames('weui-progress', className)}
-            {...handles}
+            {...props}
         >
             <div
                 className='weui-progress__bar'

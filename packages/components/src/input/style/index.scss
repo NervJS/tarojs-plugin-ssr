@@ -8,7 +8,7 @@
     text-overflow: clip;
     color: #333;
 
-    &__content {
+    &_content {
         position: relative;
         display: flex;
         align-items: center;
@@ -18,13 +18,16 @@
         text-overflow: inherit;
     }
 
-    &__placeholder {
+    &_placeholder {
         position: absolute;
+        top: 50%;
+        left: 0;
         font-size: inherit;
         color: #ccc;
+        transform: translateY(-50%);
     }
 
-    &__main {
+    &_main {
         font-size: inherit;
         font-weight: inherit;
         color: inherit;

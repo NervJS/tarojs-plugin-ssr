@@ -1,7 +1,7 @@
 import React, {forwardRef} from 'react'
 import classNames from 'classnames'
-import type {BaseProps} from '../_util/types'
-import useHoverableEvents from '../_util/hooks/useHoverableEvents'
+import type {TaroBaseProps} from '../_util/typings'
+import useTaroHoverableEvents from '../_util/hooks/useTaroHoverableEvents'
 
 type SizeType = 'default' | 'mini'
 
@@ -9,7 +9,7 @@ type ButtonType = 'primary' | 'default' | 'warn'
 
 type ButtonFormType = 'buttonclick' | 'submit' | 'reset'
 
-export interface ButtonProps extends BaseProps {
+export interface ButtonProps extends TaroBaseProps {
     /**
      * 按钮的大小
      * @default default
@@ -77,9 +77,6 @@ export interface ButtonProps extends BaseProps {
 }
 
 const Button: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = ({
-    id,
-    className,
-    style,
     size = 'default',
     type = 'default',
     plain = false,
@@ -87,9 +84,9 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
     disabled = false,
     loading = false,
     children,
-    ...eventProps
+    ...rest
 }, ref) => {
-    const [hoverClass, handles] = useHoverableEvents(eventProps)
+    const {className, ...props} = useTaroHoverableEvents(rest)
 
     return (
         <button
@@ -106,12 +103,10 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
                     'weui-btn_disabled': disabled && !plain,
                     'weui-btn_plain-disabled': disabled && plain
                 },
-                hoverClass,
                 className
             )}
-            style={style}
             type={formType !== 'buttonclick' ? formType : undefined}
-            {...handles}
+            {...props}
         >
             {loading && <i className='weui-loading' />}
             {children}

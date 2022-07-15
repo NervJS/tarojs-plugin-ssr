@@ -1,4 +1,3 @@
-import 'swiper/swiper.scss';
-import 'swiper/modules/navigation/navigation.scss';
-import 'swiper/modules/pagination/pagination.scss';
+import 'swiper/swiper.scss'
 import '../../style/index.scss'
+import './index.scss'

@@ -1,8 +1,9 @@
-import React, {forwardRef} from 'react'
-import type {BaseProps} from '../_util/types'
-import useBaseEvents from '../_util/hooks/useBaseEvents'
+import React from 'react'
+import classNames from 'classnames'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
+import {TaroBaseProps} from '../_util/typings'
 
-export interface SwiperItemProps extends BaseProps {
+export interface SwiperItemProps extends TaroBaseProps {
     /**
      * 该 swiper-item 的标识符
      */
@@ -14,24 +15,18 @@ export interface SwiperItemProps extends BaseProps {
     children?: React.ReactNode
 }
 
-const SwiperItem: React.ForwardRefRenderFunction<HTMLDivElement, SwiperItemProps> = ({
-    className,
-    style,
-    children,
-    ...eventProps
-}, ref) => {
-    const handles = useBaseEvents(eventProps)
+const SwiperItem: React.FC<SwiperItemProps> = ({className, itemId, children, ...rest}) => {
+    const props = useTaroBaseEvents(rest)
 
     return (
         <div
-            ref={ref}
-            className={className}
-            style={style}
-            {...handles}
+            key={itemId}
+            className={classNames('swiper-slide', className)}
+            {...props}
         >
             {children}
         </div>
     )
 }
 
-export default forwardRef(SwiperItem)
+export default SwiperItem

@@ -22,7 +22,6 @@
     },
     "include": [
         "src/**/*",
-        "components/src/**/*",
         "taro/src/**/*",
         "router/src/**/*"
     ]

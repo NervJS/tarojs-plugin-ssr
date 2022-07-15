@@ -5,9 +5,10 @@ import React, {
     forwardRef
 } from 'react'
 import classNames from 'classnames'
-import type {BaseProps, TaroBaseEvent} from '../_util/types'
-import useBaseEvents from '../_util/hooks/useBaseEvents'
+import type {TaroBaseProps, TaroEvent, TaroEventHandler} from '../_util/typings'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 import useIntersection from '../_util/hooks/useIntersection'
+import {createTaroEvent} from '../_util/taroEvent'
 
 type ModeType =
     | 'scaleToFill'
@@ -25,11 +26,7 @@ type ModeType =
     | 'bottom left'
     | 'bottom right'
 
-interface TaroImageLoadEvent extends TaroBaseEvent<{height: number, width: number}> {}
-
-interface TaroImageErrorEvent extends TaroBaseEvent<{errMsg: string}> {}
-
-export interface ImageProps extends BaseProps {
+export interface ImageProps extends TaroBaseProps {
     /**
      * 图片资源地址
      */
@@ -50,26 +47,24 @@ export interface ImageProps extends BaseProps {
     /**
      * 当错误发生时，发布到 AppService 的事件名，事件对象
      */
-    onError?: (event: TaroImageErrorEvent) => void
+    onError?: TaroEventHandler<TaroEvent<{errMsg: string}>>
 
     /**
      * 当图片载入完毕时，发布到 AppService 的事件名，事件对象
      */
-    onLoad?: (event: TaroImageLoadEvent) => void
+    onLoad?: TaroEventHandler<TaroEvent<{height: number, width: number}>>
 }
 
 const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
-    id,
     className,
-    style,
     src,
     mode = 'scaleToFill',
     lazyLoad = false,
     onError,
     onLoad,
-    ...eventProps
+    ...rest
 }, ref) => {
-    const handles = useBaseEvents(eventProps)
+    const props = useTaroBaseEvents(rest)
 
     const [setRef, isIntersected] = useIntersection<HTMLDivElement>({
         rootMargin: '50px',
@@ -85,34 +80,27 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
         isLazy = false
     }
     const isVisible = !isLazy || isIntersected
-    const mergedStyle = Object.assign({
-        backgroundImage: isVisible && src ? `url(${src})` : undefined
-    }, style)
 
     useEffect(() => {
         if (src && (onLoad || onError)) {
             const img = new window.Image()
             img.src = src
             img.onerror = () => {
-                const taroEvent: TaroImageErrorEvent = {
-                    type: 'error',
-                    detail: {
+                if (onError) {
+                    const detail = {
                         errMsg: 'something wrong'
                     }
-                }
-                if (onError) {
+                    const taroEvent = createTaroEvent('error', div.current!, detail)
                     onError(taroEvent)
                 }
             }
             img.onload = () => {
-                const taroEvent: TaroImageLoadEvent = {
-                    type: 'load',
-                    detail: {
+                if (onLoad) {
+                    const detail = {
                         height: img.height,
                         width: img.width
                     }
-                }
-                if (onLoad) {
+                    const taroEvent = createTaroEvent('load', div.current!, detail)
                     onLoad(taroEvent)
                 }
             }
@@ -121,30 +109,35 @@ const Image: React.ForwardRefRenderFunction<HTMLDivElement, ImageProps> = ({
 
     return (
         <div
-            ref={el => {
-                div.current = el
-                setRef(el)
-            }}
-            id={id}
-            className={classNames('taro-img', {
-                'taro-img__scale-to-fill': mode === 'scaleToFill',
-                'taro-img__aspect-fit': mode === 'aspectFit',
-                'taro-img__aspect-fill': mode === 'aspectFill',
-                'taro-img__width-fix': mode === 'widthFix',
-                'taro-img__height-fix': mode === 'heightFix',
-                'taro-img__top': mode === 'top',
-                'taro-img__bottom': mode === 'bottom',
-                'taro-img__center': mode === 'center',
-                'taro-img__left': mode === 'left',
-                'taro-img__right': mode === 'right',
-                'taro-img__top-left': mode === 'top left',
-                'taro-img__top-right': mode === 'top right',
-                'taro-img__bottom-left': mode === 'bottom left',
-                'taro-img__bottom-right': mode === 'bottom right'
-            }, className)}
-            style={mergedStyle}
-            {...handles}
-        />
+            className={classNames('taro-img', className)}
+            {...props}
+        >
+            <div
+                ref={el => {
+                    div.current = el
+                    setRef(el)
+                }}
+                className={classNames('taro-img__content', {
+                    'taro-img__scale-to-fill': mode === 'scaleToFill',
+                    'taro-img__aspect-fit': mode === 'aspectFit',
+                    'taro-img__aspect-fill': mode === 'aspectFill',
+                    'taro-img__width-fix': mode === 'widthFix',
+                    'taro-img__height-fix': mode === 'heightFix',
+                    'taro-img__top': mode === 'top',
+                    'taro-img__bottom': mode === 'bottom',
+                    'taro-img__center': mode === 'center',
+                    'taro-img__left': mode === 'left',
+                    'taro-img__right': mode === 'right',
+                    'taro-img__top-left': mode === 'top left',
+                    'taro-img__top-right': mode === 'top right',
+                    'taro-img__bottom-left': mode === 'bottom left',
+                    'taro-img__bottom-right': mode === 'bottom right'
+                })}
+                style={{
+                    backgroundImage: isVisible && src ? `url(${src})` : undefined
+                }}
+            />
+        </div>
     )
 }
 

@@ -1,7 +1,7 @@
 import React, {forwardRef} from 'react'
 import classNames from 'classnames'
-import type {BaseProps} from '../_util/types'
-import useBaseEvents from '../_util/hooks/useBaseEvents'
+import type {TaroBaseProps} from '../_util/typings'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 
 interface NodeType {
     type?: 'node' | 'text'
@@ -10,7 +10,7 @@ interface NodeType {
 
 type NodesType = string | NodeType[]
 
-export interface RichTextProps extends BaseProps {
+export interface RichTextProps extends TaroBaseProps {
     /**
      * 节点列表/ HTML String
      */
@@ -71,27 +71,23 @@ function renderNodes(nodes?: NodesType): string {
 }
 
 const RichText: React.ForwardRefRenderFunction<HTMLDivElement, RichTextProps> = ({
-    id,
-    style,
     className,
     nodes,
     selectable,
-    ...eventProps
+    ...rest
 }, ref) => {
-    const handles = useBaseEvents(eventProps)
+    const props = useTaroBaseEvents(rest)
 
     return (
         <div
             ref={ref}
-            id={id}
-            style={style}
             className={classNames(className, {
                 'taro-rich-text__selectable': selectable
             })}
             dangerouslySetInnerHTML={{
                 __html: renderNodes(nodes)
             }}
-            {...handles}
+            {...props}
         />
     )
 }

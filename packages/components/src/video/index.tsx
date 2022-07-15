@@ -1,38 +1,49 @@
 import React, {useEffect, useRef, useImperativeHandle, forwardRef} from 'react'
 import classNames from 'classnames'
-import type {BaseProps, TaroBaseEvent} from '../_util/types'
-import useBaseEvents from '../_util/hooks/useBaseEvents'
+import type {TaroBaseProps, TaroEvent, TaroEventHandler, TaroVideoEventHandler} from '../_util/typings'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
+import {createTaroVideoEvent} from '../_util/taroEvent'
 
 type ObjectFitType =
     | 'contain'
     | 'fill'
     | 'cover'
 
-interface TaroVideoEvent extends TaroBaseEvent<{videoId: string | undefined}> {}
-
-interface TaroVideoTimeUpdateEvent extends TaroBaseEvent<{
+interface TaroTimeUpdateEvent extends TaroEvent<{
     videoId: string | undefined
     currentTime: number
     duration: number
 }> {}
 
-interface TaroVideoFullscreenChangeEvent extends TaroBaseEvent<{
+type TaroTimeUpdateEventHandler = TaroEventHandler<TaroTimeUpdateEvent>
+
+interface TaroFullscreenChangeEvent extends TaroEvent<{
     videoId: string | undefined
     fullscreen: '0' | '1'
 }> {}
 
-interface TaroVideoLoadedMetaData extends TaroBaseEvent<{
+type TaroFullscreenChangeEventHandler = TaroEventHandler<TaroFullscreenChangeEvent>
+
+interface TaroLoadedMetaDataEvent extends TaroEvent<{
     videoId: string | undefined
     duration: number
     height: number
     width: number
 }> {}
 
-export interface VideoProps extends BaseProps {
+type TaroLoadedMetaDataEventHandler = TaroEventHandler<TaroLoadedMetaDataEvent>
+
+export interface VideoProps extends TaroBaseProps {
     /**
      * 要播放视频的资源地址
      */
     src: string
+
+    /**
+     * 视频标题，全屏时在视频顶部展示
+     * @unsupported
+     */
+    title?: string
 
     /**
      * 指定视频初始播放位置
@@ -75,55 +86,157 @@ export interface VideoProps extends BaseProps {
     poster?: string
 
     /**
+     * 在非全屏模式下，是否开启使用手势调节亮度与音量，兼容 vslide-gesture 属性
+     * @default false
+     * @unsupported
+     */
+    pageGesture?: boolean
+
+    /**
+     * 按设置的视频全屏方向进入全屏。不指定视频全屏方向时则根据设备方向判断全屏方向。0：正常竖向；90：屏幕顺时针 90 度；-90：屏幕逆时针 90 度
+     * @unsupported
+     */
+    direction?: number
+
+    /**
+     * 若不设置，宽度大于 240 时才会显示
+     * @default true
+     * @unsupported
+     */
+    showProgress?: boolean
+
+    /**
+     * 是否显示全屏按钮
+     * @default true
+     * @unsupported
+     */
+    showFullscreenBtn?: boolean
+
+    /**
+     * 是否开启使用手势控制进度
+     * @default true
+     * @unsupported
+     */
+    enableProgressGesture?: boolean
+
+    /**
+     * 弹幕列表
+     * @unsupported
+     */
+    danmuList?: object[]
+
+    /**
+     * 是否展示弹幕，只在初始化时有效，不能动态变更
+     * @default false
+     * @unsupported
+     */
+    enableDanmu?: boolean
+
+    /**
+     * 是否显示视频底部控制栏的播放按钮
+     * @default true
+     * @unsupported
+     */
+    showPlayBtn?: boolean
+
+    /**
+     * 是否显示视频中间的播放按钮
+     * @default true
+     * @unsupported
+     */
+    showCenterPlayBtn?: boolean
+
+    /**
+     * 是否显示静音按钮
+     * @default false
+     * @unsupported
+     */
+    showMuteBtn?: boolean
+
+    /**
+     * 非 wifi 环境下是否显示继续播放浮层
+     * @default true
+     * @unsupported
+     */
+    showNoWifiTip?: boolean
+
+    /**
+     * 非全屏模式下，是否开启亮度与音量调节手势，兼容 page-gesture 属性
+     * @default true
+     * @unsupported
+     */
+    vslideGesture?: boolean
+
+    /**
+     * 全屏模式下，是否开启亮度与音量调节手势
+     * @default true
+     * @unsupported
+     */
+    vslideGestureInFullscreen?: boolean
+
+    /**
+     * 全屏模式下，是否显示锁屏按钮
+     * @default true
+     * @unsupported
+     */
+    showLockBtn?: boolean
+
+    /**
+     * 是否开启播放手势，即双击切换播放/暂停
+     * @default false
+     * @unsupported
+     */
+    enablePlayGesture?: boolean
+
+    /**
      * 当开始/继续播放时触发 play 事件
      */
-    onPlay?: (event: TaroVideoEvent) => void
+    onPlay?: TaroVideoEventHandler
 
     /**
      * 当暂停播放时触发 pause 事件
      */
-    onPause?: (event: TaroVideoEvent) => void
+    onPause?: TaroVideoEventHandler
 
     /**
      * 当播放到末尾时触发 ended 事件
      */
-    onEnded?: (event: TaroVideoEvent) => void
+    onEnded?: TaroVideoEventHandler
 
     /**
      * 播放进度变化时触发, 触发频率 250ms 一次
      *
      * event.detail = {currentTime, duration}
      */
-    onTimeUpdate?: (event: TaroVideoTimeUpdateEvent) => void
+    onTimeUpdate?: TaroTimeUpdateEventHandler
 
     /**
      * 当视频进入和退出全屏时触发
      *
      * event.detail = {fullScreen, direction}，direction取为 vertical 或 horizontal
      */
-    onFullscreenChange?: (event: TaroVideoFullscreenChangeEvent) => void
+    onFullscreenChange?: TaroFullscreenChangeEventHandler
 
     /**
      * 视频出现缓冲时触发
      */
-    onWaiting?: (event: TaroVideoEvent) => void
+    onWaiting?: TaroVideoEventHandler
 
     /**
      * 视频播放出错时触发
      */
-    onError?: (event: TaroVideoEvent) => void
+    onError?: TaroVideoEventHandler
 
     /**
      * 视频元数据加载完成时触发。event.detail = {width, height, duration}
      */
-    onLoadedMetaData?: (event: TaroVideoLoadedMetaData) => void
+    onLoadedMetaData?: TaroLoadedMetaDataEventHandler
 }
 
 const Video: React.ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
     id,
     className,
     style,
-    children,
     src,
     initialTime,
     controls = true,
@@ -140,11 +253,30 @@ const Video: React.ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
     onWaiting,
     onError,
     onLoadedMetaData,
-    ...eventProps
-}, ref) => {
-    const handles = useBaseEvents(eventProps)
-    const isFirstPaly = useRef(false)
 
+    // unsupported props
+    title,
+    pageGesture,
+    direction,
+    showProgress,
+    showFullscreenBtn,
+    enableProgressGesture,
+    danmuList,
+    enableDanmu,
+    showPlayBtn,
+    showCenterPlayBtn,
+    showMuteBtn,
+    showNoWifiTip,
+    vslideGesture,
+    vslideGestureInFullscreen,
+    showLockBtn,
+    enablePlayGesture,
+
+    ...rest
+}, ref) => {
+    const props = useTaroBaseEvents(rest)
+
+    const isFirstPaly = useRef(true)
     const video = useRef<HTMLVideoElement | null>(null)
 
     useImperativeHandle(ref, () => video.current!)
@@ -154,24 +286,39 @@ const Video: React.ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
             return
         }
 
-        function handle() {
-            const fullscreen = (document as any).webkitFullscreenElement === video.current
-            ? '1'
-            : '0'
-            const taroEvent: TaroVideoFullscreenChangeEvent = {
+        function handle(event) {
+            let fullscreen: '1' | '0' = '0'
+            if ('webkitFullscreenElement' in document) {
+                fullscreen = (document as any).webkitFullscreenElement === video.current ? '1' : '0'
+            } else {
+                fullscreen = document.fullscreenElement === video.current ? '1' : '0'
+            }
+            const {
+                timeStamp,
+                target,
+                currentTarget
+            } = event
+            const taroEvent: TaroFullscreenChangeEvent = {
                 type: 'fullscreenchange',
                 detail: {
                     videoId: id,
                     fullscreen
-                }
+                },
+                timeStamp,
+                target,
+                currentTarget,
+                preventDefault: () => event.preventDefault(),
+                stopPropagation: () => event.stopPropagation()
             }
-            onFullscreenChange!(taroEvent)
+            onFullscreenChange?.(taroEvent)
         }
         const videoEl = video.current
         videoEl.addEventListener('webkitfullscreenchange', handle)
+        videoEl.addEventListener('fullscreenchange', handle)
 
         return () => {
             videoEl.removeEventListener('webkitfullscreenchange', handle)
+            videoEl.removeEventListener('fullscreenchange', handle)
         }
     }, [onFullscreenChange])
 
@@ -192,94 +339,92 @@ const Video: React.ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
             loop={loop}
             muted={muted}
             poster={poster}
-            onPlay={() => {
+            onPlay={event => {
                 if (video.current && isFirstPaly.current && initialTime) {
+                    isFirstPaly.current = false
                     video.current.currentTime = initialTime
                 }
                 if (onPlay) {
-                    const taroEvent: TaroVideoEvent = {
-                        type: 'play',
-                        detail: {
-                            videoId: id
-                        }
-                    }
+                    const taroEvent = createTaroVideoEvent('play', event)
                     onPlay(taroEvent)
                 }
             }}
-            onPause={() => {
+            onPause={event => {
                 if (onPause) {
-                    const taroEvent: TaroVideoEvent = {
-                        type: 'pause',
-                        detail: {
-                            videoId: id
-                        }
-                    }
+                    const taroEvent = createTaroVideoEvent('pause', event)
                     onPause(taroEvent)
                 }
             }}
-            onEnded={() => {
+            onEnded={event => {
                 if (onEnded) {
-                    const taroEvent: TaroVideoEvent = {
-                        type: 'ended',
-                        detail: {
-                            videoId: id
-                        }
-                    }
+                    const taroEvent = createTaroVideoEvent('ended', event)
                     onEnded(taroEvent)
                 }
             }}
-            onTimeUpdate={() => {
+            onTimeUpdate={event => {
                 if (onTimeUpdate) {
                     const videoEl = video.current!
-                    const taroEvent: TaroVideoTimeUpdateEvent = {
+                    const {
+                        timeStamp,
+                        target,
+                        currentTarget,
+                        preventDefault,
+                        stopPropagation
+                    } = event
+                    const taroEvent: TaroTimeUpdateEvent = {
                         type: 'timeupdate',
                         detail: {
                             videoId: id,
                             currentTime: videoEl.currentTime,
                             duration: videoEl.duration
-                        }
+                        },
+                        timeStamp,
+                        target,
+                        currentTarget,
+                        preventDefault,
+                        stopPropagation
                     }
                     onTimeUpdate(taroEvent)
                 }
             }}
-            onWaiting={() => {
+            onWaiting={event => {
                 if (onWaiting) {
-                    const taroEvent: TaroVideoEvent = {
-                        type: 'waiting',
-                        detail: {
-                            videoId: id
-                        }
-                    }
+                    const taroEvent = createTaroVideoEvent('waiting', event)
                     onWaiting(taroEvent)
                 }
             }}
-            onError={() => {
+            onError={event => {
                 if (onError) {
-                    const taroEvent: TaroVideoEvent = {
-                        type: 'error',
-                        detail: {
-                            videoId: id
-                        }
-                    }
+                    const taroEvent = createTaroVideoEvent('error', event)
                     onError(taroEvent)
                 }
             }}
-            onLoadedMetadata={() => {
+            onLoadedMetadata={event => {
                 if (onLoadedMetaData) {
                     const videoEl = video.current!
-                    const taroEvent: TaroVideoLoadedMetaData = {
+                    const {
+                        timeStamp,
+                        target,
+                        currentTarget
+                    } = event
+                    const taroEvent: TaroLoadedMetaDataEvent = {
                         type: 'loadedmetadata',
                         detail: {
                             videoId: id,
                             duration: videoEl.duration,
                             height: videoEl.videoHeight,
                             width: videoEl.videoWidth
-                        }
+                        },
+                        timeStamp,
+                        target,
+                        currentTarget,
+                        preventDefault: () => event.preventDefault(),
+                        stopPropagation: () => event.stopPropagation()
                     }
                     onLoadedMetaData(taroEvent)
                 }
             }}
-            {...handles}
+            {...props}
         />
     )
 }
