@@ -23,16 +23,16 @@ const TestComponentInternal: React.ForwardRefRenderFunction<HTMLDivElement, Test
 const TestComponent = forwardRef(TestComponentInternal)
 
 describe('useTaroHoverableEvents', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+
     let ref = React.createRef<HTMLDivElement>()
 
     const handleParentTouchStart = jest.fn()
     const handleParentTouchEnd = jest.fn()
     const handleParentClick = jest.fn()
     const handleParentLongPress = jest.fn()
-
-    beforeAll(() => {
-        jest.useFakeTimers()
-    })
 
     beforeEach(() => {
         render(

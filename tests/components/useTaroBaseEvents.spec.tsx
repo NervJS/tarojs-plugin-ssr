@@ -25,6 +25,10 @@ const TestComponentInternal: React.ForwardRefRenderFunction<HTMLDivElement, Test
 const TestComponent = forwardRef(TestComponentInternal)
 
 describe('useTaroBaseEvents', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+
     let parentRef = React.createRef<HTMLDivElement>()
     let childRef1 = React.createRef<HTMLDivElement>()
     let childRef2 = React.createRef<HTMLDivElement>()
@@ -75,17 +79,15 @@ describe('useTaroBaseEvents', () => {
         expect(handleParentLongPress.mock.calls.length).toBe(0)
     })
 
-    it('longpress event', cb => {
+    it('longpress event', () => {
         fireEvent.mouseDown(parentRef.current)
-        setTimeout(() => {
-            fireEvent.mouseUp(parentRef.current)
-            fireEvent.click(parentRef.current)
-            expect(handleParentTouchStart.mock.calls.length).toBe(1)
-            expect(handleParentTouchEnd.mock.calls.length).toBe(1)
-            expect(handleParentClick.mock.calls.length).toBe(0)
-            expect(handleParentLongPress.mock.calls.length).toBe(1)
-            cb()
-        }, 500)
+        jest.runOnlyPendingTimers()
+        fireEvent.mouseUp(parentRef.current)
+        fireEvent.click(parentRef.current)
+        expect(handleParentTouchStart.mock.calls.length).toBe(1)
+        expect(handleParentTouchEnd.mock.calls.length).toBe(1)
+        expect(handleParentClick.mock.calls.length).toBe(0)
+        expect(handleParentLongPress.mock.calls.length).toBe(1)
     })
 
     it('default event propagation', () => {
