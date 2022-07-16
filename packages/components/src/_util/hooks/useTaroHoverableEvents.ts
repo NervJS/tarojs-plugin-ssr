@@ -94,7 +94,7 @@ function useTaroHoverableEvents(
 
     return {
         className: classNames({
-            hoverClass: hovered
+            [hoverClass!]: hoverClass && hovered
         }, className),
         onMouseDown: handleMouseDown,
         onTouchStart: handleTouchStart,
