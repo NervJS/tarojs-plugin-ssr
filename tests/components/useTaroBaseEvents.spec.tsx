@@ -5,8 +5,13 @@
 import React, {forwardRef} from 'react'
 import {render, fireEvent} from '@testing-library/react'
 import useTaroBaseEvents from '@taror/components/lib/_util/hooks/useTaroBaseEvents'
+import {TaroBaseProps} from '@taror/components/lib/_util/typings'
 
-const TestComponentInternal: React.ForwardRefRenderFunction<HTMLDivElement, any> = (
+interface TestComponentProps extends TaroBaseProps {
+    children?: React.ReactNode
+}
+
+const TestComponentInternal: React.ForwardRefRenderFunction<HTMLDivElement, TestComponentProps> = (
     {children, ...rest},
     ref
 ) => {

@@ -1,5 +1,5 @@
 const fs = require('fs')
-const nodePath = require('path')
+const nodePath = require('upath')
 
 const regexLikeCssGlobal = /((?<!\.module)\.css)|((?<!\.module)\.(scss|sass))$/
 
@@ -41,7 +41,7 @@ module.exports = function (babel, options, dirname) {
                 if (isRelative) {
                     const absolutePath = nodePath.resolve(nodePath.dirname(outputAppFilePath), request)
                     const relativePath = nodePath.relative(nodePath.dirname(nextAppPath), absolutePath)
-                    node.source.value = relativePath
+                    node.source.value = nodePath.normalize(relativePath)
                     result.push(node)
                 } else {
                     result.push(node)
