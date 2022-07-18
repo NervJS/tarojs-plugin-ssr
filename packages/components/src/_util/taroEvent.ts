@@ -21,11 +21,11 @@ export function createTaroMouseEvent(taroEventType: string, reactEvent: React.To
 
     const changedTouches = 'changedTouches' in reactEvent
         ? reactEvent.changedTouches
-        : [reactEvent] as any as React.TouchList
+        : [reactEvent] as unknown as React.TouchList
 
     const touches = 'touches' in reactEvent
         ? reactEvent.touches
-        : [reactEvent] as any as React.TouchList
+        : [reactEvent] as unknown as React.TouchList
 
     return {
         currentTarget,
@@ -52,11 +52,11 @@ export function createTaroTouchEvent(taroEventType: string, reactEvent: React.To
 
     const changedTouches = 'changedTouches' in reactEvent
         ? reactEvent.changedTouches
-        : [reactEvent] as any as React.TouchList
+        : [reactEvent] as unknown as React.TouchList
 
     const touches = 'touches' in reactEvent
         ? reactEvent.touches
-        : [reactEvent] as any as React.TouchList
+        : [reactEvent] as unknown as React.TouchList
 
     return {
         currentTarget,

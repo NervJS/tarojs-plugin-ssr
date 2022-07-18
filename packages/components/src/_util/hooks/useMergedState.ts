@@ -1,4 +1,4 @@
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef, useEffect} from 'react'
 
 export default function useMergedState<T, R = T>(
     defaultStateValue?: T | (() => T),
@@ -7,49 +7,49 @@ export default function useMergedState<T, R = T>(
         value?: T;
         onChange?: (value?: T, prevValue?: T) => void;
         postState?: (value?: T) => T;
-    },
+    }
 ): [R, (value: T) => void] {
-    const {defaultValue, value, onChange, postState} = option || {};
+    const {defaultValue, value, onChange, postState} = option || {}
     const [innerValue, setInnerValue] = useState<T | undefined>(() => {
         if (value !== undefined) {
-            return value;
+            return value
         }
         if (defaultValue !== undefined) {
-            return typeof defaultValue === 'function'
-                ? (defaultValue as any)()
-                : defaultValue;
+            return defaultValue instanceof Function
+                ? defaultValue()
+                : defaultValue
         }
 
-        return typeof defaultStateValue === 'function'
-            ? (defaultStateValue as any)()
-            : defaultStateValue;
-    });
+        return defaultStateValue instanceof Function
+            ? defaultStateValue()
+            : defaultStateValue
+    })
 
-    let mergedValue = value !== undefined ? value : innerValue;
+    let mergedValue = value !== undefined ? value : innerValue
     if (postState) {
-        mergedValue = postState(mergedValue);
+        mergedValue = postState(mergedValue)
     }
 
     function triggerChange(newValue: T) {
-        setInnerValue(newValue);
+        setInnerValue(newValue)
         if (mergedValue !== newValue && onChange) {
-            onChange(newValue, mergedValue);
+            onChange(newValue, mergedValue)
         }
     }
 
     // Effect of reset value to `undefined`
-    const firstRenderRef = useRef(true);
+    const firstRenderRef = useRef(true)
     useEffect(() => {
         if (firstRenderRef.current) {
-            firstRenderRef.current = false;
+            firstRenderRef.current = false
 
-            return;
+            return
         }
 
         if (value === undefined) {
-            setInnerValue(value);
+            setInnerValue(value)
         }
-    }, [value]);
+    }, [value])
 
-    return [(mergedValue as unknown) as R, triggerChange];
-};
+    return [(mergedValue as unknown) as R, triggerChange]
+}

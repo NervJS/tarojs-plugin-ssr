@@ -19,8 +19,7 @@ export interface TaroMouseEvent extends TaroEvent<TaroMouseEventDetail> {
     touches: React.TouchList
 }
 
-export interface TaroTouchEventDetail {}
-export interface TaroTouchEvent extends TaroEvent<TaroTouchEventDetail> {
+export interface TaroTouchEvent extends TaroEvent {
     changedTouches: React.TouchList
     touches: React.TouchList
 }
@@ -33,48 +32,48 @@ export interface TaroUIEventDetail {
     deltaX: number
     deltaY: number
 }
-export interface TaroUIEvent extends TaroEvent<TaroUIEventDetail> { }
+export type TaroUIEvent = TaroEvent<TaroUIEventDetail>
 
 export interface TaroInputEventDetail {
     cursor: number
     keyCode: number
     value: string
 }
-export interface TaroInputEvent extends TaroEvent<TaroInputEventDetail> { }
+export type TaroInputEvent = TaroEvent<TaroInputEventDetail>
 
 export interface TaroFocusEventDetail {
     height: number
     value: string
 }
-export interface TaroFocusEvent extends TaroEvent<TaroFocusEventDetail> { }
+export type TaroFocusEvent = TaroEvent<TaroFocusEventDetail>
 
 export interface TaroBlurEventDetail {
     cursor: number
     value: string
 }
-export interface TaroBlurEvent extends TaroEvent<TaroBlurEventDetail> { }
+export type TaroBlurEvent = TaroEvent<TaroBlurEventDetail>
 
 export interface TaroConfirmEventDetail {
     value: string
 }
-export interface TaroConfirmEvent extends TaroEvent<TaroConfirmEventDetail> { }
+export type TaroConfirmEvent = TaroEvent<TaroConfirmEventDetail>
 
 export interface TaroVideoEventDetail {
     videoId: string | undefined
 }
-export interface TaroVideoEvent extends TaroEvent<TaroVideoEventDetail> { }
+export type TaroVideoEvent = TaroEvent<TaroVideoEventDetail>
 
 export interface TaroSwitchEventDetail {
     checked: boolean
 }
-export interface TaroSwitchEvent extends TaroEvent<TaroSwitchEventDetail> { }
+export type TaroSwitchEvent = TaroEvent<TaroSwitchEventDetail>
 
 export interface TaroSwiperEventDetail {
     current: number
 }
-export interface TaroSwiperEvent extends TaroEvent<TaroSwiperEventDetail> {}
+export type TaroSwiperEvent = TaroEvent<TaroSwiperEventDetail>
 
-export type TaroEventHandler<E extends TaroEvent<{}>> = (event: E) => void
+export type TaroEventHandler<E extends TaroEvent> = (event: E) => void
 
 export type TaroMouseEventHandler = TaroEventHandler<TaroMouseEvent>
 export type TaroTouchEventHandler = TaroEventHandler<TaroTouchEvent>

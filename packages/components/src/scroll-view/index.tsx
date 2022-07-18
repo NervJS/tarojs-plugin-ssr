@@ -177,8 +177,8 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
             className={classNames(
                 'taro-scroll',
                 {
-                    [`taro-scroll-view__scroll-x`]: scrollX,
-                    [`taro-scroll-view__scroll-y`]: scrollY
+                    'taro-scroll-view__scroll-x': scrollX,
+                    'taro-scroll-view__scroll-y': scrollY
                 },
                 className
             )}

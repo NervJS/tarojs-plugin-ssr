@@ -35,7 +35,7 @@ describe('next uitls', () => {
                         value: '(?<param>.*)'
                     }
                 ],
-                destination: `/home/:param`
+                destination: '/home/:param'
             }
         ])
     })
@@ -44,4 +44,4 @@ describe('next uitls', () => {
         expect(isDynamicRoute('index.ts')).toEqual(false)
         expect(isDynamicRoute('[param].ts')).toEqual(true)
     })
-});
+})

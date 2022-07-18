@@ -45,7 +45,7 @@ const Switch: React.ForwardRefRenderFunction<HTMLInputElement, SwitchProps> = ({
             className={classNames({
                 'weui-switch': type === 'switch',
                 'weui-agree__checkbox': type === 'checkbox'
-            })}
+            }, className)}
             style={mergedStyle}
             checked={mergedChecked}
             name={name}

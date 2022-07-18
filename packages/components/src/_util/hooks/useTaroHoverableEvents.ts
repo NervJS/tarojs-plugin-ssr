@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import {TaroHoverableProps} from '../typings'
 import useTaroBaseEvents, {UseTaroBaseEventsReturn} from './useTaroBaseEvents'
 
-interface UseTaroHoverableEventsReturn extends UseTaroBaseEventsReturn { }
+type UseTaroHoverableEventsReturn = UseTaroBaseEventsReturn
 
 function useTaroHoverableEvents(
     {

@@ -102,7 +102,7 @@ const Progress: React.ForwardRefRenderFunction<HTMLDivElement, ProgressProps> = 
             transitionProperty: 'transform',
             transitionDuration: activeMode === 'forwards'
                 ? `${(num / 1e3) * (duration - prePercent.current)}s`
-                : `${(num / 1e3) * duration}s`,
+                : `${(num / 1e3) * duration}s`
         }
         : {}
 
@@ -133,14 +133,14 @@ const Progress: React.ForwardRefRenderFunction<HTMLDivElement, ProgressProps> = 
                 <span
                     className='weui-progress__opr'
                     style={{
-                        fontSize: typeof fontSize === 'number' ? `${fontSize}px` : fontSize,
+                        fontSize: typeof fontSize === 'number' ? `${fontSize}px` : fontSize
                     }}
                 >
                     {num}%
                 </span>
             )}
         </div>
-    );
+    )
 }
 
 export default forwardRef(Progress)

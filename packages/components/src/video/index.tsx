@@ -9,27 +9,27 @@ type ObjectFitType =
     | 'fill'
     | 'cover'
 
-interface TaroTimeUpdateEvent extends TaroEvent<{
+type TaroTimeUpdateEvent = TaroEvent<{
     videoId: string | undefined
     currentTime: number
     duration: number
-}> {}
+}>
 
 type TaroTimeUpdateEventHandler = TaroEventHandler<TaroTimeUpdateEvent>
 
-interface TaroFullscreenChangeEvent extends TaroEvent<{
+type TaroFullscreenChangeEvent = TaroEvent<{
     videoId: string | undefined
     fullscreen: '0' | '1'
-}> {}
+}>
 
 type TaroFullscreenChangeEventHandler = TaroEventHandler<TaroFullscreenChangeEvent>
 
-interface TaroLoadedMetaDataEvent extends TaroEvent<{
+type TaroLoadedMetaDataEvent = TaroEvent<{
     videoId: string | undefined
     duration: number
     height: number
     width: number
-}> {}
+}>
 
 type TaroLoadedMetaDataEventHandler = TaroEventHandler<TaroLoadedMetaDataEvent>
 
@@ -320,7 +320,7 @@ const Video: React.ForwardRefRenderFunction<HTMLVideoElement, VideoProps> = ({
             videoEl.removeEventListener('webkitfullscreenchange', handle)
             videoEl.removeEventListener('fullscreenchange', handle)
         }
-    }, [onFullscreenChange])
+    }, [id, onFullscreenChange])
 
     const mergedStyle: React.CSSProperties = Object.assign({
         objectFit

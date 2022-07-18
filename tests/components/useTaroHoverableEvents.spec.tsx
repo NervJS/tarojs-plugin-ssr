@@ -7,7 +7,7 @@ import {render, fireEvent, act} from '@testing-library/react'
 import useTaroHoverableEvents from '@taror/components/lib/_util/hooks/useTaroHoverableEvents'
 import {TaroHoverableProps} from '@taror/components/lib/_util/typings'
 
-interface TestComponentProps extends TaroHoverableProps { }
+type TestComponentProps = TaroHoverableProps
 
 const TestComponentInternal: React.ForwardRefRenderFunction<HTMLDivElement, TestComponentProps> = (
     {children, ...rest},

@@ -68,7 +68,7 @@ function useTaroBaseEvents({
         touchStartInfo.current = touches[0]
             ? {
                 screenX: touches[0].screenX,
-                screenY: touches[0].screenY,
+                screenY: touches[0].screenY
             }
             : null
 
@@ -107,7 +107,7 @@ function useTaroBaseEvents({
             const taroEvent = createTaroTouchEvent('touchmove', reactEvent)
             onTouchMove(taroEvent)
         }
-    }, [touchHasMoved, onTouchMove])
+    }, [catchMove, touchHasMoved, onTouchMove])
 
     const handleEnd = useCallback((reactEvent: React.TouchEvent | React.MouseEvent): void => {
         const eventType = EVENT_TYPE_MAPPINGS[reactEvent.type]

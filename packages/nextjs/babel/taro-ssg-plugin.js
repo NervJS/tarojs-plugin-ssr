@@ -13,10 +13,10 @@ const ssgExports = new Set([
 
     // legacy methods added so build doesn't fail from importing
     // server-side only methods
-    `unstable_getStaticProps`,
-    `unstable_getStaticPaths`,
-    `unstable_getServerProps`,
-    `unstable_getServerSideProps`,
+    'unstable_getStaticProps',
+    'unstable_getStaticPaths',
+    'unstable_getServerProps',
+    'unstable_getServerSideProps'
 ])
 
 const isDataIdentifier = (name, state) => {
@@ -240,7 +240,7 @@ function nextTransformSsg({types: t}, options, dirname) {
                                         break
                                     }
                                 }
-                            },
+                            }
                         },
                         state
                     )
@@ -284,7 +284,7 @@ function nextTransformSsg({types: t}, options, dirname) {
                     }
 
                     do {
-                        ;path.scope.crawl()
+                        path.scope.crawl()
                         count = 0
 
                         path.traverse({
@@ -358,12 +358,12 @@ function nextTransformSsg({types: t}, options, dirname) {
                             ArrowFunctionExpression: sweepFunction,
                             ImportSpecifier: sweepImport,
                             ImportDefaultSpecifier: sweepImport,
-                            ImportNamespaceSpecifier: sweepImport,
+                            ImportNamespaceSpecifier: sweepImport
                         })
                     } while (count)
-                },
-            },
-        },
+                }
+            }
+        }
     }
 }
 

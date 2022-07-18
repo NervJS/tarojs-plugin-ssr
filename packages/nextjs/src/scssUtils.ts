@@ -24,7 +24,7 @@ async function getBundleResult(url: string, projectDirectory?: string): Promise<
  * Return bundled sass content, but input resource can be a single string or an array.
  */
 async function getBundleContent(resource: string | string[], projectDirectory?: string): Promise<string> {
-    let result: string = ''
+    let result = ''
     if (typeof resource === 'string') {
         const res = await getBundleResult(resource, projectDirectory)
         result = res.bundledContent || ''

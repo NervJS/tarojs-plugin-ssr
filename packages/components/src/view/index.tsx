@@ -25,4 +25,4 @@ const View: React.ForwardRefRenderFunction<HTMLDivElement, ViewProps> = ({
     )
 }
 
-export default forwardRef(View);
+export default forwardRef(View)

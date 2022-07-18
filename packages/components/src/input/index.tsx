@@ -235,7 +235,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
     const placeholderEl = useRef<HTMLDivElement | null>(null)
     const keyCode = useRef<number | null>(null)
 
-    useImperativeHandle(ref, () => inputEl.current!);
+    useImperativeHandle(ref, () => inputEl.current!)
 
     const [mergedValue, setMergedValue] = useMergedState('', {
         value

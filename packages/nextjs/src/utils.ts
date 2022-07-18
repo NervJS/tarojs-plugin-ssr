@@ -48,7 +48,7 @@ export function parseJson(filePath: string): any {
     const jsonFile = ts.parseJsonText(filePath, sourceText)
     const errors: ts.Diagnostic[] = []
     const result = ts.convertToObject(jsonFile, errors)
-    return result;
+    return result
 }
 
 export function resolveAliasToTSConfigPaths(alias: Record<string, string>, tsconfigPath: string): Record<string, string[]> {

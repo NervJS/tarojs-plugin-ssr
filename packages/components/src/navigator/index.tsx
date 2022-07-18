@@ -87,6 +87,7 @@ let customRoutes: CustomRoutes = {}
 
 let navigateTo: navigateToType | null = null
 
+// eslint-disable-next-line prefer-const
 let navigateBack: navigateBackType | null = null
 
 export function initNavigatorComponent(opts: NavigatorOptions) {
@@ -96,9 +97,9 @@ export function initNavigatorComponent(opts: NavigatorOptions) {
 
 function isAbsoluteUrl(url?: string): boolean {
     if (!url) {
-        return false;
+        return false
     }
-    return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+    return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url)
 }
 
 const Navigator: React.ForwardRefRenderFunction<HTMLAnchorElement, NavigatorProps> = ({

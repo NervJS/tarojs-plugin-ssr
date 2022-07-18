@@ -14,6 +14,12 @@
     "devDependencies": {
         "@testing-library/react": "^12.1.5",
         "@types/jest": "^27.5.0",
+        "@types/node": "^18.0.6",
+        "@typescript-eslint/eslint-plugin": "^5.30.6",
+        "@typescript-eslint/parser": "^5.30.6",
+        "eslint": "^8.20.0",
+        "eslint-plugin-react": "^7.30.1",
+        "eslint-plugin-react-hooks": "^4.6.0",
         "jest": "^28.1.0",
         "jest-environment-jsdom": "^28.1.1",
         "lerna": "^4.0.0",

@@ -6,9 +6,9 @@ export const requestIdleCallback = globalThis.requestIdleCallback
                 didTimeout: false,
                 timeRemaining: function () {
                     return Math.max(0, 50 - (Date.now() - start))
-                },
+                }
             })
-        }, 1) as any as number
+        }, 1) as unknown as number
     }
 
 export const cancelIdleCallback = globalThis.cancelIdleCallback

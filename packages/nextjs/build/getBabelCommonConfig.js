@@ -1,5 +1,3 @@
-const { COMPILE_TARGET } = require('./projectHelper')
-
 const resolve = require.resolve
 
 module.exports = useESModules => {

@@ -21,7 +21,7 @@ function openBrowser(url: string): boolean {
             'Microsoft Edge',
             'Brave Browser',
             'Vivaldi',
-            'Chromium',
+            'Chromium'
         ]
 
         for (const chromiumBrowser of supportedChromiumBrowsers) {
@@ -37,7 +37,7 @@ function openBrowser(url: string): boolean {
                     '"',
                     {
                         cwd: __dirname,
-                        stdio: 'ignore',
+                        stdio: 'ignore'
                     }
                 )
                 return true
@@ -50,7 +50,7 @@ function openBrowser(url: string): boolean {
     // Fallback to open
     // (It will always open new tab)
     try {
-        var options = {wait: false, url: true}
+        const options = {wait: false, url: true}
         open(url, options).catch(() => { }) // Prevent `unhandledRejection` error.
         return true
     } catch (err) {

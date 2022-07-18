@@ -81,7 +81,7 @@ export function runTaroCommand(argv: string[], options: CommandOptions = {}) {
                 code,
                 signal,
                 stdout: stdoutOutput,
-                stderr: stderrOutput,
+                stderr: stderrOutput
             })
         })
 
@@ -185,8 +185,8 @@ export async function killProcess(pid: number): Promise<void> {
                 if (
                     process.platform === 'win32' &&
                     typeof err.message === 'string' &&
-                    (err.message.includes(`no running instance of the task`) ||
-                        err.message.includes(`not found`))
+                    (err.message.includes('no running instance of the task') ||
+                        err.message.includes('not found'))
                 ) {
                     // Windows throws an error if the process is already dead
                     //

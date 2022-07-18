@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react'
 import {
     requestIdleCallback,
-    cancelIdleCallback,
+    cancelIdleCallback
 } from '../dom/requestIdleCallback'
 
 type UseIntersectionObserverInit = Pick<IntersectionObserverInit, 'rootMargin'>
@@ -17,11 +17,11 @@ const hasIntersectionObserver = typeof IntersectionObserver !== 'undefined'
 
 function useIntersection<T extends Element>({
     rootMargin,
-    disabled,
+    disabled
 }: UseIntersection): [(element: T | null) => void, boolean] {
     const isDisabled: boolean = disabled || !hasIntersectionObserver
 
-    const unobserve = useRef<Function>()
+    const unobserve = useRef<() => void>()
     const [visible, setVisible] = useState(false)
 
     const setRef = useCallback(
@@ -104,7 +104,7 @@ function createObserver(options: UseIntersectionObserverInit): Observer {
         (instance = {
             id,
             observer,
-            elements,
+            elements
         })
     )
     return instance

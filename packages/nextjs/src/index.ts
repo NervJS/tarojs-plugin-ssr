@@ -314,7 +314,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     src(`${templateDir}/postcss.config.ejs`)
                         .pipe(es.through(function (data) {
                             const plugins = Object.entries(postcss).reduce((result, info) => {
-                                const [pluginName, pluginOption] = info as any;
+                                const [pluginName, pluginOption] = info as any
                                 if (
                                     !DEFAULT_POSTCSS_OPTIONS.includes(pluginName) &&
                                     pluginOption?.enable
@@ -410,7 +410,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                             if (code !== 0) {
                                 process.exit(code || 1)
                             }
-                        });
+                        })
                     }
                 }
 

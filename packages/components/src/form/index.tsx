@@ -8,7 +8,7 @@ import {
 
 interface FormSubmitEvent {
     detail: {
-        value: Record<string, any>
+        value: Record<string, unknown>
     }
 }
 

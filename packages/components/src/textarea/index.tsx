@@ -185,7 +185,7 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
     const placeholderEl = useRef<HTMLDivElement | null>(null)
     const keyCode = useRef<number | null>(null)
 
-    useImperativeHandle(ref, () => textAreaEl.current!);
+    useImperativeHandle(ref, () => textAreaEl.current!)
 
     const [mergedValue, setMergedValue] = useMergedState('', {
         value
@@ -296,7 +296,7 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
                 />
             </div>
         </div>
-    );
+    )
 }
 
 export default forwardRef(Textarea)
