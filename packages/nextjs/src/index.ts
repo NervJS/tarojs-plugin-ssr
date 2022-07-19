@@ -391,7 +391,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         }
                         if (indexRoute) {
                             const nextConfigPath = path.resolve(outputPath, 'next.config.js')
-                            const {basePath} = require(nextConfigPath)
+                            const {basePath} = await import(nextConfigPath)
                             let url = [undefined, '', '/'].includes(basePath)
                                 ? `http://127.0.0.1:${port}${indexRoute}`
                                 : `http://127.0.0.1:${port}${basePath}${indexRoute}`
@@ -499,7 +499,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         console.log(`${chalk.green(`File was ${operation}`)} ${relativePath}`)
                     }
 
-                    const watcher = watch(`${sourcePath}/**`, {delay: 200})
+                    const watcher = watch(`${path.normalize(sourcePath)}/**`, {delay: 200})
                     watcher.on('ready', () => console.log(chalk.blue('\nWatching for file changes...\n')))
                     watcher.on('change', filePath => handleWatch('changed', filePath))
                     watcher.on('add', filePath => handleWatch('added', filePath))
