@@ -59,7 +59,7 @@ describe('Watch', () => {
     beforeAll(async () => {
         if (!fs.existsSync(indexFilePath)) {
             const dir = path.dirname(indexFilePath)
-            if (fs.existsSync(dir)) {
+            if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, {recursive: true})
             }
             fs.writeFileSync(indexFilePath, indexPageCode1, 'utf-8')
