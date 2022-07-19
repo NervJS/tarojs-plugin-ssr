@@ -23,6 +23,7 @@ const Index = () => {
 export default Index
 `
 const indexFilePath = path.join(inputSrcDir, 'pages/index/index.js')
+const h5IndexFilePath = path.join(inputSrcDir, 'pages/index/index.h5.js')
 
 const outputSrcDir = path.join(outputDir, 'src')
 const outputIndexPageFile = path.join(outputSrcDir, 'pages/index/index.js')
@@ -80,6 +81,9 @@ describe('Watch', () => {
         if (fs.existsSync(indexFilePath)) {
             fs.rmSync(indexFilePath, {recursive: true})
         }
+        if (fs.existsSync(h5IndexFilePath)) {
+            fs.rmSync(h5IndexFilePath, {recursive: true})
+        }
     })
 
     it('change file', async () => {
@@ -90,8 +94,20 @@ describe('Watch', () => {
         expect(outputCode).toBe(indexPageCode2)
     })
 
-    it('remove file', async () => {
+    it('delete a file', async () => {
         fs.rmSync(indexFilePath)
+        await waitFileChange(app)
+        expect(fs.existsSync(outputIndexPageFile)).toBe(false)
+    })
+
+    it('delete multiple files at the same time', async () => {
+        fs.writeFileSync(indexFilePath, indexPageCode2, 'utf-8')
+        await waitFileChange(app)
+        fs.writeFileSync(h5IndexFilePath, indexPageCode1, 'utf-8')
+        await waitFileChange(app)
+        fs.rmSync(indexFilePath)
+        fs.rmSync(h5IndexFilePath)
+        await waitFileChange(app)
         await waitFileChange(app)
         expect(fs.existsSync(outputIndexPageFile)).toBe(false)
     })

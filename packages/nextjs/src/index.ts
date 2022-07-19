@@ -500,8 +500,9 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         }
 
                         if (operation === 'removed') {
-                            fs.rmSync(outputFilePath)
-
+                            if (fs.existsSync(outputFilePath)) {
+                                fs.rmSync(outputFilePath)
+                            }
                             const dir = path.dirname(filePath)
                             const ext = path.extname(filePath)
                             const base = path.basename(filePath, ext)
