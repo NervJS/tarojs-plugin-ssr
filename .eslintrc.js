@@ -7,10 +7,8 @@ module.exports = {
     extends: [
         'eslint:recommended',
         'plugin:react/recommended',
-        'plugin:@typescript-eslint/recommended',
         'plugin:react-hooks/recommended'
     ],
-    parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaFeatures: {
             jsx: true
@@ -18,8 +16,7 @@ module.exports = {
         ecmaVersion: 'latest'
     },
     plugins: [
-        'react',
-        '@typescript-eslint'
+        'react'
     ],
     rules: {
         'comma-dangle': 'error',
@@ -28,7 +25,21 @@ module.exports = {
         'quote-props': ['error', 'as-needed'],
         'no-inner-declarations': 'off',
         'no-empty': 'off',
-        '@typescript-eslint/no-empty-function': 'off',
         'react/react-in-jsx-scope': 'off'
-    }
+    },
+    overrides: [
+        {
+            files: ['*.ts', '*.tsx'],
+            parser: '@typescript-eslint/parser',
+            extends: [
+                'plugin:@typescript-eslint/recommended'
+            ],
+            plugins: [
+                '@typescript-eslint'
+            ],
+            rules: {  
+                '@typescript-eslint/no-empty-function': 'off'
+            }
+        }
+    ]
 }
