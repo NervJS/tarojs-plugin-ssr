@@ -73,6 +73,11 @@ export interface TaroSwiperEventDetail {
 }
 export type TaroSwiperEvent = TaroEvent<TaroSwiperEventDetail>
 
+export interface TaroPickerViewEventDetail {
+    value?: number[]
+}
+export type TaroPickerViewEvent = TaroEvent<TaroPickerViewEventDetail>
+
 export type TaroEventHandler<E extends TaroEvent> = (event: E) => void
 
 export type TaroMouseEventHandler = TaroEventHandler<TaroMouseEvent>
@@ -85,6 +90,7 @@ export type TaroConfirmEventHandler = TaroEventHandler<TaroConfirmEvent>
 export type TaroVideoEventHandler = TaroEventHandler<TaroVideoEvent>
 export type TaroSwitchEventHanlder = TaroEventHandler<TaroSwitchEvent>
 export type TaroSwiperEventHandler = TaroEventHandler<TaroSwiperEvent>
+export type TaroPickerViewEventHandler = TaroEventHandler<TaroPickerViewEvent>
 
 export interface TaroBaseEvents {
     /**
