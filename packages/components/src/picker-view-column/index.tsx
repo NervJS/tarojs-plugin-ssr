@@ -1,5 +1,9 @@
 import React from 'react'
 
-const PickerViewColumn: React.FC = ({children}) => <>{children}</>
+interface PickerViewColumnProps {
+    children?: React.ReactNode
+}
+
+const PickerViewColumn: React.FC<PickerViewColumnProps> = ({children}) => <>{children}</>
 
 export default PickerViewColumn

@@ -110,3 +110,8 @@ dist
 
 # examples
 examples/**/yarn.lock
+
+# dumi docs
+.umi
+.umi-production
+docs-dist
