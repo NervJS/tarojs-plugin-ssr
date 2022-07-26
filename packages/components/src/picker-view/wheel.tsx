@@ -51,7 +51,7 @@ interface WheelProps {
 }
 
 const WheelInternal: React.FC<WheelProps> = ({
-    // value,
+    value,
     onSelect,
     children
 }) => {
@@ -76,6 +76,24 @@ const WheelInternal: React.FC<WheelProps> = ({
         }
     }, [items])
 
+    useEffect(() => {
+        if (draggingRef.current || value == null || value < 0) {
+            return
+        }
+        const min = -((items.length - 1) * itemHeight.current)
+        const finalPosition = value * -itemHeight.current
+        api.start({
+            y: finalPosition < min ? min : finalPosition,
+            immediate: y.goal !== finalPosition
+        })
+      }, [items, value])
+
+    function scrollSelect(index: number): void {
+        const finalPosition = index * -itemHeight.current
+        api.start({ y: finalPosition })
+        onSelect?.(index)
+    }
+
     useDrag(
         state => {
             state.event.stopPropagation()
@@ -83,7 +101,6 @@ const WheelInternal: React.FC<WheelProps> = ({
             if (!itemHeight.current) {
                 return
             }
-            console.log('drag', rootRef.current?.offsetHeight)
 
             draggingRef.current = true
             const min = -((items.length - 1) * itemHeight.current)
@@ -95,10 +112,7 @@ const WheelInternal: React.FC<WheelProps> = ({
                 const targetIndex = min < max
                     ? -Math.round(bound(position, min, max) / itemHeight.current)
                     : 0
-
-                const finalPosition = targetIndex * -itemHeight.current
-                api.start({y: finalPosition})
-                onSelect?.(targetIndex)
+                scrollSelect(targetIndex)
             } else {
                 const position = state.offset[1]
                 api.start({
@@ -124,6 +138,7 @@ const WheelInternal: React.FC<WheelProps> = ({
     return (
         <div className={`${classPrefix}_column`}>
             <animated.div
+                ref={rootRef}
                 className={`${classPrefix}_column-wheel`}
                 style={{translateY: y}}
             >
@@ -133,7 +148,8 @@ const WheelInternal: React.FC<WheelProps> = ({
                             key={index}
                             className={`${classPrefix}_column-item`}
                             onClick={() => {
-
+                                draggingRef.current = true
+                                scrollSelect(index)
                             }}
                         >
                             {item}

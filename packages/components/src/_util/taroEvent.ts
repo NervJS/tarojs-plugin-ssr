@@ -9,7 +9,8 @@ import {
     TaroConfirmEvent,
     TaroVideoEvent,
     TaroSwitchEvent,
-    TaroSwiperEvent
+    TaroSwiperEvent,
+    TaroPickerViewEvent
 } from './typings'
 
 export function createTaroMouseEvent(taroEventType: string, reactEvent: React.TouchEvent | React.MouseEvent): TaroMouseEvent {
@@ -197,6 +198,20 @@ export function createTaroSwiperEvent(taroEventType: string, swiper: Swiper): Ta
         },
         timeStamp: Date.now(),
         type: taroEventType,
+        preventDefault() { },
+        stopPropagation() { }
+    }
+}
+
+export function createTaroPickerViewEvent(el: HTMLDivElement, value: number[]): TaroPickerViewEvent {
+    return {
+        currentTarget: el,
+        target: el,
+        detail: {
+            value
+        },
+        timeStamp: Date.now(),
+        type: 'change',
         preventDefault() { },
         stopPropagation() { }
     }

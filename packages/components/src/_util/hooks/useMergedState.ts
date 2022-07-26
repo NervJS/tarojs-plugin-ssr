@@ -5,7 +5,7 @@ export default function useMergedState<T, R = T>(
     option?: {
         defaultValue?: T | (() => T);
         value?: T;
-        onChange?: (value?: T, prevValue?: T) => void;
+        onChange?: (value: T, prevValue?: T) => void;
         postState?: (value?: T) => T;
     }
 ): [R, (value: T) => void] {

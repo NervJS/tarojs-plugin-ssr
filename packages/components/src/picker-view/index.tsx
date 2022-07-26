@@ -1,10 +1,12 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import type {
     TaroBaseProps,
     TaroPickerViewEventHandler
 } from '../_util/typings'
-import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 import toArray from '../_util/children/toArray'
+import {createTaroPickerViewEvent} from '../_util/taroEvent'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
+import useMergedState from '../_util/hooks/useMergedState'
 import Wheel from './wheel'
 
 const classPrefix = 'taro-picker-view'
@@ -64,11 +66,22 @@ const PickerView: React.FC<PickerViewProps> = ({
     ...rest
 }) => {
     const props = useTaroBaseEvents(rest)
-    
+
+    const rootRef = useRef<HTMLDivElement | null>(null)
+
+    const [mergedValue, setMergedValue] = useMergedState([], {
+        value,
+        onChange(current) {
+            const taroEvent = createTaroPickerViewEvent(rootRef.current!, current)
+            onChange?.(taroEvent)
+        }
+    })
+
     const columns = toArray(children)
 
     return (
         <div
+            ref={rootRef}
             className={classPrefix}
             {...props}
         >
@@ -77,11 +90,21 @@ const PickerView: React.FC<PickerViewProps> = ({
                 {columns.map((column, index) => (
                     <Wheel
                         key={index}
-                        onSelect={() => {}}
+                        value={mergedValue[index]}
+                        onSelect={current => {
+                            const next = [...mergedValue]
+                            next[index] = current
+                            setMergedValue(next)
+                        }}
                     >
                         {column.props.children}
                     </Wheel>
                 ))}
+                <div className={`${classPrefix}-mask`}>
+                    <div className={`${classPrefix}-mask-top`} />
+                    <div className={`${classPrefix}-mask-middle`} />
+                    <div className={`${classPrefix}-mask-bottom`} />
+                </div>
             </div>
         </div>
     )
