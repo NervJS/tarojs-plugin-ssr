@@ -10,7 +10,7 @@ import chalk from 'chalk'
 import spawn from 'cross-spawn'
 import * as babel from '@babel/core'
 import type {IPluginContext} from '@tarojs/service'
-import {getNextExportedFunctions, resolveDynamicPagesToRewrites, isDynamicRoute} from './nextUtils'
+import {getNextExportedFunctions, resolveDynamicPagesToRewrites, isDynamicPage} from './nextUtils'
 import getNextSassOptions from './scssUtils'
 import {
     ensureLeadingSlash,
@@ -48,6 +48,42 @@ interface PluginOptions {
      * 是否打开浏览器
      */
     browser?: boolean
+}
+
+interface FindDynamicPageResult {
+    page: string
+    file: string
+}
+
+function findDynamicPage(dir: string): FindDynamicPageResult | null {
+    const contents = fs.readdirSync(dir)
+    for (const content of contents) {
+        const stat = fs.statSync(path.join(dir, content))
+        if (stat.isDirectory()) {
+            if (!isDynamicPage(content)) {
+                continue
+            }
+            const child = findDynamicPage(path.join(dir, content))
+            if (!child) {
+                return null
+            }
+            return {
+                page: `${content}/${child.page}`,
+                file: `${content}/${child.file}`
+            }
+        } else if (stat.isFile()) {
+            const ext = path.extname(content)
+            const basename = path.basename(content, ext)
+            if (!isDynamicPage(basename)) {
+                continue
+            }
+            return {
+                page: basename,
+                file: content
+            }
+        }
+    }
+    return null
 }
 
 export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
@@ -146,18 +182,15 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         taroRoute = taroRoute[0]
                     }
 
-                    const files = fs.readdirSync(taroPageDir)
-                    const dynamicPageFileName = files.find(name => isDynamicRoute(name))
-                    let dynamicPageFileBaseName
-                    if (dynamicPageFileName) {
-                        const dynamicPageFileExt = path.extname(dynamicPageFileName)
-                        dynamicPageFileBaseName = path.basename(dynamicPageFileName, dynamicPageFileExt)
-                        dynamicPages.push(`${taroRoute}/${dynamicPageFileBaseName}`)
+                    // 查找是否定义了动态路由，若存在则优先使用
+                    const result = findDynamicPage(taroPageDir)
+                    if (result) {
+                        dynamicPages.push(`${taroRoute}/${result.page}`)
                     }
 
-                    const targetPageFile = dynamicPageFileBaseName ? `${dynamicPageFileBaseName}.js` : 'index.js'
-                    const targetPageFilePath = dynamicPageFileName
-                        ? path.join(taroPageDir, dynamicPageFileName)
+                    const targetPageFile = result ? `${result.page}.js` : 'index.js'
+                    const targetPageFilePath = result
+                        ? path.join(taroPageDir, result.file)
                         : taroPageFilePath
                     const nextjsPageFilePath = path.join(nextjsPagesDir, taroRoute, targetPageFile)
 
@@ -170,8 +203,8 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
 
                     const originRequest = path.join(outputSourcePath, taroPage)
                     let request = originRequest
-                    if (dynamicPageFileBaseName) {
-                        request = path.join(path.dirname(request), dynamicPageFileBaseName)
+                    if (result) {
+                        request = path.join(path.dirname(request), result.page)
                     }
                     const modulePath = path.relative(nextjsPageDir, request)
 

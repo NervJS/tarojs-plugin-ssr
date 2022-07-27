@@ -73,21 +73,38 @@ type Rewrite = {
     has?: RouteHas[]
 }
 
-const ROUTE_PARMA_REGEX = /(\S*)\/\[([^/]+?)\]$/
+export function isDynamicPage(content: string): boolean {
+    return content.startsWith('[') && content.endsWith(']')
+}
 
 export function resolveDynamicPagesToRewrites(dynamicPages: string[]): Rewrite[] {
     return dynamicPages.map(page => {
-        const [_, source, key] = ROUTE_PARMA_REGEX.exec(page)!
+        const segments = page.split('/').filter(segment => segment)
+        let source = ''
+        let destination = ''
+        const has: RouteHas[] = []
+
+        for (const segment of segments) {
+            if (isDynamicPage(segment)) {
+                const key = segment.substring(1, segment.length - 1)
+                if (key) {
+                    has.push({
+                        type: 'query',
+                        key,
+                        value: `(?<${key}>.*)`
+                    })
+                    destination += `/:${key}`
+                }
+            } else {
+                source += `/${segment}`
+                destination += `/${segment}`
+            }
+        }
+
         return {
             source,
-            has: [
-                {
-                    type: 'query',
-                    key,
-                    value: `(?<${key}>.*)`
-                }
-            ],
-            destination: `${source}/:${key}`
+            has,
+            destination
         }
     })
 }
