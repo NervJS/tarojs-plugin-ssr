@@ -1,4 +1,6 @@
-# PickerView 选择器视图
+# PickerView 滚动选择器
+
+可嵌页面的滚动选择器。
 
 ## 示例
 
