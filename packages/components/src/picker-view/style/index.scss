@@ -1,5 +1,8 @@
 .taro-picker-view {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    height: 126px;
 
     &_title {
         overflow: hidden;
@@ -14,6 +17,7 @@
     }
 
     &_wrapper {
+        flex: 1;
         position: relative;
         display: flex;
         overflow: hidden;
@@ -22,7 +26,7 @@
     &_column {
         flex: 1;
         position: relative;
-        height: 300px;
+        height: 100%;
         user-select: none;
         touch-action: none;
 

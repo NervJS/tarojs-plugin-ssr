@@ -72,8 +72,10 @@ const PickerView: React.FC<PickerViewProps> = ({
     const [mergedValue, setMergedValue] = useMergedState([], {
         value,
         onChange(current) {
-            const taroEvent = createTaroPickerViewEvent(rootRef.current!, current)
-            onChange?.(taroEvent)
+            if (rootRef.current) {
+                const taroEvent = createTaroPickerViewEvent(rootRef.current, current)
+                onChange?.(taroEvent)
+            }
         }
     })
 

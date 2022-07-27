@@ -52,8 +52,8 @@ interface WheelProps {
 
 const WheelInternal: React.FC<WheelProps> = ({
     value,
-    onSelect,
-    children
+    children,
+    onSelect
 }) => {
     const [{y}, api] = useSpring(() => ({
         from: {y: 0},
@@ -162,9 +162,9 @@ const WheelInternal: React.FC<WheelProps> = ({
 }
 
 const Wheel = memo(WheelInternal, (prev, next) => {
-    if (prev.value !== next.value) return false
-    if (!isEqual(prev.children, next.children)) return false
-    return true
+    return prev.value === next.value &&
+        isEqual(prev.children, next.children) &&
+        prev.onSelect === next.onSelect
 })
 
 export default Wheel

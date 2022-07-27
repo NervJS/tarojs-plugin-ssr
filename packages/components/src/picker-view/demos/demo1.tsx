@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { PickerView, PickerViewColumn, View } from '@taror/components'
 import '@taror/components/src/picker-view/style'
 import './demo1.scss'
@@ -21,23 +21,31 @@ for (let i = 1; i <= 31; i++) {
 }
 
 const App: React.FC = () => {
-    const [value, setValue] = useState([9999, 1, 1])
+    const [value, setValue] = useState([years.length - 1, 1, 1])
 
     return (
-        <PickerView
-            value={value}
-            onChange={event => setValue(event.detail.value)}
-        >
-            <PickerViewColumn>
-                {years.map(year => <View key={year} className='item'>{year}年</View>)}
-            </PickerViewColumn>
-            <PickerViewColumn>
-                {months.map(month => <View key={month} className='item'>{month}月</View>)}
-            </PickerViewColumn>
-            <PickerViewColumn>
-                {days.map(day => <View key={day} className='item'>{day}日</View>)}
-            </PickerViewColumn>
-        </PickerView>
+        <>
+            <View className='selected-date'>{years[value[0]]}年{months[value[1]]}月{days[value[2]]}日</View>
+            <PickerView
+                value={value}
+                title='选择器标题'
+                style={{
+                    width: '100%',
+                    height: '300px'
+                }}
+                onChange={event => setValue(event.detail.value)}
+            >
+                <PickerViewColumn>
+                    {years.map(year => <View key={year} className='item'>{year}年</View>)}
+                </PickerViewColumn>
+                <PickerViewColumn>
+                    {months.map(month => <View key={month} className='item'>{month}月</View>)}
+                </PickerViewColumn>
+                <PickerViewColumn>
+                    {days.map(day => <View key={day} className='item'>{day}日</View>)}
+                </PickerViewColumn>
+            </PickerView>
+        </>
     )
 }
 
