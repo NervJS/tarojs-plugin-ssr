@@ -1,8 +1,8 @@
 {
-  "name": "data-fetch-example",
+  "name": "dynamic-routing-example",
   "version": "1.0.0",
   "private": true,
-  "description": "数据请求示例",
+  "description": "动态路由示例",
   "scripts": {
     "build:weapp": "taro build --type weapp",
     "build:swan": "taro build --type swan",

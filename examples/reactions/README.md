@@ -5,11 +5,11 @@
 ## 执行 Next.js
 
 ```bash
-GITHUB_TOKEN=<Your GitHub Token> && yarn dev:nextjs
+export GITHUB_TOKEN=<Your GitHub Token> && yarn dev:nextjs
 ```
 
 ## 执行小程序
 
 ```bash
-GITHUB_TOKEN=<Your GitHub Token> && yarn dev:swan
+export GITHUB_TOKEN=<Your GitHub Token> && yarn dev:swan
 ```

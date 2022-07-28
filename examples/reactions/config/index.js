@@ -1,3 +1,7 @@
+if (!process.env.GITHUB_TOKEN) {
+    console.log('You should specific your GitHub token!')
+}
+
 const config = {
     projectName: 'data',
     date: '2022-4-16',

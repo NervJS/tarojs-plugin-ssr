@@ -1,6 +1,11 @@
-# 数据请求示例
+# 动态路由示例
 
-通过导出 `getStaticProps` Next.js 将在构建阶段获取数据，并将页面预渲染为静态页面。
+这个例子展示如何使用动态路由。它包含两个动态路由：
+
+1. pages/post/[id]/index.tsx
+    * 例如，匹配 /post?id=my-example
+2. pages/comment/[id]/[comment].tsx
+    * 例如，匹配 /comment?id=my-example&comment=a-comment
 
 ## 执行 Next.js
 
