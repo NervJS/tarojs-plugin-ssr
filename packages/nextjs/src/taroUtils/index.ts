@@ -1,0 +1,1 @@
+export {mergeTaroPages} from './mergeTaroPages'

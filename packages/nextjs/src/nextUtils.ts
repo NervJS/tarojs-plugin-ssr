@@ -1,6 +1,6 @@
 import * as babel from '@babel/core'
 import * as fs from 'fs'
-import {SCRIPT_EXT} from './constants'
+import {SCRIPT_EXTS} from './constants'
 
 const NEXT_EXPORT_FUNCTIONS = [
     'getStaticProps',
@@ -110,7 +110,7 @@ export function resolveDynamicPagesToRewrites(dynamicPages: string[]): Rewrite[]
 }
 
 // Identify /[param]/ in route string
-const TEST_ROUTE_PATTERN = `\\[[^/]+?\\](${SCRIPT_EXT.join('|')})$`
+const TEST_ROUTE_PATTERN = `\\[[^/]+?\\](${SCRIPT_EXTS.join('|')})$`
 
 export function isDynamicRoute(route: string): boolean {
     return new RegExp(TEST_ROUTE_PATTERN).test(route)

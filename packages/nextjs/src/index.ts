@@ -10,6 +10,7 @@ import chalk from 'chalk'
 import spawn from 'cross-spawn'
 import * as babel from '@babel/core'
 import type {IPluginContext} from '@tarojs/service'
+import {mergeTaroPages} from './taroUtils'
 import {getNextExportedFunctions, resolveDynamicPagesToRewrites, isDynamicPage} from './nextUtils'
 import getNextSassOptions from './scssUtils'
 import {
@@ -19,6 +20,7 @@ import {
     unIndent,
     resolveAliasToTSConfigPaths
 } from './utils'
+import { SCRIPT_EXTS } from './constants'
 import openBrowser from './openBrowser'
 
 const isWindows = process.platform === 'win32'
@@ -140,23 +142,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
 
             const templateDir = path.resolve(__dirname, '../template')
 
-            const taroPages: string[] = []
-            if (Array.isArray(appConfig.pages)) {
-                for (const page of appConfig.pages) {
-                    taroPages.push(ensureLeadingSlash(page))
-                }
-            }
-            if (Array.isArray(appConfig.subPackages)) {
-                for (const pkg of appConfig.subPackages) {
-                    if (!Array.isArray(pkg.pages)) {
-                        return
-                    }
-
-                    for (const page of pkg.pages) {
-                        taroPages.push(ensureLeadingSlash(`${pkg.root}/${page}`))
-                    }
-                }
-            }
+            const taroPages = mergeTaroPages(appConfig.pages, appConfig.subPackages)
 
             const customRoutes = Object.create(null)
             if (router.customRoutes) {
@@ -281,7 +267,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                             }
 
                             const ext = path.extname(file.path)
-                            if (!helper.SCRIPT_EXT.includes(ext)) {
+                            if (!SCRIPT_EXTS.includes(ext)) {
                                 return true
                             }
 
@@ -478,7 +464,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         const files = fs.readdirSync(dir)
                         return files.some(name => {
                             const ext = path.extname(name)
-                            if (!helper.SCRIPT_EXT.includes(ext)) {
+                            if (!SCRIPT_EXTS.includes(ext)) {
                                 return false
                             }
                             const primaryBase = path.basename(name, ext)
@@ -495,7 +481,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         const relativePath = filePath.substring(appPath.length + 1)
 
                         const ext = path.extname(filePath)
-                        if (!helper.SCRIPT_EXT.includes(ext)) {
+                        if (!SCRIPT_EXTS.includes(ext)) {
                             return path.join(outputPath, relativePath)
                         }
 

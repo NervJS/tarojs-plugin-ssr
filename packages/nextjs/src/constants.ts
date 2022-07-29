@@ -1,1 +1,1 @@
-export const SCRIPT_EXT = ['.js', '.jsx', '.ts', '.tsx']
+export const SCRIPT_EXTS = ['.js', '.jsx', '.ts', '.tsx']
