@@ -150,40 +150,6 @@ module.exports = {
 
 ### 获取路由参数
 
-#### 方法的表现差异
-
-你在获取页面查询参数时，可能会发生值为空的情况：
-
-```javascript
-// 当前的查询参数：?q=1
-const MyComponent = () => {
-    const q = useRouter().router.params.q
-    
-    useEffect(() => {
-        console.log(`get q = ${q}`) // get q = undefined
-    }, [])
-}
-```
-
-这是由于 Next.js 的同构渲染机制导致的。
-
-在浏览器接受到从服务端返回而来的 html 页面后，会先执行 React 的 hydrate 方法，组件触发第一次渲染。之后 Next.js 才会将完整的路由信息传入，组件触发第二次渲染。所以，上述组件需要做以下修改：
-
-```javascript
-// 当前的查询参数：?q=1
-const MyComponent = () => {
-    const q = useRouter().router.params.q
-    
-    useEffect(() => {
-        if (q) {
-            console.log(`get q = ${q}`) // get q = 1
-        }
-    }, [q]) // 将 q (或 router) 加入到 Hook 的依赖列表中
-}
-```
-
-#### 方法的内部处理细节
-
 Taro 有两种获取路由参数的方式，一种是调用方法 `getCurrentInstance().router.params`，另一种是使用 React Hook `useRouter().params`。
 
 推荐使用 `useRouter` 来获取路由参数，因为它内部直接使用 Next.js 提供的 `useRouter` React Hook 实现，具有很好的一致性。
