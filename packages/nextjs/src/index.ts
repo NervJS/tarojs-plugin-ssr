@@ -11,7 +11,11 @@ import spawn from 'cross-spawn'
 import * as babel from '@babel/core'
 import type {IPluginContext} from '@tarojs/service'
 import {mergeTaroPages} from './taroUtils'
-import {getNextExportedFunctions, resolveDynamicPagesToRewrites, isDynamicPage} from './nextUtils'
+import {
+    getNextExportedFunctions,
+    resolveDynamicPagesToRewrites,
+    getNextPageInfos
+} from './nextUtils'
 import getNextSassOptions from './scssUtils'
 import {
     ensureLeadingSlash,
@@ -50,42 +54,6 @@ interface PluginOptions {
      * 是否打开浏览器
      */
     browser?: boolean
-}
-
-interface FindDynamicPageResult {
-    page: string
-    file: string
-}
-
-function findDynamicPage(dir: string): FindDynamicPageResult | null {
-    const contents = fs.readdirSync(dir)
-    for (const content of contents) {
-        const stat = fs.statSync(path.join(dir, content))
-        if (stat.isDirectory()) {
-            if (!isDynamicPage(content)) {
-                continue
-            }
-            const child = findDynamicPage(path.join(dir, content))
-            if (!child) {
-                return null
-            }
-            return {
-                page: `${content}/${child.page}`,
-                file: `${content}/${child.file}`
-            }
-        } else if (stat.isFile()) {
-            const ext = path.extname(content)
-            const basename = path.basename(content, ext)
-            if (!isDynamicPage(basename)) {
-                continue
-            }
-            return {
-                page: basename,
-                file: content
-            }
-        }
-    }
-    return null
 }
 
 export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
@@ -153,48 +121,29 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
 
             const {additionalData} = await getNextSassOptions(sass)
 
-            function createNextjsPages() {
-                const dynamicPages: string[] = []
-                const multipleRoutePages: string[][] = []
+            const nextPageInfos = await getNextPageInfos(sourcePath, taroPages, customRoutes)
 
+            function createNextjsPages() {
                 const nextjsPagesDir = `${outputPath}/pages`
 
-                for (const taroPage of taroPages) {
-                    const taroPageFilePath = resolveScriptPath(path.join(sourcePath, taroPage))
-                    const taroPageDir = path.dirname(taroPageFilePath)
-                    let taroRoute = customRoutes[taroPage] || taroPage
-                    if (Array.isArray(taroRoute)) {
-                        multipleRoutePages.push(taroRoute)
-                        taroRoute = taroRoute[0]
-                    }
+                for (const pageInfo of nextPageInfos) {
+                    const taroPage = pageInfo.origin
+                    const nextRoute = pageInfo.route
 
-                    // 查找是否定义了动态路由，若存在则优先使用
-                    const result = findDynamicPage(taroPageDir)
-                    if (result) {
-                        dynamicPages.push(`${taroRoute}/${result.page}`)
-                    }
-
-                    const targetPageFile = result ? `${result.page}.js` : 'index.js'
-                    const targetPageFilePath = result
-                        ? path.join(taroPageDir, result.file)
-                        : taroPageFilePath
-                    const nextjsPageFilePath = path.join(nextjsPagesDir, taroRoute, targetPageFile)
+                    const targetPageFile = nextRoute && nextRoute !== '/' ? `${nextRoute}.js` : 'index.js'
+                    const nextjsPageFilePath = path.join(nextjsPagesDir, targetPageFile)
 
                     const nextjsPageDir = path.dirname(nextjsPageFilePath)
                     if (!fs.existsSync(nextjsPageDir)) {
                         fs.mkdirSync(nextjsPageDir, {recursive: true})
                     }
 
-                    const exportedFunctions = getNextExportedFunctions(targetPageFilePath)
+                    const exportedFunctions = getNextExportedFunctions(path.join(sourcePath, pageInfo.file))
 
-                    const originRequest = path.join(outputSourcePath, taroPage)
-                    let request = originRequest
-                    if (result) {
-                        request = path.join(path.dirname(request), result.page)
-                    }
+                    const request = path.join(outputSourcePath, taroPage)
                     const modulePath = path.relative(nextjsPageDir, request)
 
-                    const configAbsolutePath = helper.resolveMainFilePath(`${originRequest}.config`)
+                    const configAbsolutePath = helper.resolveMainFilePath(`${request}.config`)
 
                     let contents: string
                     if (fs.existsSync(configAbsolutePath)) {
@@ -250,11 +199,8 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         fs.writeFileSync(nextjsErrorPagePath, contents, {encoding: 'utf-8'})
                     }
                 }
-
-                return {dynamicPages, multipleRoutePages}
             }
-
-            const {dynamicPages, multipleRoutePages} = createNextjsPages()
+            createNextjsPages()
 
             function scaffold() {
                 return es.merge(
@@ -299,6 +245,9 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                     src(`${appPath}/config/**`).pipe(dest(path.join(outputPath, 'config'))),
                     src(`${templateDir}/next.config.ejs`)
                         .pipe(es.through(function (data) {
+                            const dynamicPages = nextPageInfos
+                                .filter(pageInfo => pageInfo.dynamic)
+                                .map(pageInfo => pageInfo.route)
                             const rewrites = resolveDynamicPagesToRewrites(dynamicPages)
 
                             const customNextConfigPath = path.join(path.dirname(configPath), 'next.config.js')
@@ -307,6 +256,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                                 customNextConfig = path.relative(outputPath, customNextConfigPath)
                             }
 
+                            const multipleRoutePages = customRoutes.filter(config => Array.isArray(config))
                             for (const multipleRoute of multipleRoutePages) {
                                 for (const source of multipleRoute.slice(1)) {
                                     rewrites.push({

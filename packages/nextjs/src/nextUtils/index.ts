@@ -1,6 +1,13 @@
 import * as babel from '@babel/core'
 import * as fs from 'fs'
-import {SCRIPT_EXTS} from './constants'
+import {SCRIPT_EXTS} from '../constants'
+import {isDynamicPage} from './isDynamicPage'
+
+export {recursiveReadDir} from './recursiveReadDir'
+
+export {isDynamicPage} from './isDynamicPage'
+
+export {getNextPageInfos} from './getNextPageInfos'
 
 const NEXT_EXPORT_FUNCTIONS = [
     'getStaticProps',
@@ -73,18 +80,16 @@ type Rewrite = {
     has?: RouteHas[]
 }
 
-export function isDynamicPage(content: string): boolean {
-    return content.startsWith('[') && content.endsWith(']')
-}
-
 export function resolveDynamicPagesToRewrites(dynamicPages: string[]): Rewrite[] {
-    return dynamicPages.map(page => {
-        const segments = page.split('/').filter(segment => segment)
+    const rewrites = dynamicPages.map(page => {
+        const segments = page.split('/').filter(Boolean)
+
         let source = ''
         let destination = ''
         const has: RouteHas[] = []
 
-        for (const segment of segments) {
+        for (let i = 0; i < segments.length; i++) {
+            const segment = segments[i]
             if (isDynamicPage(segment)) {
                 const key = segment.substring(1, segment.length - 1)
                 if (key) {
@@ -95,9 +100,11 @@ export function resolveDynamicPagesToRewrites(dynamicPages: string[]): Rewrite[]
                     })
                     destination += `/:${key}`
                 }
-            } else {
+            } else if (has.length === 0) {
                 source += `/${segment}`
                 destination += `/${segment}`
+            } else if (segment !== 'index' || i !== segments.length - 1) {
+                return null
             }
         }
 
@@ -107,6 +114,7 @@ export function resolveDynamicPagesToRewrites(dynamicPages: string[]): Rewrite[]
             destination
         }
     })
+    return rewrites.filter(Boolean) as Rewrite[]
 }
 
 // Identify /[param]/ in route string

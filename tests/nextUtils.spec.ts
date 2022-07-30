@@ -56,6 +56,20 @@ describe('next uitls', () => {
                 destination: '/post/:id/:comment'
             }
         ])
+        const rewrites3 = resolveDynamicPagesToRewrites(['/post/[id]/index'])
+        expect(rewrites3).toEqual([
+            {
+                source: '/post',
+                has: [
+                    {
+                        type: 'query',
+                        key: 'id',
+                        value: '(?<id>.*)'
+                    }
+                ],
+                destination: '/post/:id'
+            }
+        ])
     })
 
     it('isDynamicRoute', () => {

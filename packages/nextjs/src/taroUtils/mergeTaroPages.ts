@@ -1,11 +1,11 @@
 import {ensureLeadingSlash} from '../utils'
 
-interface SubPackagesType {
+interface SubPackages {
     root: string
     pages: string[]
 }
 
-export function mergeTaroPages(pages?: string[], subPackages?: SubPackagesType): string[] {
+export function mergeTaroPages(pages?: string[], subPackages?: SubPackages): string[] {
     const taroPages: string[] = []
     if (Array.isArray(pages)) {
         for (const page of pages) {
