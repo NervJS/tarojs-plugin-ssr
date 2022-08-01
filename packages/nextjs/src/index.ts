@@ -119,7 +119,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                 }
             }
 
-            const {additionalData} = await getNextSassOptions(sass)
+            const additionalData = await getNextSassOptions(sass)
 
             const nextPageInfos = await getNextPageInfos(sourcePath, taroPages, customRoutes)
 
