@@ -127,7 +127,6 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                 const nextjsPagesDir = `${outputPath}/pages`
 
                 for (const pageInfo of nextPageInfos) {
-                    const taroPage = pageInfo.origin
                     const nextRoute = pageInfo.route
 
                     const targetPageFile = nextRoute && nextRoute !== '/' ? `${nextRoute}.js` : 'index.js'
@@ -140,7 +139,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
 
                     const exportedFunctions = getNextExportedFunctions(path.join(sourcePath, pageInfo.file))
 
-                    const request = path.join(outputSourcePath, taroPage)
+                    const request = path.join(outputSourcePath, pageInfo.file)
                     const modulePath = path.relative(nextjsPageDir, request)
 
                     const configAbsolutePath = helper.resolveMainFilePath(`${request}.config`)

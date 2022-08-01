@@ -17,6 +17,9 @@ describe('Dynamic routing', () => {
         const page2 = path.join(pagesDir, 'pages/index/index.js')
         expect(fs.existsSync(page1)).toBe(true)
         expect(fs.existsSync(page2)).toBe(false)
+        const code1 = fs.readFileSync(page1, 'utf-8')
+        expect(code1.includes('import Page from \'../../../../src/pages/index/[id].js\'')).toBe(true)
+        expect(code1.includes('export {getServerSideProps} from \'../../../../src/pages/index/[id].js\'')).toBe(true)
     })
 
     it('nesting dynamic routing', () => {
@@ -26,6 +29,13 @@ describe('Dynamic routing', () => {
         expect(fs.existsSync(page1)).toBe(true)
         expect(fs.existsSync(page2)).toBe(true)
         expect(fs.existsSync(page3)).toBe(false)
+
+        const code1 = fs.readFileSync(page1, 'utf-8')
+        const code2 = fs.readFileSync(page2, 'utf-8')
+        expect(code1.includes('import Page from \'../../../../../src/pages/comment/[id]/[comment].js\'')).toBe(true)
+        expect(code1.includes('export {getServerSideProps} from \'../../../../../src/pages/comment/[id]/[comment].js\'')).toBe(true)
+        expect(code2.includes('import Page from \'../../../../../src/pages/comment/[id]/index.js\'')).toBe(true)
+        expect(code2.includes('export {getServerSideProps} from \'../../../../../src/pages/comment/[id]/index.js\'')).toBe(true)
     })
 
     it('custom routes', () => {
