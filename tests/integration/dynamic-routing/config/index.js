@@ -8,7 +8,15 @@ const config = {
             runNextjs: false,
             browser: false
         }]
-    ]
+    ],
+    h5: {
+        router: {
+            mode: 'browser',
+            customRoutes: {
+                '/pages/post/index': '/post'
+            }
+        }
+    }
 }
 
 module.exports = function (merge) {

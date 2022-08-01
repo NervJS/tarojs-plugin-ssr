@@ -20,11 +20,18 @@ describe('Dynamic routing', () => {
     })
 
     it('nesting dynamic routing', () => {
-        const page1 = path.join(pagesDir, 'pages/post/index/[id]/[comment].js')
-        const page2 = path.join(pagesDir, 'pages/post/index/[id]/index.js')
-        const page3 = path.join(pagesDir, 'pages/post/index/index.js')
+        const page1 = path.join(pagesDir, 'pages/comment/index/[id]/[comment].js')
+        const page2 = path.join(pagesDir, 'pages/comment/index/[id]/index.js')
+        const page3 = path.join(pagesDir, 'pages/comment/index/index.js')
         expect(fs.existsSync(page1)).toBe(true)
         expect(fs.existsSync(page2)).toBe(true)
         expect(fs.existsSync(page3)).toBe(false)
+    })
+
+    it('custom routes', () => {
+        const page1 = path.join(pagesDir, 'post/[id].js')
+        const page2 = path.join(pagesDir, 'post/index.js')
+        expect(fs.existsSync(page1)).toBe(true)
+        expect(fs.existsSync(page2)).toBe(false)
     })
 })
