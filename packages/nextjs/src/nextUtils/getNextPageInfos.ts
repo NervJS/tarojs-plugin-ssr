@@ -42,6 +42,7 @@ interface RouteInfo {
     origin: string,
     route: string
     file: string
+    request: string
     dynamic: boolean
 }
 
@@ -69,6 +70,7 @@ export async function getNextPageInfos(
                     origin: taroPage,
                     route: taroRoute + page.substring(0, page.length - ext.length),
                     file: absolutePath.replace(sourcePath, ''),
+                    request: absolutePath.replace(sourcePath, ''),
                     dynamic: true
                 })
             }
@@ -77,6 +79,7 @@ export async function getNextPageInfos(
                 origin: taroPage,
                 route: taroRoute,
                 file: taroPageFile.replace(sourcePath, ''),
+                request: taroPage,
                 dynamic: false
             })
         }

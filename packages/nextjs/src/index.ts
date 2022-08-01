@@ -139,7 +139,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
 
                     const exportedFunctions = getNextExportedFunctions(path.join(sourcePath, pageInfo.file))
 
-                    const request = path.join(outputSourcePath, pageInfo.file)
+                    const request = path.join(outputSourcePath, pageInfo.request)
                     const modulePath = path.relative(nextjsPageDir, request)
 
                     const configAbsolutePath = helper.resolveMainFilePath(`${request}.config`)
