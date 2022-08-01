@@ -14,14 +14,10 @@ export async function findDynamicRoutePages(dir: string): Promise<string[]> {
         result.map(async (part: Dirent) => {
             const absolutePath = path.join(dir, part.name)
 
-            if (!isDynamicPage(part.name)) {
-                return
-            }
-
-            if (part.isDirectory()) {
+            if (part.isDirectory() && isDynamicPage(part.name)) {
                 const result = await recursiveReadDir(
                     absolutePath,
-                    new RegExp(`(?:\\.${SCRIPT_EXTS.join('|')})$`)
+                    new RegExp(`\\.(?:${SCRIPT_EXTS.map(ext => ext.substring(1)).join('|')})$`)
                 )
                 for (const routePage of result) {
                     pages.push(`/${part.name}${routePage}`)
@@ -30,7 +26,10 @@ export async function findDynamicRoutePages(dir: string): Promise<string[]> {
             }
 
             if (part.isFile()) {
-                pages.push(part.name)
+                const ext = path.extname(part.name)
+                if (SCRIPT_EXTS.includes(ext) && isDynamicPage(path.basename(part.name, ext))) {
+                    pages.push(`/${part.name}`)
+                }
             }
         })
     )

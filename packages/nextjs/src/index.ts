@@ -256,7 +256,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                                 customNextConfig = path.relative(outputPath, customNextConfigPath)
                             }
 
-                            const multipleRoutePages = customRoutes.filter(config => Array.isArray(config))
+                            const multipleRoutePages = Object.values(customRoutes).filter(value => Array.isArray(value)) as string[][]
                             for (const multipleRoute of multipleRoutePages) {
                                 for (const source of multipleRoute.slice(1)) {
                                     rewrites.push({
