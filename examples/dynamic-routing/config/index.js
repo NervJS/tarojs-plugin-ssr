@@ -1,13 +1,9 @@
-if (!process.env.GITHUB_TOKEN) {
-    console.log('You should specific your GitHub token!')
-}
-
 const config = {
     projectName: 'data',
     date: '2022-4-16',
     designWidth: 375,
     deviceRatio: {
-        640: 1,
+        640: 2.34 / 2,
         750: 1,
         828: 1.81 / 2,
         375: 2 / 1
@@ -17,8 +13,7 @@ const config = {
     plugins: [
         'tarojs-plugin-platform-nextjs'
     ],
-    env: {
-        GITHUB_TOKEN: JSON.stringify(process.env.GITHUB_TOKEN)
+    defineConstants: {
     },
     copy: {
         patterns: [
@@ -70,7 +65,8 @@ const config = {
         router: {
             mode: 'browser',
             customRoutes: {
-                '/pages/index/index': '/'
+                '/pages/index/index': '/',
+                '/pages/post/index': '/post'
             }
         }
     }

@@ -1,7 +1,7 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import ts from 'typescript'
-import {SCRIPT_EXT} from './constants'
+import {SCRIPT_EXTS} from './constants'
 
 export function unIndent(strings: { raw: readonly string[] | ArrayLike<string>}, ...values: any[]): string {
     const text = String.raw(strings, ...values)
@@ -11,14 +11,18 @@ export function unIndent(strings: { raw: readonly string[] | ArrayLike<string>},
     return lines.map(line => line.slice(minLineIndent)).join('\n')
 }
 
+/**
+ * For a given page path, this function ensures that there is a leading slash.
+ * If there is not a leading slash, one is added, otherwise it is noop.
+ */
 export function ensureLeadingSlash(path: string): string {
     if (path == null) {
         return ''
     }
-    return path.charAt(0) === '/' ? path : '/' + path
+    return path.startsWith('/') ? path : `/${path}`
 }
 
-export function resolveScriptPath(filePath: string, extArrs = SCRIPT_EXT): string {
+export function resolveScriptPath(filePath: string, extArrs = SCRIPT_EXTS): string {
     const taroEnv = 'h5'
     for (let i = 0; i < extArrs.length; i++) {
         const item = extArrs[i]

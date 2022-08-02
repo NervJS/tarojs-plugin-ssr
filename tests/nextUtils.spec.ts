@@ -23,19 +23,51 @@ describe('next uitls', () => {
     })
 
     it('resolveDynamicPagesToRewrites', () => {
-        const rewrites = resolveDynamicPagesToRewrites(['/home/[param]'])
-
-        expect(rewrites).toEqual([
+        const rewrites1 = resolveDynamicPagesToRewrites(['/post/[id]'])
+        expect(rewrites1).toEqual([
             {
-                source: '/home',
+                source: '/post',
                 has: [
                     {
                         type: 'query',
-                        key: 'param',
-                        value: '(?<param>.*)'
+                        key: 'id',
+                        value: '(?<id>.*)'
                     }
                 ],
-                destination: '/home/:param'
+                destination: '/post/:id'
+            }
+        ])
+        const rewrites2 = resolveDynamicPagesToRewrites(['/post/[id]/[comment]'])
+        expect(rewrites2).toEqual([
+            {
+                source: '/post',
+                has: [
+                    {
+                        type: 'query',
+                        key: 'id',
+                        value: '(?<id>.*)'
+                    },
+                    {
+                        type: 'query',
+                        key: 'comment',
+                        value: '(?<comment>.*)'
+                    }
+                ],
+                destination: '/post/:id/:comment'
+            }
+        ])
+        const rewrites3 = resolveDynamicPagesToRewrites(['/post/[id]/index'])
+        expect(rewrites3).toEqual([
+            {
+                source: '/post',
+                has: [
+                    {
+                        type: 'query',
+                        key: 'id',
+                        value: '(?<id>.*)'
+                    }
+                ],
+                destination: '/post/:id'
             }
         ])
     })

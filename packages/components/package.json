@@ -22,7 +22,7 @@
         "clean": "taror-tools run clean && rm -rf es lib coverage dist report.html"
     },
     "devDependencies": {
-        "@taror/tools": "^0.0.4",
+        "@taror/tools": "^0.0.5",
         "@umijs/plugin-sass": "^1.1.1",
         "dumi": "^1.1.46"
     },
