@@ -18,7 +18,7 @@ const Switch: React.ForwardRefRenderFunction<HTMLInputElement, SwitchProps> = ({
     style,
     className,
     name,
-    checked = false,
+    checked,
     type = 'switch',
     color = '#04be02',
     disabled = false,
