@@ -189,8 +189,8 @@ const Swiper: React.FC<SwiperProps> = ({
     const onChangeRef = useRef<TaroSwiperEventHandler | undefined>(onChange)
     const onAnimationFinishRef = useRef<TaroSwiperEventHandler | undefined>(onAnimationFinish)
     
-    const [mergedCurrent, setMergedCurrent] = useMergedState(current, {
-        defaultValue: 0
+    const [mergedCurrent, setMergedCurrent] = useMergedState(0, {
+        defaultValue: current
     })
 
     useEffect(() => {

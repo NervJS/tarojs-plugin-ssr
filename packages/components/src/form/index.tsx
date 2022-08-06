@@ -1,22 +1,19 @@
 import React, {
     useRef,
     useMemo,
-    forwardRef
+    forwardRef,
+    useImperativeHandle
 } from 'react'
+import type {TaroFormSubmitEventHandler, TaroFormCancelEventHandler} from '../_util/typings'
+import {createTaroEvent, createTaroFormSubmitEvent} from '../_util/taroEvent'
 import FormContext, {FormContextProps} from './formContext'
-
-interface FormSubmitEvent {
-    detail: {
-        value: Record<string, unknown>
-    }
-}
 
 interface FormProps {
     className?: string
     style?: React.CSSProperties
     children?: React.ReactNode
-    onSubmit: (event: FormSubmitEvent) => void
-    onReset: () => void
+    onSubmit: TaroFormSubmitEventHandler
+    onReset: TaroFormCancelEventHandler
 }
 
 const Form: React.ForwardRefRenderFunction<HTMLFormElement, FormProps> = ({
@@ -26,8 +23,11 @@ const Form: React.ForwardRefRenderFunction<HTMLFormElement, FormProps> = ({
     onSubmit,
     onReset
 }, ref) => {
-    const listeners = useRef<(() => void)[]>([])
+    const form = useRef<HTMLFormElement | null>(null)
 
+    useImperativeHandle(ref, () => form.current!)
+
+    const listeners = useRef<(() => void)[]>([])
     const values = useRef<Record<string, any>>({})
 
     const context = useMemo<FormContextProps>(() => ({
@@ -51,7 +51,7 @@ const Form: React.ForwardRefRenderFunction<HTMLFormElement, FormProps> = ({
 
     return (
         <form
-            ref={ref}
+            ref={form}
             className={className}
             style={style}
             onSubmit={event => {
@@ -60,11 +60,13 @@ const Form: React.ForwardRefRenderFunction<HTMLFormElement, FormProps> = ({
                 for (const fn of listeners.current) {
                     fn()
                 }
-                onSubmit?.({detail: {value: values.current}})
+                const taroEvent = createTaroFormSubmitEvent(form.current!, values.current)
+                onSubmit?.(taroEvent)
             }}
             onReset={event => {
                 event.stopPropagation()
-                onReset?.()
+                const taroEvent = createTaroEvent('reset', event.target, {})
+                onReset?.(taroEvent)
             }}
         >
             <FormContext.Provider value={context}>

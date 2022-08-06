@@ -13,7 +13,7 @@ const App: React.FC = () => {
     }
 
     return (
-        <>
+        <View className='container'>
             <Form onSubmit={handleFormSubmit} onReset={handleFormReset}>
                 <View className="card-area">
                     <View className="top-description border-bottom">开关选择器</View>
@@ -63,28 +63,28 @@ const App: React.FC = () => {
                 <View className="mode-title-line-right"></View>
             </View>
             <Form 
-                report-submit
-                report-type="subscribe"
-                template-id="BD0003"
-                subscribe-id="8026"
-                bindsubmit="reportFormSubmit"
-                bindreset="reportFormReset">
+                reportSubmit
+                reportType="subscribe"
+                templateId="BD0003"
+                subscribeId="8026"
+                onSubmit="reportFormSubmit"
+                onReset="reportFormReset">
                 <View className="card-area">
-                    <View className="top-description border-bottom">report-type为subscribe</View>
+                    <View className="top-description border-bottom">reportType为subscribe</View>
                     <Button formType="submit" type="primary">点击触发</Button>
                 </View>
             </Form>
             <Form 
-                report-submit
-                report-type="default"
-                bindsubmit="reportFormSubmit"
-                bindreset="reportFormReset">
+                reportSubmit
+                reportType="default"
+                onSubmit="reportFormSubmit"
+                onReset="reportFormReset">
                 <View className="card-area">
-                    <View className="top-description border-bottom">report-type为default</View>
-                    <Button FormType="submit" type="primary">点击触发</Button>
+                    <View className="top-description border-bottom">reportType为default</View>
+                    <Button formType="submit" type="primary">点击触发</Button>
                 </View>
             </Form>
-        </>
+        </View>
     )
 }
 

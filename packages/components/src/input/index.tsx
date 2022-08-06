@@ -11,6 +11,7 @@ import type {
 import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 import useMergedState from '../_util/hooks/useMergedState'
 import {createTaroFocusEvent, createTaroBlurEvent, createTaroConfirmEvent} from '../_util/taroEvent'
+import useField from '../form/useField'
 
 export interface InputProps extends TaroBaseProps {
     /**
@@ -240,6 +241,8 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
     const [mergedValue, setMergedValue] = useMergedState('', {
         value
     })
+
+    useField(name, mergedValue)
 
     useEffect(() => {
         if (!placeholderEl.current) {

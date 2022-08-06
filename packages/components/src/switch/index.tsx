@@ -4,6 +4,7 @@ import type {TaroBaseProps, TaroSwitchEventHanlder} from '../_util/typings'
 import {createTaroSwitchEvent} from '../_util/taroEvent'
 import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 import useMergedState from '../_util/hooks/useMergedState'
+import useField from '../form/useField'
 
 export interface SwitchProps extends TaroBaseProps {
     name?: string
@@ -30,6 +31,8 @@ const Switch: React.ForwardRefRenderFunction<HTMLInputElement, SwitchProps> = ({
     const [mergedChecked, setMergedChecked] = useMergedState(false, {
         value: checked
     })
+
+    useField(name, mergedChecked)
 
     const checkedStyle: React.CSSProperties = mergedChecked
         ? {
