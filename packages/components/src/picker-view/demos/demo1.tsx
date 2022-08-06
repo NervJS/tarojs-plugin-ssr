@@ -33,7 +33,11 @@ const App: React.FC = () => {
                     width: '100%',
                     height: '300px'
                 }}
-                onChange={event => setValue(event.detail.value)}
+                onChange={event => {
+                    if (event.detail.value) {
+                        setValue(event.detail.value)
+                    }
+                }}
             >
                 <PickerViewColumn>
                     {years.map(year => <View key={year} className='item'>{year}年</View>)}

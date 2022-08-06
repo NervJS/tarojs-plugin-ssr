@@ -8,7 +8,7 @@ import useMergedState from '../_util/hooks/useMergedState'
 export interface SwitchProps extends TaroBaseProps {
     name?: string
     checked?: boolean
-    type: 'switch' | 'checkbox'
+    type?: 'switch' | 'checkbox'
     color?: string
     disabled?: boolean
     onChange?: TaroSwitchEventHanlder
