@@ -36,8 +36,7 @@ const Switch: React.ForwardRefRenderFunction<HTMLInputElement, SwitchProps> = ({
 
     const checkedStyle: React.CSSProperties = mergedChecked
         ? {
-            borderColor: color,
-            backgroundColor: color
+            borderColor: color
         }
         : {}
     const mergedStyle: React.CSSProperties = Object.assign(checkedStyle, style)
