@@ -9,16 +9,14 @@
     },
     "files": [
         "babel",
-        "components/dist",
-        "components/lib",
-        "components/index.js",
         "postcss",
         "lib",
         "template",
         "taro/lib",
         "taro/index.js",
         "router/lib",
-        "router/index.js"
+        "router/index.js",
+        "components/lib"
     ],
     "keywords": [
         "taro",
