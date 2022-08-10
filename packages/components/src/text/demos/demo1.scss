@@ -1,0 +1,11 @@
+.text-box {
+    margin: 17px;
+}
+
+.text-block {
+    display: block;
+    height: 24px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
