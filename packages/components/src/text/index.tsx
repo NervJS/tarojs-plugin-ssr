@@ -8,13 +8,13 @@ export interface TextProps extends TaroBaseProps {
      * 显示连续空格
      * @default false
      */
-    space: false | 'ensp' | 'emsp' | 'nbsp'
+    space?: false | 'ensp' | 'emsp' | 'nbsp'
 
     /**
      * 文本是否可选
      * @default false
      */
-    selectable: boolean
+    selectable?: boolean
 
     /**
      * 文本内容

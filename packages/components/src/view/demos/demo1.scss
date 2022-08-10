@@ -1,4 +1,18 @@
-@import './base.scss';
+.color-a {
+    background-color: #5B9FFF;
+}
+
+.color-b {
+    background-color: #85B8FF;
+}
+
+.color-c {
+    background-color: #ADCFFF;
+}
+
+.hover {
+    opacity: .2;
+}
 
 .rowlike {
     display: flex;
@@ -14,3 +28,21 @@
         line-height: 122px;
     }
 }
+
+.collike {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 2px;
+
+    .item {
+        height: 107px;
+        width: 250px;
+        line-height: 107px;
+        flex: 1;
+        text-align: center;
+        font-size: 16px;
+        color: #fff;
+    }
+}
+

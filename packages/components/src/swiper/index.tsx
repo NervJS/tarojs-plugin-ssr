@@ -228,12 +228,23 @@ const Swiper: React.FC<SwiperProps> = ({
         }
 
         const swiper = swiperRef.current = new SwiperCore(swiperElRef.current, options)
-        swiper.slideNext()
 
         return () => {
             swiper.destroy()
         }
     }, [])
+
+    useEffect(() => {
+        const swiper = swiperRef.current
+        if (!swiper) {
+            return
+        }
+        if (autoplay) {
+            swiper.autoplay.start()
+        } else {
+            swiper.autoplay.stop()
+        }
+    }, [autoplay])
 
     const items = useMemo(() => toArray(children), [children])
 
