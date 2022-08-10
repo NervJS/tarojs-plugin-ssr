@@ -13,7 +13,7 @@ const App: React.FC = () => {
     }
 
     return (
-        <View className='container'>
+        <View className='wrap'>
             <Form onSubmit={handleFormSubmit} onReset={handleFormReset}>
                 <View className="card-area">
                     <View className="top-description border-bottom">开关选择器</View>
