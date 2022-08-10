@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { View, Progress } from '@taror/components'
 import './demo1.scss'
 
