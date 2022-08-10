@@ -1,0 +1,20 @@
+.icon-area {
+    margin-top: 15px;
+}
+
+.icon-item {
+    display: inline-block;
+    flex-direction: column;
+    width: 80px;
+    height: 95px;
+    margin: 7px;
+    text-align: center;
+
+    justify-content: center;
+}
+
+.icon-text {
+    width: 80px;
+    margin-top: 15px;
+    word-break: break-all;
+}
