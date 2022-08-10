@@ -57,33 +57,6 @@ const App: React.FC = () => {
                     <Button formType="reset">清空</Button>
                 </View>
             </Form>
-            <View className="mode-title mode-title-first">
-                <View className="mode-title-line-left"></View>
-                <View className="mode-title-Text">模板类型表单</View>
-                <View className="mode-title-line-right"></View>
-            </View>
-            <Form 
-                reportSubmit
-                reportType="subscribe"
-                templateId="BD0003"
-                subscribeId="8026"
-                onSubmit="reportFormSubmit"
-                onReset="reportFormReset">
-                <View className="card-area">
-                    <View className="top-description border-bottom">reportType为subscribe</View>
-                    <Button formType="submit" type="primary">点击触发</Button>
-                </View>
-            </Form>
-            <Form 
-                reportSubmit
-                reportType="default"
-                onSubmit="reportFormSubmit"
-                onReset="reportFormReset">
-                <View className="card-area">
-                    <View className="top-description border-bottom">reportType为default</View>
-                    <Button formType="submit" type="primary">点击触发</Button>
-                </View>
-            </Form>
         </View>
     )
 }
