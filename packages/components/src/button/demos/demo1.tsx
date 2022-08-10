@@ -95,7 +95,7 @@ const App: React.FC = () => {
             <View className="card-area">
                 <View className="top-description border-bottom">
                     <View>绑定开放能力</View>
-                    <View style="width: 1.8rem;">打开开发者工具、扫描二维码体验完整能力</View>
+                    <View style={{width: '180px'}}>打开开发者工具、扫描二维码体验完整能力</View>
                 </View>
                 <Button type="primary" className="middle-btn" open-type="share">触发用户分享</Button>
                 <Button type="primary" className="middle-btn" open-type="getUserInfo" bindgetuserinfo="getUserInfo">获取用户信息</Button>

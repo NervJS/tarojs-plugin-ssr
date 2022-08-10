@@ -17,7 +17,7 @@
         "start": "dumi dev",
         "docs:build": "dumi build",
         "docs:deploy": "gh-pages -f -d docs-dist",
-        "deply": "yarn run docs:build && yarn run docs:deploy",
+        "deploy": "yarn run docs:build && yarn run docs:deploy",
         "build": "yarn compile && yarn dist",
         "compile": "yarn clean && taror-tools run compile",
         "dist": "taror-tools run dist",

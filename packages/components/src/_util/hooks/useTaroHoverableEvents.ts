@@ -45,7 +45,7 @@ function useTaroHoverableEvents(
         if (hoverStopPropagation) {
             (reactEvent as any).stopHoverClass = true
         }
-    }, [])
+    }, [hoverClass, hoverStartTime, hoverStopPropagation])
 
     const handleEnd = useCallback((): void => {
         if (timer.current) {

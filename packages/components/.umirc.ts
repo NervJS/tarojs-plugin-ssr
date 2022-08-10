@@ -2,7 +2,7 @@ import {defineConfig} from 'dumi'
 
 export default defineConfig({
     title: 'taror',
-    base: 'tarojs-plugin-platform-nextjs',
+    base: '/tarojs-plugin-platform-nextjs',
     outputPath: 'docs-dist',
     publicPath: '/tarojs-plugin-platform-nextjs/',
     extraBabelPlugins: [
