@@ -1,8 +1,10 @@
 @import './base.scss';
 
 .collike {
-    margin: 2px 68px;
+    display: flex;
+    align-items: center;
     flex-direction: column;
+    margin-top: 2px;
 
     .item {
         height: 107px;

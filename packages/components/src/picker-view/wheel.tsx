@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useRef} from 'react'
+import React, {memo, useEffect, useMemo, useRef} from 'react'
 import {useSpring, animated} from '@react-spring/web'
 import {useDrag} from '@use-gesture/react'
 import isEqual from 'lodash/isEqual'
@@ -63,7 +63,7 @@ const WheelInternal: React.FC<WheelProps> = ({
         }
     }))
 
-    const items = toArray(children)
+    const items = useMemo(() => toArray(children), [children])
     
     const draggingRef = useRef(false)
 
@@ -142,20 +142,18 @@ const WheelInternal: React.FC<WheelProps> = ({
                 className={`${classPrefix}_column-wheel`}
                 style={{translateY: y}}
             >
-                {items.map((item, index) => {
-                    return (
-                        <div
-                            key={index}
-                            className={`${classPrefix}_column-item`}
-                            onClick={() => {
-                                draggingRef.current = true
-                                scrollSelect(index)
-                            }}
-                        >
-                            {item}
-                        </div>
-                    )
-                })}
+                {items.map((item, index) => (
+                    <div
+                        key={index}
+                        className={`${classPrefix}_column-item`}
+                        onClick={() => {
+                            draggingRef.current = true
+                            scrollSelect(index)
+                        }}
+                    >
+                        {item}
+                    </div>
+                ))}
             </animated.div>
         </div>
     )
