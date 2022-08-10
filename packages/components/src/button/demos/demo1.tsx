@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { View, Button } from '@taror/components'
+import { View, Button, Form } from '@taror/components'
 import './demo1.scss'
 
 const App: React.FC = () => {
@@ -12,7 +12,7 @@ const App: React.FC = () => {
                     <View>主要按钮</View>
                     <View>primary</View>
                 </View>
-                <Button type="primary" plain="false">
+                <Button type="primary" plain={false}>
                     主按钮 normal
                 </Button>
                 <Button type="primary" loading>
@@ -28,7 +28,7 @@ const App: React.FC = () => {
                     <View>次要按钮</View>
                     <View>default</View>
                 </View>
-                <Button type="default" plain="false">
+                <Button type="default" plain={false}>
                     次按钮 normal
                 </Button>
                 <Button type="default" loading>
@@ -78,7 +78,7 @@ const App: React.FC = () => {
                 <Button
                     type="primary"
                     hoverClass='none'
-                    onChange={() => {
+                    onClick={() => {
                         console.log('已点击')
                     }}
                 >
@@ -94,43 +94,38 @@ const App: React.FC = () => {
 
             <View className="card-area">
                 <View className="top-description border-bottom">
-                    <View>绑定开放能力</View>
-                    <View style={{width: '180px'}}>打开开发者工具、扫描二维码体验完整能力</View>
-                </View>
-                <Button type="primary" className="middle-btn" open-type="share">触发用户分享</Button>
-                <Button type="primary" className="middle-btn" open-type="getUserInfo" bindgetuserinfo="getUserInfo">获取用户信息</Button>
-                <Button type="primary" className="middle-btn" onClick="navToGetUserInfo">获取用户信息示例</Button>
-                <Button type="primary" className="middle-btn" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">获取用户手机号</Button>
-                <Button type="primary" className="middle-btn" onClick="navToGetPhoneNumber">获取用户手机号示例</Button>
-                <Button type="primary" className="middle-btn" open-type="openSetting" bindopensetting="openSetting">打开授权设置页</Button>
-                <Button type="primary" className="middle-btn" open-type="chooseAddress" bindchooseAddress="chooseAddress">选择用户收货地址</Button>
-                <Button type="primary" className="middle-btn" open-type="chooseInvoiceTitle" bindchooseInvoiceTitle="chooseInvoiceTitle">选择用户发票抬头</Button>
-                <Button type="primary" className="middle-btn" contact open-type="contact" bindcontact="contact">打开客服对话</Button>
-                <Button type="primary" className="middle-btn" contact open-type="login" bindlogin="login">登录</Button>
-                <Button type="primary" className="middle-btn" open-type="subscribe" template-id="BD0003" subscribe-id="8026" bindsubscribe="subscribe">订阅消息</Button>
-            </View>
-
-            {/* <View className="card-area">
-                <View className="top-description border-bottom">
                     <View>绑定表单操作</View>
-                    <View>form-type="submit/reset"</View>
+                    <View>form-type=&quot;submit/reset&quot;</View>
                 </View>
-                <form bindsubmit="submit" bindreset="reset">
-                    <Button form-type="submit" type="primary">
+                <Form
+                    onSubmit={() => {
+                        console.log('用户点击了submit')
+                    }}
+                    onReset={() => {
+                        console.log('用户点击了reset')
+                    }}
+                >
+                    <Button formType="submit" type="primary">
                         提交
                     </Button>
-                    <Button form-type="reset">
+                    <Button formType="reset">
                         重置
                     </Button>
-                </form>
+                </Form>
             </View>
 
-            <View className="card-area" hover-className="hover">
+            <View className="card-area" hoverClass="hover">
                 <View className="top-description border-bottom">
                     <View>按钮父级同步出现点击态</View>
                     <View>hover-stop-propagation</View>
                 </View>
-                <Button type="primary" hover-stop-propagation="true" onClick="tap">
+                <Button
+                    hoverStopPropagation
+                    type="primary"
+                    onClick={() => {
+                        console.log('已点击')
+                    }}
+                >
                     点击卡片空白区域体验效果
                 </Button>
             </View>
@@ -139,17 +134,15 @@ const App: React.FC = () => {
                 <View className="top-description border-bottom">
                     自定义 Button 样式
                 </View>
-                <Button className="{{isFavor ? 'Favor' : 'noFavor' }}" bindtap="tapChange">
-                    {isFavor? '已': ''}关注
+                <Button
+                    className={isFavor ? 'Favor' : 'noFavor' }
+                    onClick={() => {
+                        setIsFavor(!isFavor)
+                    }}
+                >
+                    {isFavor ? '已' : ''}关注
                 </Button>
             </View>
-
-            <View className="card-area">
-                <View className="top-description border-bottom">
-                    同时绑定开放能力、普通点击事件
-                </View>
-                <Button type="primary" open-type="getPhoneNumber" bindgetuserinfo="getPhoneNumber" bindtap="tap">获取用户手机号</Button>
-            </View> */}
         </View>
     )
 }

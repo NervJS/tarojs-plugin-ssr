@@ -37,7 +37,10 @@ function useTaroHoverableEvents(
         if (timer.current) {
             clearTimeout(timer.current)
         }
-        if (hoverClass !== 'none' && !(event as any).stopHoverClass) {
+        if (reactEvent.currentTarget === reactEvent.target) {
+            (reactEvent as any).stopHoverClass = false
+        }
+        if (hoverClass !== 'none' && !(reactEvent as any).stopHoverClass) {
             timer.current = setTimeout(() => {
                 setHovered(true)
             }, hoverStartTime)
