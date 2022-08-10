@@ -17,7 +17,7 @@ const App: React.FC = () => {
             <Form onSubmit={handleFormSubmit} onReset={handleFormReset}>
                 <View className="card-area">
                     <View className="top-description border-bottom">开关选择器</View>
-                    <View className="item-scroll">
+                    <View className="item-scroll switch-scroll">
                         <Text className="switch-Text">开关</Text>
                         <Switch name="switch" />
                     </View>
