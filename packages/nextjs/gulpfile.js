@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 const gulp = require('gulp')
 const babel = require('gulp-babel')
 const ts = require('gulp-typescript')
@@ -5,7 +7,8 @@ const clean = require('gulp-clean')
 const {
     getPluginProjectPath,
     getTaroProjectPath,
-    getRouterProjectPath
+    getRouterProjectPath,
+    getComponentsProjectPath
 } = require('./build/projectHelper')
 const getBabelCommonConfig = require('./build/getBabelCommonConfig')
 const getTSCommonConfig = require('./build/getTSCommonConfig')
@@ -89,8 +92,37 @@ gulp.task('plugin', gulp.series(
     buildPlugin
 ))
 
+function cleanComponents() {
+    const lib = getComponentsProjectPath('lib')
+    return gulp.src(lib, {
+        allowEmpty: true,
+        read: false
+    }).pipe(clean())
+}
+
+function buildComponents() {
+    const tsConfig = getTSCommonConfig()
+    const libDir = getComponentsProjectPath('lib')
+    return gulp.src('components/src/**')
+        .pipe(ts(tsConfig))
+        .pipe(gulp.dest(libDir))
+}
+
+function copyComponentsCss(cb) {
+    const tarorCss = require.resolve('@taror/components/dist/taror.css')
+    fs.copyFileSync(tarorCss, path.join(getComponentsProjectPath('lib'), 'taror.css'))
+    cb()
+}
+
+gulp.task('components', gulp.series(
+    cleanComponents,
+    buildComponents,
+    copyComponentsCss
+))
+
 gulp.task('default', gulp.parallel(
     'plugin',
     'taro',
-    'router'
+    'router',
+    'components'
 ))

@@ -15,8 +15,14 @@ function getRouterProjectPath(...filePath) {
     return path.join(root, ...filePath)
 }
 
+function getComponentsProjectPath(...filePath) {
+    const root = path.resolve(__dirname, '../components')
+    return path.join(root, ...filePath)
+}
+
 module.exports = {
     getPluginProjectPath,
     getTaroProjectPath,
-    getRouterProjectPath
+    getRouterProjectPath,
+    getComponentsProjectPath
 }
