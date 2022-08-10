@@ -41,5 +41,11 @@ module.exports = {
                 '@typescript-eslint/no-empty-function': 'off'
             }
         }
+    ],
+    ignorePatterns: [
+        '**/lib/*.js',
+        '**/lib/*.ts',
+        '**/es/*.js',
+        '**/es/*.ts'
     ]
 }

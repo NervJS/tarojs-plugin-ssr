@@ -3322,10 +3322,10 @@
     webpack-dev-server "3.11.0"
     webpack-format-messages "^2.0.5"
 
-"@taror/tools@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.npmjs.org/@taror/tools/-/tools-0.0.5.tgz#1f49978c04c50269680706f038f8b3157a10b099"
-  integrity sha512-VTikCc9ziAbb0Nx0ZMtN3FeMDbJY5agsAgsRMnicAZsZsFwPiFx7og7urIfy56DK7CpEZR56jm4CPvr0NJnhgw==
+"@taror/tools@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.npmjs.org/@taror/tools/-/tools-0.0.6.tgz#2c7f805e3d3d21581755a3db70a2e2ab9b89f155"
+  integrity sha512-QV2Bz0BPeIf48t7E4oyUa8Tf9WxGw6fnupTgqpU+dXSEIwscLiYMeUHRclh+6dRjtPyYzTAOWfoApBNPaoRqkA==
   dependencies:
     "@babel/core" "^7.17.7"
     "@babel/plugin-proposal-class-properties" "^7.4.4"
