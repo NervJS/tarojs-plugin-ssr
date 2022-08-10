@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, Text } from '@taror/components'
-import '@taror/components/src/view/style'
 import './demo1.scss'
 
 const App: React.FC = () => (

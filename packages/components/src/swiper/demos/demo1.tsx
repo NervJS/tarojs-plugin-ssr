@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import {View, Text, Swiper, SwiperItem, Switch} from '@taror/components'
-import '@taror/components/src/view/style'
 import './demo1.scss'
 
 const swiperList = [
