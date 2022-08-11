@@ -13,10 +13,10 @@ describe('Dynamic routing', () => {
     })
 
     it('static routing', () => {
-        const page = path.join(pagesDir, 'pages/me/index.js')
+        const page = path.join(pagesDir, 'pages/me/index/index.js')
         expect(fs.existsSync(page)).toBe(true)
         const code = fs.readFileSync(page, 'utf-8')
-        expect(code.includes('import Page from \'../../../src/pages/me/index\'')).toBe(true)
+        expect(code.includes('import Page from \'../../../../src/pages/me/index\'')).toBe(true)
     })
 
     it('fattern dynamic routing', () => {

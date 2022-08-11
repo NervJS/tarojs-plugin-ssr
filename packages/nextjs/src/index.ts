@@ -129,7 +129,17 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                 for (const pageInfo of nextPageInfos) {
                     const nextRoute = pageInfo.route
 
-                    const targetPageFile = nextRoute && nextRoute !== '/' ? `${nextRoute}.js` : 'index.js'
+                    const targetPageFile = (function () {
+                        if (nextRoute === '' || nextRoute === '/') {
+                            return 'index.js'
+                        }
+                        const parts = nextRoute.split('/')
+                        // 如果路由以 index 结尾，需要再嵌套一层目录
+                        if (parts[parts.length - 1] === 'index') {
+                            return `${nextRoute}/index.js`
+                        }
+                        return `${nextRoute}.js`
+                    })()
                     const nextjsPageFilePath = path.join(nextjsPagesDir, targetPageFile)
 
                     const nextjsPageDir = path.dirname(nextjsPageFilePath)
