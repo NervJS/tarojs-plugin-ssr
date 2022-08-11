@@ -16,6 +16,7 @@ export default defineConfig({
         ]
     ],
     themeConfig: {
+        carrier: 'SyMind',
         hd: {
             rules: [{ mode: 'none' }]
         }
