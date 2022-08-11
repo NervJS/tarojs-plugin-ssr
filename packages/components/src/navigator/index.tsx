@@ -85,14 +85,20 @@ interface NavigatorOptions {
 
 let customRoutes: CustomRoutes = {}
 
-let navigateTo: navigateToType | null = null
+let navigateTo: navigateToType = ({url}) => {
+    location.href = url
+}
 
 // eslint-disable-next-line prefer-const
-let navigateBack: navigateBackType | null = null
+let navigateBack: navigateBackType = () => {
+    history.back()
+}
 
 export function initNavigatorComponent(opts: NavigatorOptions) {
     customRoutes = opts.customRoutes
-    navigateTo = opts.navigateTo
+    if (opts.navigateTo) {
+        navigateTo = opts.navigateTo
+    }
 }
 
 function isAbsoluteUrl(url?: string): boolean {
