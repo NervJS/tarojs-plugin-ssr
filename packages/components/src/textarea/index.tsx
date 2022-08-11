@@ -16,7 +16,7 @@ import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 import useMergedState from '../_util/hooks/useMergedState'
 import {createTaroFocusEvent, createTaroBlurEvent} from '../_util/taroEvent'
 
-interface TextareaProps extends TaroBaseProps {
+export interface TextareaProps extends TaroBaseProps {
     /**
      * 在表单组件中加上 name 来作为 key 
      */

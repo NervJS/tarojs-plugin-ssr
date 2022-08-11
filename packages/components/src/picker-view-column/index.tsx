@@ -1,6 +1,6 @@
 import React from 'react'
 
-interface PickerViewColumnProps {
+export interface PickerViewColumnProps {
     children?: React.ReactNode
 }
 

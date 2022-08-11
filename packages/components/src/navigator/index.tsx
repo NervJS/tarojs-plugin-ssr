@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import type {TaroEventHandler, TaroEvent, TaroHoverableProps} from '../_util/typings'
 import useTaroHoverableEvents from '../_util/hooks/useTaroHoverableEvents'
 
-interface NavigatorProps extends TaroHoverableProps {
+export interface NavigatorProps extends TaroHoverableProps {
     /**
      * 在哪个目标上发生跳转，默认当前小程序
      * @default "self"

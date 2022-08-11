@@ -34,7 +34,7 @@ interface EasingFunction {
     easeInOutCubic
 }
 
-interface SwiperProps extends TaroBaseProps {
+export interface SwiperProps extends TaroBaseProps {
     /**
      * 是否显示面板指示点
      * @default false

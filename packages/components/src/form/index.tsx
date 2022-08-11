@@ -8,7 +8,7 @@ import type {TaroFormSubmitEventHandler, TaroFormCancelEventHandler} from '../_u
 import {createTaroEvent, createTaroFormSubmitEvent} from '../_util/taroEvent'
 import FormContext, {FormContextProps} from './formContext'
 
-interface FormProps {
+export interface FormProps {
     className?: string
     style?: React.CSSProperties
     children?: React.ReactNode
