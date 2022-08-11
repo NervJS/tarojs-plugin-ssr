@@ -1,0 +1,78 @@
+.scroll-view {
+    height: 166px;
+    white-space: nowrap;
+}
+
+.color-a,
+.color-b,
+.color-c {
+    line-height: 166px;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+}
+
+.color-a {
+    background-color: #5B9FFF;
+}
+.color-b {
+    background-color: #85B8FF;
+}
+.color-c {
+    background-color: #ADCFFF;
+}
+
+.row-view {
+    display: inline-block !important;
+    width: 100%;
+    height: 166px;
+    line-height: 166px;
+}
+
+.page-section-btns {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 23px;
+}
+
+.page-section-btns > div {
+    flex: 1;
+    height: 28px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    color: #6895FF;
+    border: 1px solid #38F;
+    border-radius: 5px;
+    margin: 10px 14px;
+}
+
+.scroll-to-top {
+    border-right: 1px solid #ddd;
+}
+
+.next-page {
+    border-left: 1px solid #ddd;
+}
+
+
+.horizontal-rolling {
+    height: 250px;
+}
+
+.arrange {
+    display: flex;
+}
+
+.scroll-item {
+    padding: 17px 17px;
+    height: 250px;
+}
+
+.scroll-image {
+    width: 120px;
+    height: 130px;
+    border-radius: 15px;
+}
