@@ -46,7 +46,6 @@ const App: React.FC = () => {
                                 if (order[i] === scrollIntoView) {
                                     const next = (i + 1) % order.length
                                     setScrollIntoView(order[next])
-                                    setScrollTop(next * 500)
                                 }
                             }
                         }}

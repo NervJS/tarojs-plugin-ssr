@@ -105,13 +105,19 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
 
     useEffect(() => {
         if (el.current) {
-            lastTop.current = el.current.scrollTop
-            lastLeft.current = el.current.scrollLeft
+            const {scrollTop, scrollLeft} = el.current
+            lastTop.current = scrollTop
+            lastLeft.current = scrollLeft
         }
     }, [])
 
     useEffect(() => {
-        if (el.current && scrollY && typeof scrollTop === 'number') {
+        if (
+            el.current &&
+            scrollY &&
+            typeof scrollTop === 'number' &&
+            scrollTop !== lastTop.current
+        ) {
             el.current.scrollTo({
                 top: scrollTop,
                 behavior: scrollWithAnimation ? 'smooth' : 'auto'
@@ -120,7 +126,12 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
     }, [scrollTop])
 
     useEffect(() => {
-        if (el.current && scrollX && typeof scrollLeft === 'number') {
+        if (
+            el.current &&
+            scrollX &&
+            typeof scrollLeft === 'number' &&
+            scrollTop !== lastLeft.current
+        ) {
             el.current.scrollTo({
                 left: scrollLeft,
                 behavior: scrollWithAnimation ? 'smooth' : 'auto'
