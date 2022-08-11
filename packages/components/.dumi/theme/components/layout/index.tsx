@@ -6,7 +6,8 @@ import SlugList from 'dumi-theme-default/es/components/SlugList'
 import SearchBar from 'dumi-theme-default/es/components/SearchBar'
 import Dark from 'dumi-theme-default/es/components/Dark'
 import 'dumi-theme-default/es/style/layout.less'
-import SideMenu from './subMenu'
+import SideMenu from '../subMenu'
+import './index.scss'
 
 const Hero = hero => (
     <>
