@@ -1,5 +1,6 @@
 import React, {
     useEffect,
+    useMemo,
     useRef,
     useImperativeHandle,
     forwardRef
@@ -15,6 +16,8 @@ import type {
 import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
 import useMergedState from '../_util/hooks/useMergedState'
 import {createTaroFocusEvent, createTaroBlurEvent} from '../_util/taroEvent'
+import calculateNodeHeight from './calculateNodeHeight'
+import getSizingData from './getSizingData'
 
 export interface TextareaProps extends TaroBaseProps {
     /**
@@ -150,7 +153,8 @@ export interface TextareaProps extends TaroBaseProps {
     onBlur?: TaroBlurEventHandler
 }
 
-const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProps> = ({
+const Textarea: React.ForwardRefRenderFunction<HTMLDivElement, TextareaProps> = ({
+    style,
     className,
     name,
     value,
@@ -160,6 +164,7 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
     disabled = false,
     maxlength = 140,
     focus,
+    autoHeight,
     cursor,
     autoFocus,
     selectionStart = -1,
@@ -171,7 +176,6 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
     // unsupported props
     confirmType,
     confirmHold,
-    autoHeight,
     fixed,
     cursorSpacing,
     showConfirmBar,
@@ -181,15 +185,38 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
 }, ref) => {
     const props = useTaroBaseEvents(rest)
 
+    const el = useRef<HTMLDivElement | null>(null)
     const textAreaEl = useRef<HTMLTextAreaElement | null>(null)
     const placeholderEl = useRef<HTMLDivElement | null>(null)
     const keyCode = useRef<number | null>(null)
 
-    useImperativeHandle(ref, () => textAreaEl.current!)
+    useImperativeHandle(ref, () => el.current!)
 
     const [mergedValue, setMergedValue] = useMergedState('', {
         value
     })
+
+    const mergedStyle = useMemo<React.CSSProperties | undefined>(() => {
+        if (!textAreaEl.current) {
+            return
+        }
+        const sizingData = getSizingData(textAreaEl.current)
+        if (!sizingData) {
+            return
+        }
+        const [height, rowHeight] = calculateNodeHeight(sizingData, mergedValue)
+        if (!autoHeight || typeof height !== 'number') {
+            return style
+        }
+        const heightStyle: React.CSSProperties = {height: `${height}px`}
+        if (style) {
+            return {
+                ...style,
+                ...heightStyle
+            }
+        }
+        return heightStyle
+    }, [mergedValue, autoHeight, style])
 
     useEffect(() => {
         if (!placeholderEl.current) {
@@ -232,7 +259,9 @@ const Textarea: React.ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProp
 
     return (
         <div
+            ref={el}
             className={classNames('taro-textarea', className)}
+            style={mergedStyle}
             {...props}
         >
             <div className='taro-textarea__content'>
