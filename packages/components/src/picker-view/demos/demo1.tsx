@@ -25,7 +25,9 @@ const App: React.FC = () => {
 
     return (
         <>
-            <View className='selected-date'>{years[value[0]]}年{months[value[1]]}月{days[value[2]]}日</View>
+            <View className='selected-date'>
+                {years[value[0]]}年{months[value[1]]}月{days[value[2]]}日
+            </View>
             <PickerView
                 value={value}
                 title='选择器标题'

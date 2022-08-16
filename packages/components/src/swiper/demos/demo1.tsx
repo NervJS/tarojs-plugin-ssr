@@ -134,11 +134,41 @@ const App: React.FC = () => {
                 <View className="top-description">模拟 tabs 组件功能</View>
                 <View className="swiper-tab">
                     <View className="swiper-box">
-                        <View className="tab-item {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swiperNav">全部</View>
-                        <View className="tab-item {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swiperNav">服务通知</View>
-                        <View className="tab-item {{currentTab==2 ? 'on' : ''}}" data-current="2" bindtap="swiperNav">系统通知</View>
-                        <View className="tab-item {{currentTab==3 ? 'on' : ''}}" data-current="3" bindtap="swiperNav">评论</View>
-                        <View className="tab-item {{currentTab==4 ? 'on' : ''}}" data-current="4" bindtap="swiperNav">其他</View>
+                        <View
+                            className="tab-item {{currentTab==0 ? 'on' : ''}}"
+                            data-current="0"
+                            bindtap="swiperNav"
+                        >
+                            全部
+                        </View>
+                        <View
+                            className="tab-item {{currentTab==1 ? 'on' : ''}}"
+                            data-current="1"
+                            bindtap="swiperNav"
+                        >
+                            服务通知
+                        </View>
+                        <View
+                            className="tab-item {{currentTab==2 ? 'on' : ''}}"
+                            data-current="2"
+                            bindtap="swiperNav"
+                        >
+                            系统通知
+                        </View>
+                        <View
+                            className="tab-item {{currentTab==3 ? 'on' : ''}}"
+                            data-current="3"
+                            bindtap="swiperNav"
+                        >
+                            评论
+                        </View>
+                        <View
+                            className="tab-item {{currentTab==4 ? 'on' : ''}}"
+                            data-current="4"
+                            bindtap="swiperNav"
+                        >
+                            其他
+                        </View>
                     </View>
                 </View>
                 <Swiper className="swiper-content" current="{{currentTab}}" duration="200" bindchange="bindchange">

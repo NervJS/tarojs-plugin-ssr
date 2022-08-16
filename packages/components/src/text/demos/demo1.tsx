@@ -13,7 +13,12 @@ const App: React.FC = () => (
                 <View>默认</View>
                 <View>selectable</View>
             </View>
-            <Text selectable className="text-box text-block">百度智能小程序(文本支持长按选择)</Text>
+            <Text
+                selectable
+                className="text-box text-block"
+            >
+                百度智能小程序(文本支持长按选择)
+            </Text>
         </View>
         <View className="card-area">
             <View className="top-description border-bottom">

@@ -144,7 +144,11 @@ const App: React.FC = () => {
             ))}
             <View className="card-area">
                 <View className="top-description border-bottom">可放动图</View>
-                <Image mode="aspectFill" className="image-custom" src="https://b.bdstatic.com/searchbox/icms/searchbox/img/image-gif.gif" />
+                <Image
+                    mode="aspectFill"
+                    className="image-custom"
+                    src="https://b.bdstatic.com/searchbox/icms/searchbox/img/image-gif.gif"
+                />
             </View>
         </View>
     )

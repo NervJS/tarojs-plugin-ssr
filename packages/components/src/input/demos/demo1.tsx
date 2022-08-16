@@ -116,7 +116,8 @@ const App: React.FC = () => {
                             placeholder='type="digit"'
                             onInput={e => {
                                 const value = e.detail.value
-                                setDigitValue(value.replace(/[^(^(\-|\\+)?\d+(\\.\d+)?$)]/g, ''))
+                                const res = value.replace(/[^(^(\-|\\+)?\d+(\\.\d+)?$)]/g, '')
+                                setDigitValue(res)
                             }}
                             value={digitValue}
                         />

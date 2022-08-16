@@ -3,9 +3,23 @@ import { View, Icon } from '@taror/components'
 import './demo1.scss'
 
 const smallDefault = [
-    'success', 'info', 'warn', 'waiting',
-    'setting', 'top', 'search', 'personal', 'download', 'clear', 'close', 'cancel', 'success_no_circle',
-    'checkboxSelected', 'radioSelected', 'radioUnselect', 'loadingGrey'
+    'success',
+    'info',
+    'warn',
+    'waiting',
+    'setting',
+    'top',
+    'search',
+    'personal',
+    'download',
+    'clear',
+    'close',
+    'cancel',
+    'success_no_circle',
+    'checkboxSelected',
+    'radioSelected',
+    'radioUnselect',
+    'loadingGrey'
 ]
 
 const colors = [

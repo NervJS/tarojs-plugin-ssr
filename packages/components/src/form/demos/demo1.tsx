@@ -45,7 +45,13 @@ const App: React.FC = () => {
                 </View>
                 <View className="card-area">
                     <View className="top-description border-bottom">滑块选择器</View>
-                    {/* <slider className="slider" activeColor="#3388FF" block-size="20" name="slider"></slider> */}
+                    {/* <slider
+                        className="slider"
+                        activeColor="#3388FF"
+                        block-size="20"
+                        name="slider"
+                        ></slider>
+                    */}
                 </View>
                 <View className="card-area">
                     <View className="top-description border-bottom">输入框</View>
