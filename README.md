@@ -2,7 +2,7 @@
 
 Taro 插件，用于编译为 Next.js 应用。
 
-让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，提升页面首屏速度🚀，利于 SEO🔍。
+让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，提升页面首屏速度 🚀，利于 SEO 🔍。
 
 
 > 请 Star 🌟 这个项目来表达你的喜爱 ❤️ 和支持。
@@ -94,7 +94,7 @@ export async function getServerSideProps(context) {
 }
 ```
 
-示例 - [Data Fetch Demo](https://github.com/SyMind/tarojs-plugin-platform-nextjs/tree/main/examples/data-fetch)
+示例 - [Data Fetch Demo](https://github.com/NervJS/tarojs-plugin-platform-nextjs/tree/main/examples/data-fetch)
 
 > 阅读 Next.js 文档了解更多：[getServerSideProps](https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props)。
 
@@ -121,7 +121,7 @@ export async function getStaticProps() {
 }
 ```
 
-示例 - [GitHub Reactions Demo](https://github.com/SyMind/tarojs-plugin-platform-nextjs/tree/main/examples/reactions)
+示例 - [GitHub Reactions Demo](https://github.com/NervJS/tarojs-plugin-platform-nextjs/tree/main/examples/reactions)
 
 > 阅读 Next.js 文档了解更多：[Incremental Static Regeneration](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)。
 
@@ -184,4 +184,4 @@ https://nervjs.github.io/tarojs-plugin-platform-nextjs/
 
 ## License
 
-[MIT](https://github.com/SyMind/tarojs-plugin-platform-nextjs/blob/main/LICENSE)
+[MIT](https://github.com/NervJS/tarojs-plugin-platform-nextjs/blob/main/LICENSE)

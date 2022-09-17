@@ -27,14 +27,14 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/SyMind/tarojs-plugin-platform-nextjs.git"
+        "url": "git+https://github.com/NervJS/tarojs-plugin-platform-nextjs.git"
     },
     "author": "SyMind",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/SyMind/tarojs-plugin-platform-nextjs/issues"
+        "url": "https://github.com/NervJS/tarojs-plugin-platform-nextjs/issues"
     },
-    "homepage": "https://github.com/SyMind/tarojs-plugin-platform-nextjs#readme",
+    "homepage": "https://github.com/NervJS/tarojs-plugin-platform-nextjs#readme",
     "dependencies": {
         "@babel/core": "^7.17.7",
         "@babel/helper-split-export-declaration": "^7.16.7",

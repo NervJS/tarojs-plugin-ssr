@@ -9,7 +9,7 @@ function TarojsPluginPlatformNextjsStarsView() {
     (async function() {
       const res = await request({
         method: 'GET',
-        url: 'https://api.github.com/repos/SyMind/tarojs-plugin-platform-nextjs'
+        url: 'https://api.github.com/repos/NervJS/tarojs-plugin-platform-nextjs'
       })
       setStars(res.data.stargazers_count)
     })()

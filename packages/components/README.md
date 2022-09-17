@@ -2,7 +2,7 @@
 
 ## 文档
 
-https://symind.github.io/tarojs-plugin-platform-nextjs/
+https://nervjs.github.io/tarojs-plugin-platform-nextjs/
 
 ## 安装
 
