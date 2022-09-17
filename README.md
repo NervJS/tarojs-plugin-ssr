@@ -176,7 +176,7 @@ class MyComponent extends Component {
 
 ## Taro 组件的 React 实现
 
-https://symind.github.io/tarojs-plugin-platform-nextjs
+https://nervjs.github.io/tarojs-plugin-platform-nextjs/
 
 ## 参与建设
 
