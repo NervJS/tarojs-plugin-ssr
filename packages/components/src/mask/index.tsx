@@ -14,7 +14,17 @@ export interface MaskProps {
      */
     visible?: boolean
 
+    /**
+     * 背景是否透明
+     * 
+     * @default false
+     */
     transparent?: boolean
+
+    /**
+     * 蒙层内容
+     */
+    children?: React.ReactNode
 
     /**
      * 点击蒙层自身触发
