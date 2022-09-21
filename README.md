@@ -180,7 +180,19 @@ https://nervjs.github.io/tarojs-plugin-platform-nextjs/
 
 ## 参与建设
 
-十分欢迎大家参与对插件问题的修复和功能的改进！如果你有兴趣，阅读 [架构设计](./ARCHITECTURE.md) 帮助您更快地了解项目。
+十分欢迎大家参与对插件问题的修复和功能的改进！
+
+### 本地编译
+
+使用以下命令在本地编译插件
+
+```bash
+yarn install
+
+yarn lerna run build
+```
+
+### [架构设计](./ARCHITECTURE.md)
 
 ## License
 
