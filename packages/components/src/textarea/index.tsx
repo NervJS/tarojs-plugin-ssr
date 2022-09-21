@@ -204,7 +204,7 @@ const Textarea: React.ForwardRefRenderFunction<HTMLDivElement, TextareaProps> = 
         if (!sizingData) {
             return
         }
-        const [height, rowHeight] = calculateNodeHeight(sizingData, mergedValue)
+        const [height] = calculateNodeHeight(sizingData, mergedValue)
         if (!autoHeight || typeof height !== 'number') {
             return style
         }
