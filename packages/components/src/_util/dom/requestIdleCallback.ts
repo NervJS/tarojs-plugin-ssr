@@ -1,4 +1,4 @@
-export const requestIdleCallback = globalThis.requestIdleCallback
+export const requestIdleCallback = (typeof globalThis !== 'undefined') && globalThis.requestIdleCallback
     || function (cb: IdleRequestCallback): number {
         const start = Date.now()
         return setTimeout(function () {
@@ -11,7 +11,7 @@ export const requestIdleCallback = globalThis.requestIdleCallback
         }, 1) as unknown as number
     }
 
-export const cancelIdleCallback = globalThis.cancelIdleCallback
+export const cancelIdleCallback = (typeof globalThis !== 'undefined') && globalThis.cancelIdleCallback
     || function (id: number) {
         return clearTimeout(id)
     }
