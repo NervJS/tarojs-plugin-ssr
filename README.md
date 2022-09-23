@@ -1,4 +1,7 @@
-# tarojs-plugin-platform-nextjs
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/19852293/191987817-848a46a1-711b-49c7-9e8d-4da0ba4cf51a.png" height="130">
+    <h1 align="center">tarojs-plugin-platform-nextjs</h1>
+</p>
 
 让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，提升页面首屏速度 🚀，利于 SEO 🔍。
 
