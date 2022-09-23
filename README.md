@@ -194,6 +194,37 @@ yarn lerna run build
 
 ### [架构设计](./ARCHITECTURE.md)
 
+### 贡献者
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/SyMind">
+                    <img
+                        src="https://avatars.githubusercontent.com/u/19852293?s=120&v=4"
+                        width="100"
+                        alt=""
+                    >
+                    </br>
+                    <b>SyMind</b>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/zygoing">
+                    <img
+                        src="https://avatars.githubusercontent.com/u/39304222?s=120&v=4"
+                        width="100"
+                        alt=""
+                    >
+                    </br>
+                    <b>zygoing</b>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 ## License
 
 [MIT](https://github.com/NervJS/tarojs-plugin-platform-nextjs/blob/main/LICENSE)
