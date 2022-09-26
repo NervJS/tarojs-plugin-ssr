@@ -44,7 +44,9 @@ class TaroApp {
             return
         }
 
-        const base = isAbsoluteUrl(url) ?  undefined : location.origin
+        // Safari 14 and below throw an error when the base parameter is undefined
+        // https://bugs.webkit.org/show_bug.cgi?id=216841
+        const base = isAbsoluteUrl(url) ? undefined : location.origin
         const urlObj = base ? new URL(url, base) : new URL(url)
 
         let target = url

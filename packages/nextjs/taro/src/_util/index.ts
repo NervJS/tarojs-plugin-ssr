@@ -19,6 +19,7 @@ export function shouldBeObject(target: unknown): {flag: boolean, msg?: string} {
 
 export function findDOM(inst?: ReactInstance | null | undefined): Element | Text | null {
     if (inst) {
+        // eslint-disable-next-line react/no-find-dom-node
         return ReactDOM.findDOMNode(inst)
     }
     return document.body
@@ -173,39 +174,6 @@ const VALID_COLOR_REG = /^#[0-9a-fA-F]{6}$/
 
 export const isValidColor = (color: string): boolean => {
     return VALID_COLOR_REG.test(color)
-}
-
-export function processOpenApi(
-    apiName: string,
-    defaultOptions?: Record<string, unknown>,
-    formatResult = (x: any) => x,
-    formatParams = (x: any) => x,
-) {
-    return (options: Record<string, any>) => {
-        // @ts-ignore
-        if (typeof window.wx === 'undefined') {
-            return weixinCorpSupport(apiName)
-        }
-
-        options = options || {}
-        const obj = Object.assign({}, defaultOptions, options)
-        const p = new Promise((resolve, reject) => {
-            ['fail', 'success', 'complete'].forEach(k => {
-                obj[k] = (oriRes: any) => {
-                    const res = formatResult(oriRes)
-                    options[k] && options[k](res)
-                    if (k === 'success') {
-                        resolve(res)
-                    } else if (k === 'fail') {
-                        reject(res)
-                    }
-                }
-            })
-            // @ts-ignore
-            wx[apiName](formatParams(obj))
-        })
-        return p
-    }
 }
 
 export function easeInOutCubic(t: number, b: number, c: number, d: number) {

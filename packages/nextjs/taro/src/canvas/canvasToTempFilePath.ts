@@ -12,7 +12,7 @@ const canvasToTempFilePathInternal: typeof swan.canvasToTempFilePath = ({
 }) => {
     if (typeof canvasId !== 'string') {
         fail?.({
-            errMsg: `The canvasId param is required.`
+            errMsg: 'The canvasId param is required.'
         })
         complete?.()
         return
