@@ -45,7 +45,7 @@ class TaroApp {
         }
 
         const base = isAbsoluteUrl(url) ?  undefined : location.origin
-        const urlObj = new URL(url, base)
+        const urlObj = base ? new URL(url, base) : new URL(url)
 
         let target = url
         if (!isAbsoluteUrl(url)) {
@@ -91,13 +91,13 @@ class TaroApp {
         }
 
         const base = isAbsoluteUrl(url) ?  undefined : location.origin
-        const urlObj = new URL(url, base)
-    
+        const urlObj = base ? new URL(url, base) : new URL(url)
+
         const customRoute = this.customRoutes[urlObj.pathname]
         if (customRoute) {
             urlObj.pathname = customRoute
         }
-    
+
         Router.router.push(urlObj.toString())
             .then(() => {
                 const page: TaroPage = {
@@ -119,13 +119,13 @@ class TaroApp {
         }
 
         const base = isAbsoluteUrl(url) ?  undefined : location.origin
-        const urlObj = new URL(url, base)
-    
+        const urlObj = base ? new URL(url, base) : new URL(url)
+
         const customRoute = this.customRoutes[urlObj.pathname]
         if (customRoute) {
             urlObj.pathname = customRoute
         }
-    
+
         Router.router.push(urlObj.toString())
             .then(() => {
                 const page: TaroPage = {
