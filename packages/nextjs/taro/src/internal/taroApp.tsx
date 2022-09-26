@@ -5,9 +5,9 @@ import type {TaroPage, CustomRoutes} from '../_util/typings'
 
 function isAbsoluteUrl(url?: string): boolean {
     if (!url) {
-        return false;
+        return false
     }
-    return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+    return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url)
 }
 
 class TaroApp {
@@ -39,8 +39,8 @@ class TaroApp {
 
     navigateTo: typeof swan.navigateTo = ({url, success, fail, complete}) => {
         if (!Router.router) {
-            fail()
-            complete()
+            fail?.()
+            complete?.()
             return
         }
 
@@ -62,7 +62,7 @@ class TaroApp {
                     route: urlObj.pathname
                 }
                 this.pageStack.push(page)
-                success()
+                success?.()
             })
             .catch(fail)
             .finally(complete)
@@ -70,8 +70,8 @@ class TaroApp {
 
     navigateBack: typeof swan.navigateBack = ({success, fail, complete}) => {
         if (!Router.router) {
-            fail()
-            complete()
+            fail?.()
+            complete?.()
             return
         }
 
@@ -79,14 +79,14 @@ class TaroApp {
         // https://github.com/vercel/next.js/discussions/18333
         Router.router.back()
         this.pageStack.pop()
-        success()
-        complete()
+        success?.()
+        complete?.()
     }
 
     redirectTo: typeof swan.redirectTo = ({url, complete, fail, success}) => {
         if (!Router.router) {
-            fail()
-            complete()
+            fail?.()
+            complete?.()
             return
         }
 
@@ -105,7 +105,7 @@ class TaroApp {
                 }
                 this.pageStack.pop()
                 this.pageStack.push(page)
-                success()
+                success?.()
             })
             .catch(fail)
             .finally(complete)
@@ -113,8 +113,8 @@ class TaroApp {
 
     reLaunch: typeof swan.reLaunch = ({url, complete, fail, success}) => {
         if (!Router.router) {
-            fail()
-            complete()
+            fail?.()
+            complete?.()
             return
         }
 
@@ -132,7 +132,7 @@ class TaroApp {
                     route: urlObj.pathname
                 }
                 this.pageStack = [page]
-                success()
+                success?.()
             })
             .catch(fail)
             .finally(complete)
