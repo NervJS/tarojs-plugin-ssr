@@ -1,6 +1,16 @@
-# tarojs-plugin-platform-nextjs
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/19852293/191987817-848a46a1-711b-49c7-9e8d-4da0ba4cf51a.png" height="130">
+    <h1 align="center">tarojs-plugin-platform-nextjs</h1>
+</p>
 
-Taro 插件，用于编译为 Next.js 应用。
+<p align="center">
+    <a aria-label="NPM version" href="https://www.npmjs.com/package/tarojs-plugin-platform-nextjs">
+        <img alt="" src="https://img.shields.io/npm/v/tarojs-plugin-platform-nextjs.svg?style=for-the-badge&labelColor=000000">
+    </a>
+    <a aria-label="License" href="https://github.com/NervJS/tarojs-plugin-platform-nextjs/blob/main/LICENSE">
+        <img alt="" src="https://img.shields.io/npm/l/tarojs-plugin-platform-nextjs.svg?style=for-the-badge&labelColor=000000">
+    </a>
+</p>
 
 让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，提升页面首屏速度 🚀，利于 SEO 🔍。
 
@@ -13,18 +23,17 @@ Taro 插件，用于编译为 Next.js 应用。
 
 ### 安装
 
-在 Taro 项目中安装本插件。
+本项目以 Taro 插件的形式存在，且依赖于 Next.js，你需要在你的 Taro 项目中安装**本插件**和 **Next.js**。
 
 ```bash
-# 安装插件与 next.js
-# 注意：原理上支持任意版本 next.js，但目前仅对 10.1.2 版本做过测试
-
-# 使用 npm
 npm install tarojs-plugin-platform-nextjs next
-
-# 使用 pnpm
-pnpm install tarojs-plugin-platform-nextjs next
 ```
+
+```bash
+yarn add tarojs-plugin-platform-nextjs next
+```
+
+注意：原理上支持任意版本 Next.js，但目前仅对 10.1.2 版本做过测试。
 
 ### 配置
 
@@ -58,7 +67,7 @@ npx taro build --type nextjs
 npx taro start -p 10086
 ```
 
-产出目录下是一个完整的 Next.js 应用，也可直接使用 next 命令启动它：
+产出目录下是一个**完整的 Next.js 应用**，你也可直接使用 next 命令启动它：
 
 ```bash
 npx next start dist -p 10086
@@ -143,7 +152,7 @@ module.exports = {
 
 ### 功能限制
 
-插件基于 Next.js 框架，故受其影响，有以下限制：
+由于插件基于 Next.js 框架，故受其影响，有以下限制：
 
 1. 仅支持 `browser` 路由模式。
 2. 组件级样式必须使用 CSS Module。
@@ -176,11 +185,11 @@ class MyComponent extends Component {
 
 ## Taro 组件的 React 实现
 
-https://nervjs.github.io/tarojs-plugin-platform-nextjs/
+Taro 官方的 H5 组件库是基于 Stencil 框架开发，为了更好的性能和兼容性，本项目使用完全基于 React 开发的 Taro 组件库 [@taror/components](https://nervjs.github.io/tarojs-plugin-platform-nextjs/)。
 
 ## 参与建设
 
-十分欢迎大家参与对插件问题的修复和功能的改进！
+十分欢迎大家参与对插件问题的修复和功能的改进，如果你有任何问题，都可以在本项目的 issue 中进行提问！
 
 ### 本地编译
 
@@ -192,7 +201,40 @@ yarn install
 yarn lerna run build
 ```
 
-### [架构设计](./ARCHITECTURE.md)
+### 架构设计
+
+你可以通过阅读[架构设计](./ARCHITECTURE.md)来了解本插件的工作原理。
+
+### 贡献者
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/SyMind">
+                    <img
+                        src="https://avatars.githubusercontent.com/u/19852293?s=120&v=4"
+                        width="100"
+                        alt=""
+                    >
+                    </br>
+                    <b>SyMind</b>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/zygoing">
+                    <img
+                        src="https://avatars.githubusercontent.com/u/39304222?s=120&v=4"
+                        width="100"
+                        alt=""
+                    >
+                    </br>
+                    <b>zygoing</b>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 ## License
 

@@ -7,5 +7,9 @@ https://nervjs.github.io/tarojs-plugin-platform-nextjs/
 ## 安装
 
 ```bash
-pnpm install @taror/components
+npm install @taror/components
+```
+
+```bash
+yarn add @taror/components
 ```

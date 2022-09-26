@@ -43,9 +43,11 @@ module.exports = {
         }
     ],
     ignorePatterns: [
-        '**/lib/*.js',
-        '**/lib/*.ts',
-        '**/es/*.js',
-        '**/es/*.ts'
+        '**/lib/**/*.js',
+        '**/lib/**/*.ts',
+        '**/es/**/*.js',
+        '**/es/**/*.ts',
+        '**/dist/**/*.js',
+        '**/dist/**/*.ts'
     ]
 }
