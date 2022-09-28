@@ -1,6 +1,6 @@
 const path = require('path')
 
-const SERVER_PROPS_SSG_CONFLICT = `You can not use getStaticProps or getStaticPaths with getServerSideProps. To use SSG, please remove getServerSideProps`
+const SERVER_PROPS_SSG_CONFLICT = 'You can not use getStaticProps or getStaticPaths with getServerSideProps. To use SSG, please remove getServerSideProps'
 
 const EXPORT_NAME_GET_STATIC_PROPS = 'getStaticProps'
 const EXPORT_NAME_GET_STATIC_PATHS = 'getStaticPaths'

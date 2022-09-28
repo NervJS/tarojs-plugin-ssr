@@ -56,7 +56,7 @@ module.exports = function (babel) {
         name: 'class-component-taro-router-plugin',
         visitor: {
             Program: {
-                enter(path) {
+                enter() {
                     needsWithRouter = false
                     isWithRouterImported = false
                 },
