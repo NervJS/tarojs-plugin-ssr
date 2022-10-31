@@ -1,5 +1,5 @@
 if (!process.env.GITHUB_TOKEN) {
-    console.log('You should specific your GitHub token!')
+    throw new Error('You should specific your GitHub token!')
 }
 
 const config = {
