@@ -1,6 +1,5 @@
 const nodePath = require('path')
-
-const regexLikeCssGlobal = /((?<!\.module)\.css)|((?<!\.module)\.(scss|sass))$/
+const {isGlobalStyle} = require('./common')
 
 module.exports = function (babel, options, dirname) {
     const t = babel.types
@@ -22,7 +21,7 @@ module.exports = function (babel, options, dirname) {
                         ImportDeclaration(path) {
                             if (
                                 t.isStringLiteral(path.node.source)
-                                && regexLikeCssGlobal.test(path.node.source.value)
+                                && isGlobalStyle(path.node.source.value)
                             ) {
                                 path.remove()
                             }

@@ -1,7 +1,6 @@
 const fs = require('fs')
 const nodePath = require('upath')
-
-const regexLikeCssGlobal = /((?<!\.module)\.css)|((?<!\.module)\.(scss|sass))$/
+const {isGlobalStyle} = require('./common')
 
 const isWindows = process.platform === 'win32'
 
@@ -28,7 +27,7 @@ module.exports = function (babel, options, dirname) {
                 }
 
                 const request = path.node.source.value
-                if (!regexLikeCssGlobal.test(request)) {
+                if (!isGlobalStyle(request)) {
                     return
                 }
 
