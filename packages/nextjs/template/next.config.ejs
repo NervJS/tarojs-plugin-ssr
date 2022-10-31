@@ -1,3 +1,5 @@
+const withLess = require('next-with-less')
+
 <%_ if (customNextConfig) { _%>
 const customNextConfig = require('./config/next.config.js')
 <%_ } _%>
@@ -91,4 +93,4 @@ const nextConfig = {
     <%_ } _%>
 }
 
-module.exports = nextConfig
+module.exports = withLess(nextConfig)

@@ -55,6 +55,7 @@
         "lodash": "^4.17.21",
         "mobile-detect": "^1.4.5",
         "mpromisify": "^1.0.4",
+        "next-with-less": "^2.0.5",
         "open": "^8.4.0",
         "postcss-pxtorem": "^6.0.0",
         "scss-bundle": "^3.1.2",
