@@ -1,9 +1,5 @@
-if (!process.env.GITHUB_TOKEN) {
-    throw new Error('You should specific your GitHub token!')
-}
-
 const config = {
-    projectName: 'data',
+    projectName: 'with-less',
     date: '2022-4-16',
     designWidth: 375,
     deviceRatio: {
@@ -18,7 +14,6 @@ const config = {
         'tarojs-plugin-platform-nextjs'
     ],
     env: {
-        GITHUB_TOKEN: JSON.stringify(process.env.GITHUB_TOKEN)
     },
     copy: {
         patterns: [

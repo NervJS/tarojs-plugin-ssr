@@ -50,6 +50,7 @@ module.exports = {
         '**/es/**/*.js',
         '**/es/**/*.ts',
         '**/dist/**/*.js',
-        '**/dist/**/*.ts'
+        '**/dist/**/*.ts',
+        '**/__fixtures__/**'
     ]
 }
