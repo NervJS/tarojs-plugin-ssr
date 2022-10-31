@@ -1,3 +1,20 @@
-.main {
-    background-color: red;
+// mixins
+.bordered {
+    border-top: dotted 1px black;
+    border-bottom: solid 2px black;
+}
+
+.a {
+    color: #111;
+    .bordered();
+}
+
+// functions
+@base: #f04615;
+@width: 1;
+
+.functions {
+    width: percentage(@width);
+    color: saturate(@base, 5%);
+    background-color: spin(lighten(@base, 25%), 8);
 }
