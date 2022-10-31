@@ -1,4 +1,5 @@
 import "../../app.scss";
+import "../../app.less";
 import Head from "next/head";
 import TaroApp from "./app";
 
