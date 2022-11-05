@@ -1,4 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
+import bridge, { PagePathChangeListener } from '../_util/bridge'
+import { ensureLeadingSlash } from '../_util/url'
+import uniqueId from '../_util/uniqueId'
 import Navigator from '../navigator'
 
 interface TabBarItem {
@@ -53,22 +56,60 @@ export interface TabBarProps {
     list: TabBarItem[]
 }
 
-const TabBar: React.FC<TabBarProps> = ({list}) => {
+const TabBar: React.FC<TabBarProps> = ({color, backgroundColor, borderStyle = 'black', selectedColor, list: originList}) => {
+    const [currentPagePath, setCurrentPagePath] = useState<string | undefined>()
+
+    useEffect(() => {
+        setCurrentPagePath(bridge.getCurrentPagePath())
+
+        const handlePagePathChange: PagePathChangeListener = path => {
+            setCurrentPagePath(path)
+        }
+        bridge.onPagePathChange(handlePagePathChange)
+
+        return () => {
+            bridge.offPagePathChange(handlePagePathChange)
+        }
+    }, [])
+
+    const list = useMemo(() => originList.map(({pagePath, ...rest}) => ({
+        ...rest,
+        pagePath: ensureLeadingSlash(pagePath),
+        key: uniqueId()
+    })), [originList])
+
     if (list.length < 2) {
         return null
     }
 
     return (
-        <div className='taro-tab-bar'>
-            {list.slice(0, 5).map(({pagePath, text, iconPath, selectedIconPath}) => {
+        <div
+            className='taro-tab-bar'
+            style={{
+                color,
+                backgroundColor,
+                borderColor: borderStyle
+            }}
+        >
+            {list.slice(0, 5).map(({key, pagePath, text, iconPath, selectedIconPath}) => {
+                const selected = currentPagePath === pagePath
+
                 return (
-                    // eslint-disable-next-line react/jsx-key
                     <Navigator
+                        key={key}
                         className='taro-tab-bar__item'
+                        style={{
+                            color: selected ? selectedColor : color
+                        }}
                         openType='navigate'
                         url={pagePath}
                     >
-                        <div className='taro-tab-bar__icon' style={{backgroundImage: `url(${iconPath})`}} />
+                        <div
+                            className='taro-tab-bar__icon'
+                            style={{
+                                backgroundImage: `url(${selected ? iconPath : selectedIconPath})`
+                            }}
+                        />
                         <div className='taro-tab-bar__text'>{text}</div>
                     </Navigator>
                 )

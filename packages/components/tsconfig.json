@@ -18,7 +18,11 @@
             "es2017"
         ],
         "skipLibCheck": true,
-        "allowJs": true
+        "allowJs": true,
+        "paths": {
+            "@taror/components": ["src/index.ts"],
+            "@taror/components/*": ["src/*"],
+        }
     },
     "include": [
         "src/**/*"

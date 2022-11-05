@@ -74,10 +74,23 @@ export namespace navigateBack {
     export type ParamPropComplete = () => void
 }
 
-type NavigateBackType = (param?: navigateBack.Param) => void
+export type NavigateBackType = (param?: navigateBack.Param) => void
+
+export type GetCustomRoutesType = () => CustomRoutesType
+
+export type GetCurrentPagePath = () => string
+
+export type PagePathChangeListener = (pagePath: string) => void
+
+export type OnPagePathChangeType = (listener: PagePathChangeListener) => void
+
+export type OffPagePathChangeType = (listener: PagePathChangeListener) => void
 
 interface BridgeConfig {
-    customRoutes: CustomRoutesType
+    getCustomRoutes: GetCustomRoutesType
+    getCurrentPagePath: GetCurrentPagePath
+    onPagePathChange: OnPagePathChangeType
+    offPagePathChange: OffPagePathChangeType
     navigateTo: NavigateToType
     navigateBack: NavigateBackType
 }
@@ -96,8 +109,20 @@ class Bridge {
         return this._config
     }
 
-    get customRoutes(): CustomRoutesType {
-        return this._guard().customRoutes
+    getCustomRoutes: GetCustomRoutesType = () => {
+        return this._guard().getCustomRoutes()
+    }
+
+    getCurrentPagePath: GetCurrentPagePath = () => {
+        return this._guard().getCurrentPagePath()
+    }
+
+    onPagePathChange: OnPagePathChangeType = listener => {
+        return this._guard().onPagePathChange(listener)
+    }
+
+    offPagePathChange: OffPagePathChangeType = listener => {
+        return this._guard().offPagePathChange(listener)
     }
 
     navigateTo: NavigateToType = (...args) => {

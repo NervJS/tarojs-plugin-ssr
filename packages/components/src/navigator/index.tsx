@@ -98,7 +98,7 @@ const Navigator: React.ForwardRefRenderFunction<HTMLAnchorElement, NavigatorProp
     let targetUrl = originUrl
     if (originUrl && !isAbsoluteUrl(originUrl)) {
         const urlObj = new URL(originUrl, 'http://0.0.0.0')
-        const customRoute = bridge.customRoutes[urlObj.pathname]
+        const customRoute = bridge.getCustomRoutes()[urlObj.pathname]
         if (typeof customRoute === 'string') {
             urlObj.pathname = customRoute
         } else if (Array.isArray(customRoute) && typeof customRoute[0] === 'string') {
