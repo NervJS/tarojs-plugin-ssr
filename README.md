@@ -77,7 +77,7 @@ npx next start dist -p 10086
 
 <p align="center">
   <a href="https://lemon.baidu.com/wiki" target="_blank" rel="noopener noreferrer">
-    <img width="180" src="https://user-images.githubusercontent.com/19852293/180333671-19ec30f9-480e-4841-a0a9-40841da81e80.png" alt="Beauty wiki logo">
+    <img width="180" src="https://user-images.githubusercontent.com/19852293/200127195-68e37d40-18a7-4354-92b3-3ac54174fe80.png" alt="Beauty wiki logo">
   </a>
 </p>
 
