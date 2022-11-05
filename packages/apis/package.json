@@ -1,0 +1,16 @@
+{
+    "name": "@taror/apis",
+    "version": "2.0.4",
+    "description": "Taro3 apis implementation without redundant dependencies",
+    "license": "MIT",
+    "files": [
+        "dist",
+        "lib",
+        "es"
+    ],
+    "main": "lib/index.js",
+    "module": "es/index.js",
+    "typings": "lib/index.d.ts",
+    "scripts": {
+    }
+}
