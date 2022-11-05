@@ -29,7 +29,7 @@ interface ToastProps {
     children?: React.ReactNode
 }
 
-class Portals<T> {
+class Portals<T extends Record<string, any>> {
     name: string
 
     component?: React.ComponentType<T>
@@ -91,7 +91,7 @@ class Portals<T> {
     }
 }
 
-let globalToast = typeof window !== 'undefined' ? new Portals<ToastProps>('Toast') : null
+const globalToast = typeof window !== 'undefined' ? new Portals<ToastProps>('Toast') : null
 
 /**
  * 内部方法，注册 Toast 组件
@@ -226,7 +226,7 @@ interface ModalProps {
 }
 
 
-let globalModal = typeof window !== 'undefined' ? new Portals<ModalProps>('Modal') : null
+const globalModal = typeof window !== 'undefined' ? new Portals<ModalProps>('Modal') : null
 
 /**
  * 内部方法，注册 Modal 组件

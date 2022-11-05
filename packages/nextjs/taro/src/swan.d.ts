@@ -1221,8 +1221,7 @@ export namespace startRecord {
 export function startRecord(OBJECT: startRecord.Param): void
 
 /**
- * ​主动调用停止录音。
- *
+ * 主动调用停止录音。
  * **示例代码：**
  *
  *     ```javascript
@@ -4127,7 +4126,7 @@ export namespace openLocation {
     export type ParamPropComplete = () => any
 }
 /**
- * ​使用内置地图查看位置。
+ * 使用内置地图查看位置。
  *
  * 需要用户授权scope.userLocation
  *
@@ -8076,7 +8075,7 @@ export namespace showModal {
     export type ParamPropComplete = () => any
 }
 /**
- * ​显示模态弹窗
+ * 显示模态框
  *
  * **示例代码：**
  *
@@ -8140,7 +8139,7 @@ export namespace showActionSheet {
     export type ParamPropComplete = () => any
 }
 /**
- * ​显示操作菜单
+ * 显示操作菜单
  *
  * **Bug & Tip：**
  *
