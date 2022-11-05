@@ -1,0 +1,24 @@
+.taro-tab-bar {
+    overflow: hidden;
+    display: flex;
+    height: 60px;
+
+    &__item {
+        flex: 1;
+    }
+
+    &__icon {
+        width: 25px;
+        height: 25px;
+        margin: 10px auto 5px;
+        background-size: contain;
+        background-position: 50%;
+        background-repeat: no-repeat;
+    }
+
+    &__text {
+        text-align: center;
+        font-size: 12px;
+        line-height: 12px;
+    }
+}

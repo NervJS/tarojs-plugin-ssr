@@ -2,6 +2,7 @@ import React, {forwardRef} from 'react'
 import classNames from 'classnames'
 import type {TaroEventHandler, TaroEvent, TaroHoverableProps} from '../_util/typings'
 import useTaroHoverableEvents from '../_util/hooks/useTaroHoverableEvents'
+import bridge from '../_util/bridge'
 
 export interface NavigatorProps extends TaroHoverableProps {
     /**
@@ -71,36 +72,6 @@ export interface NavigatorProps extends TaroHoverableProps {
     onFail?: TaroEventHandler<TaroEvent<{errMsg: string}>>
 }
 
-type CustomRoutes = Record<string, string>
-
-type navigateToType = (param?: any) => void
-
-type navigateBackType = (param?: any) => void
-
-interface NavigatorOptions {
-    customRoutes: CustomRoutes
-    navigateTo: navigateToType
-    navigateBack: navigateBackType
-}
-
-let customRoutes: CustomRoutes = {}
-
-let navigateTo: navigateToType = ({url}) => {
-    location.href = url
-}
-
-// eslint-disable-next-line prefer-const
-let navigateBack: navigateBackType = () => {
-    history.back()
-}
-
-export function initNavigatorComponent(opts: NavigatorOptions) {
-    customRoutes = opts.customRoutes
-    if (opts.navigateTo) {
-        navigateTo = opts.navigateTo
-    }
-}
-
 function isAbsoluteUrl(url?: string): boolean {
     if (!url) {
         return false
@@ -127,9 +98,11 @@ const Navigator: React.ForwardRefRenderFunction<HTMLAnchorElement, NavigatorProp
     let targetUrl = originUrl
     if (originUrl && !isAbsoluteUrl(originUrl)) {
         const urlObj = new URL(originUrl, 'http://0.0.0.0')
-        const customRoute = customRoutes[urlObj.pathname]
-        if (customRoute) {
+        const customRoute = bridge.customRoutes[urlObj.pathname]
+        if (typeof customRoute === 'string') {
             urlObj.pathname = customRoute
+        } else if (Array.isArray(customRoute) && typeof customRoute[0] === 'string') {
+            urlObj.pathname = customRoute[0]
         }
         targetUrl = urlObj.pathname + urlObj.search + urlObj.hash
     }
@@ -144,9 +117,11 @@ const Navigator: React.ForwardRefRenderFunction<HTMLAnchorElement, NavigatorProp
                 event.preventDefault()
                 if (target === 'self') {
                     if (openType === 'navigate') {
-                        navigateTo?.({url: targetUrl})
+                        if (targetUrl) {
+                            bridge.navigateTo({url: targetUrl})
+                        }
                     } else if (openType === 'navigateBack') {
-                        navigateBack?.()
+                        bridge.navigateBack()
                     }
                 }
             }}

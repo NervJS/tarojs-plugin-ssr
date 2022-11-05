@@ -13,7 +13,7 @@ export type {InputProps} from './input'
 export {default as Label} from './label'
 export type {LabelProps} from './label'
 
-export {default as Navigator, initNavigatorComponent} from './navigator'
+export {default as Navigator} from './navigator'
 export type {NavigatorProps} from './navigator'
 
 export {default as Picker} from './picker'
@@ -62,3 +62,6 @@ export {default as Toast} from './toast'
 export {default as Icon} from './icon'
 export {default as Preview} from './preview'
 export {default as Modal} from './modal'
+
+export {default as TabBar} from './tab-bar'
+export type {TabBarProps} from './tab-bar'
