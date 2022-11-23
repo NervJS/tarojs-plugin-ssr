@@ -232,6 +232,17 @@ yarn lerna run build
                     <b>zygoing</b>
                 </a>
             </td>
+             <td align="center">
+                <a href="https://github.com/zengshide123">
+                    <img
+                        src="https://avatars.githubusercontent.com/u/31063702?s=60&v=4"
+                        width="100"
+                        alt=""
+                    >
+                    </br>
+                    <b>zengshide123</b>
+                </a>
+            </td>
         </tr>
     </tbody>
 </table>
