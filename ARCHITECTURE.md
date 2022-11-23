@@ -4,7 +4,7 @@
 
 ## 概览
 
-Taro 在 3.1 版本提出了开放式架构的思想，让开发者可以通过编写插件来支持一个新的平台，具体文档在 [这里](https://taro-docs.jd.com/taro/blog/2021-03-10-taro-3-1-lts#1-%E5%BC%80%E6%94%BE%E5%BC%8F%E6%9E%B6%E6%9E%84)。
+Taro 在 3.1 版本提出了开放式架构的思想，让开发者可以通过编写插件来支持一个新的平台，具体文档在 [这里](https://docs.taro.zone/blog/2021-03-10-taro-3-1-lts#1-%E5%BC%80%E6%94%BE%E5%BC%8F%E6%9E%B6%E6%9E%84)。
 
 该项目就是通过编写 Taro 插件，将 React 生态中知名框架 Next.js 作为 Taro 的一个目标平台，以此让 Taro 能够支持 Pre-rendering、SSR 和 ISR。
 
