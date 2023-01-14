@@ -26,11 +26,11 @@
 本项目以 Taro 插件的形式存在，且依赖于 Next.js，你需要在你的 Taro 项目中安装**本插件**和 **Next.js**。
 
 ```bash
-npm install tarojs-plugin-platform-nextjs next
+npm install next tarojs-plugin-platform-nextjs
 ```
 
 ```bash
-yarn add tarojs-plugin-platform-nextjs next
+yarn add next tarojs-plugin-platform-nextjs
 ```
 
 注意：原理上支持任意版本 Next.js，但目前仅对 10.1.2 版本做过测试。
@@ -167,7 +167,7 @@ Taro 有两种获取路由参数的方式，一种是调用方法 `getCurrentIns
 
 当你在一个类组件中调用 `getCurrentInstance` 时，在编译阶段插件会在该组件外部使用 Next.js 的 `withRouter` 方法进行包装，让类组件能够响应 Next.js 路由的变化。
 
-```javascript
+```diff
 + import {withRouter} from 'next/router'
 
 class MyComponent extends Component {
