@@ -66,7 +66,8 @@ module.exports = function (babel, options, dirname) {
                 },
                 exit(path) {
                     if (globalCss.length) {
-                        path.unshiftContainer(
+                        // 将 global css 置于内部组件样式之后，以便内部组件样式可以覆盖全局样式
+                        path.pushContainer(
                             'body',
                             globalCss
                         )

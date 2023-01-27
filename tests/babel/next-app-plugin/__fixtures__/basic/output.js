@@ -1,5 +1,3 @@
-import "../../app.scss";
-import "../../app.less";
 import Head from "next/head";
 import TaroApp from "./app";
 
@@ -18,3 +16,5 @@ const MyApp = ({ Component, pageProps }) => (
 );
 
 export default MyApp;
+import "../../app.scss";
+import "../../app.less";
