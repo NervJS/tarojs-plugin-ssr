@@ -113,8 +113,7 @@ function buildComponents() {
 
 function copyComponentsCss(cb) {
     const tarorCss = require.resolve('@taror/components/dist/taror.css')
-    fs.copyFileSync(tarorCss,path.join(getComponentsProjectPath('lib'), 'taror.css')
-    )
+    fs.copyFileSync(tarorCss,path.join(getComponentsProjectPath('lib'), 'taror.css'))
     cb()
 }
 
