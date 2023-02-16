@@ -10,8 +10,11 @@ const config = {
     },
     sourceRoot: 'src',
     outputRoot: 'dist',
-    plugins: [['tarojs-plugin-platform-nextjs', { withLess: true }]],
-    env: {},
+    plugins: [
+        'tarojs-plugin-platform-nextjs'
+    ],
+    env: {
+    },
     copy: {
         patterns: [
         ],

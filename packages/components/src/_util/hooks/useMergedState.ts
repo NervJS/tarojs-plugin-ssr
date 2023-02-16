@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import {useState, useRef, useEffect} from 'react'
 
 export default function useMergedState<T, R = T>(
     defaultStateValue?: T | (() => T),
@@ -9,7 +9,7 @@ export default function useMergedState<T, R = T>(
         postState?: (value?: T) => T;
     }
 ): [R, (value: T) => void] {
-    const { defaultValue, value, onChange, postState } = option || {}
+    const {defaultValue, value, onChange, postState} = option || {}
     const [innerValue, setInnerValue] = useState<T | undefined>(() => {
         if (value !== undefined) {
             return value
