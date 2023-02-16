@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": "./",
+        "module": "commonjs",
+        "allowJs": false,
+        "target": "es5",
+        "noImplicitAny": false,
+        "isolatedModules": false,
+        "skipLibCheck": true,
+        "noEmit": false
+    },
+    "include": ["typings", "server"],
+    "exclude": ["node_modules", "../node_modules"]
+}

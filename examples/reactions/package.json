@@ -38,7 +38,7 @@
     "@tarojs/react": "3.4.4",
     "@tarojs/runtime": "3.4.4",
     "@tarojs/taro": "3.4.4",
-    "next": "^12.1.5",
+    "next": "^13.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "tarojs-plugin-platform-nextjs": "latest"

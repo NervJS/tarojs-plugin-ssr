@@ -1,7 +1,7 @@
-import Router from 'next/router'
-import {limited} from '../_util'
-import type * as swan from '../swan'
-import type {TaroPage, CustomRoutes} from '../_util/typings'
+import Router from "next/router"
+import { limited } from "../_util"
+import type * as swan from "../swan"
+import type { TaroPage, CustomRoutes } from "../_util/typings"
 
 function isAbsoluteUrl(url?: string): boolean {
     if (!url) {
@@ -18,7 +18,7 @@ class TaroApp {
     constructor(customRoutes: CustomRoutes) {
         this.customRoutes = customRoutes
 
-        if (typeof window === 'undefined') {
+        if (typeof window === "undefined") {
             return
         }
         const page: TaroPage = {
@@ -26,18 +26,21 @@ class TaroApp {
         }
         this.pageStack.push(page)
 
-        this.getCurrentPages = limited.never('getCurrentPages', this.getCurrentPages)
-        this.navigateTo = limited.async('navigateTo', this.navigateTo)
-        this.navigateBack = limited.async('navigateBack', this.navigateBack)
-        this.redirectTo = limited.async('redirectTo', this.redirectTo)
-        this.reLaunch = limited.async('reLaunch', this.reLaunch)
+        this.getCurrentPages = limited.never(
+            "getCurrentPages",
+            this.getCurrentPages
+        )
+        this.navigateTo = limited.async("navigateTo", this.navigateTo)
+        this.navigateBack = limited.async("navigateBack", this.navigateBack)
+        this.redirectTo = limited.async("redirectTo", this.redirectTo)
+        this.reLaunch = limited.async("reLaunch", this.reLaunch)
     }
 
     getCurrentPages = (): TaroPage[] => {
         return this.pageStack
     }
 
-    navigateTo: typeof swan.navigateTo = ({url, success, fail, complete}) => {
+    navigateTo: typeof swan.navigateTo = ({ url, success, fail, complete }) => {
         if (!Router.router) {
             fail?.()
             complete?.()
@@ -53,12 +56,18 @@ class TaroApp {
         if (!isAbsoluteUrl(url)) {
             const customRoute = this.customRoutes[urlObj.pathname]
             if (customRoute) {
-                urlObj.pathname = customRoute
+                // 兼容多路由的情况
+                if (Array.isArray(customRoute)) {
+                    urlObj.pathname = customRoute[0]
+                } else {
+                    urlObj.pathname = customRoute
+                }
             }
             target = urlObj.pathname + urlObj.search + urlObj.hash
         }
 
-        Router.router.push(target)
+        Router.router
+            .push(target)
             .then(() => {
                 const page: TaroPage = {
                     route: urlObj.pathname
@@ -70,7 +79,7 @@ class TaroApp {
             .finally(complete)
     }
 
-    navigateBack: typeof swan.navigateBack = ({success, fail, complete}) => {
+    navigateBack: typeof swan.navigateBack = ({ success, fail, complete }) => {
         if (!Router.router) {
             fail?.()
             complete?.()
@@ -85,22 +94,28 @@ class TaroApp {
         complete?.()
     }
 
-    redirectTo: typeof swan.redirectTo = ({url, complete, fail, success}) => {
+    redirectTo: typeof swan.redirectTo = ({ url, complete, fail, success }) => {
         if (!Router.router) {
             fail?.()
             complete?.()
             return
         }
 
-        const base = isAbsoluteUrl(url) ?  undefined : location.origin
+        const base = isAbsoluteUrl(url) ? undefined : location.origin
         const urlObj = base ? new URL(url, base) : new URL(url)
 
         const customRoute = this.customRoutes[urlObj.pathname]
         if (customRoute) {
-            urlObj.pathname = customRoute
+            // 兼容多路由的情况
+            if (Array.isArray(customRoute)) {
+                urlObj.pathname = customRoute[0]
+            } else {
+                urlObj.pathname = customRoute
+            }
         }
 
-        Router.router.push(urlObj.toString())
+        Router.router
+            .push(urlObj.toString())
             .then(() => {
                 const page: TaroPage = {
                     route: urlObj.pathname
@@ -113,22 +128,28 @@ class TaroApp {
             .finally(complete)
     }
 
-    reLaunch: typeof swan.reLaunch = ({url, complete, fail, success}) => {
+    reLaunch: typeof swan.reLaunch = ({ url, complete, fail, success }) => {
         if (!Router.router) {
             fail?.()
             complete?.()
             return
         }
 
-        const base = isAbsoluteUrl(url) ?  undefined : location.origin
+        const base = isAbsoluteUrl(url) ? undefined : location.origin
         const urlObj = base ? new URL(url, base) : new URL(url)
 
         const customRoute = this.customRoutes[urlObj.pathname]
         if (customRoute) {
-            urlObj.pathname = customRoute
+            // 兼容多路由的情况
+            if (Array.isArray(customRoute)) {
+                urlObj.pathname = customRoute[0]
+            } else {
+                urlObj.pathname = customRoute
+            }
         }
 
-        Router.router.push(urlObj.toString())
+        Router.router
+            .push(urlObj.toString())
             .then(() => {
                 const page: TaroPage = {
                     route: urlObj.pathname

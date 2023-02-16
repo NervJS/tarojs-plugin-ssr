@@ -13,18 +13,18 @@ import 'tarojs-plugin-platform-nextjs/components/lib/taror.css'
 import TaroApp from '../src/app'
 import customRoutes from '../customRoutes.json'
 
-initTaroApp(customRoutes)
-initPxTransform({designWidth: <%- designWidth %>})
+initTaroApp(customRoutes);
+initPxTransform({designWidth: <%- designWidth %>});
 initNavigatorComponent({
     customRoutes,
     navigateTo,
     navigateBack
-})
-registerToastComponent(Toast)
-registerModalComponent(Modal)
-registerPreviewComponent(Preview)
+});
+registerToastComponent(Toast);
+registerModalComponent(Modal);
+registerPreviewComponent(Preview);
 
-const MyApp = ({Component, pageProps}) => (
+const MyApp = (props) => (
     <>
         <Head>
             <meta
@@ -32,9 +32,7 @@ const MyApp = ({Component, pageProps}) => (
                 content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"
             />
         </Head>
-        <TaroApp>
-            <Component {...pageProps} />
-        </TaroApp>
+        <TaroApp {...props} customRoutes={customRoutes}/>
     </>
 )
 

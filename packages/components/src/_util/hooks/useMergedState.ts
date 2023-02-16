@@ -1,4 +1,4 @@
-import {useState, useRef, useEffect} from 'react'
+import { useState, useRef, useEffect } from "react";
 
 export default function useMergedState<T, R = T>(
     defaultStateValue?: T | (() => T),
@@ -9,47 +9,47 @@ export default function useMergedState<T, R = T>(
         postState?: (value?: T) => T;
     }
 ): [R, (value: T) => void] {
-    const {defaultValue, value, onChange, postState} = option || {}
+    const { defaultValue, value, onChange, postState } = option || {};
     const [innerValue, setInnerValue] = useState<T | undefined>(() => {
         if (value !== undefined) {
-            return value
+            return value;
         }
         if (defaultValue !== undefined) {
             return defaultValue instanceof Function
                 ? defaultValue()
-                : defaultValue
+                : defaultValue;
         }
 
         return defaultStateValue instanceof Function
             ? defaultStateValue()
-            : defaultStateValue
-    })
+            : defaultStateValue;
+    });
+    useEffect(() => {
+        setInnerValue(value);
+    }, [value]);
 
-    let mergedValue = value !== undefined ? value : innerValue
-    if (postState) {
-        mergedValue = postState(mergedValue)
-    }
+    const mergedValue = postState ? postState(innerValue) : innerValue;
 
     function triggerChange(newValue: T) {
-        setInnerValue(newValue)
+        setInnerValue(newValue);
         if (mergedValue !== newValue && onChange) {
-            onChange(newValue, mergedValue)
+            onChange(newValue, mergedValue);
         }
     }
 
     // Effect of reset value to `undefined`
-    const firstRenderRef = useRef(true)
+    const firstRenderRef = useRef(true);
     useEffect(() => {
         if (firstRenderRef.current) {
-            firstRenderRef.current = false
+            firstRenderRef.current = false;
 
-            return
+            return;
         }
 
         if (value === undefined) {
-            setInnerValue(value)
+            setInnerValue(value);
         }
-    }, [value])
+    }, [value]);
 
-    return [(mergedValue as unknown) as R, triggerChange]
+    return [mergedValue as unknown as R, triggerChange];
 }

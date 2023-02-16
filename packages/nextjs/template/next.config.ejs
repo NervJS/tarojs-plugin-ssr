@@ -1,9 +1,8 @@
-let withLess = false
+<%_ if (isWithLess) { _%>
+const withLess = require('next-with-less')
+<%_ } _%>
 let reported = false
-try {
-    withLess = require('next-with-less')
-} catch (err) {
-}
+
 <%_ if (customNextConfig) { _%>
 const customNextConfig = require('./config/next.config.js')
 <%_ } _%>
@@ -39,12 +38,6 @@ const nextConfig = {
     ],
     webpack(config, options) {
         const {isServer, webpack} = options
-
-        if (!isServer && !withLess && !reported) {
-            const chalk = require('chalk')
-            console.log(chalk.red('\nThe current version of Next.js cannot support Less, please feed back on the issue of github.'))
-            reported = true
-        }
 
         config.module.rules.push({
             test: /\.(bmp|gif|jpg|jpeg|png|svg)$/,
@@ -107,4 +100,10 @@ const nextConfig = {
     <%_ } _%>
 }
 
-module.exports = withLess ? withLess(nextConfig) : nextConfig
+<%_ if (isWithLess) { _%>
+module.exports = withLess(nextConfig);
+<%_ } _%>
+<%_ if (!isWithLess) { _%>
+module.exports = nextConfig;
+<%_ } _%>
+

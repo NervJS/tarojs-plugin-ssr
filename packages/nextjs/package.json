@@ -1,10 +1,10 @@
 {
     "name": "tarojs-plugin-platform-nextjs",
-    "version": "2.0.9",
+    "version": "1.0.0-beta.21",
     "description": "Taro 插件，用于编译为 Next.js 应用。",
     "main": "lib/index.js",
     "scripts": {
-        "prepublishOnly": "gulp",
+        "prepublishOnly": "npm install && npm run build",
         "build": "gulp"
     },
     "files": [
@@ -16,6 +16,8 @@
         "taro/index.js",
         "router/lib",
         "router/index.js",
+        "ares/lib",
+        "ares/index.js",
         "components/lib"
     ],
     "keywords": [
@@ -25,22 +27,12 @@
         "next.js",
         "ssr"
     ],
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/NervJS/tarojs-plugin-platform-nextjs.git"
-    },
-    "author": "SyMind",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/NervJS/tarojs-plugin-platform-nextjs/issues"
-    },
-    "homepage": "https://github.com/NervJS/tarojs-plugin-platform-nextjs#readme",
     "dependencies": {
         "@babel/core": "^7.17.7",
         "@babel/helper-split-export-declaration": "^7.16.7",
         "@babel/plugin-proposal-class-properties": "^7.17.12",
         "@babel/preset-env": "^7.18.2",
-        "@taror/components": "^2.0.7",
+        "@taror/components": "^1.0.0-beta.21",
         "autoprefixer": "^10.4.4",
         "base64-js": "^1.5.1",
         "chalk": "^4.1.2",
@@ -52,10 +44,11 @@
         "gulp-filter": "^7.0.0",
         "gulp-rename": "^2.0.0",
         "jsonp-retry": "^1.0.3",
-        "lodash": "^4.17.21",
+        "lodash.merge": "^4.6.2",
         "mobile-detect": "^1.4.5",
         "mpromisify": "^1.0.4",
         "next-with-less": "^2.0.5",
+        "node-sass": "^7.0.0",
         "open": "^8.4.0",
         "postcss-pxtorem": "^6.0.0",
         "scss-bundle": "^3.1.2",
@@ -69,9 +62,9 @@
         "@babel/preset-env": "^7.16.11",
         "@babel/preset-react": "^7.16.7",
         "@babel/runtime": "^7.17.9",
-        "@tarojs/cli": "3.4.7",
-        "@tarojs/plugin-framework-react": "3.4.7",
-        "@tarojs/service": "^3.4.8",
+        "@tarojs/cli": "3.5.7",
+        "@tarojs/plugin-framework-react": "3.5.7",
+        "@tarojs/service": "3.5.7",
         "@types/cross-spawn": "^6.0.2",
         "@types/ejs": "^3.1.0",
         "@types/gulp": "^4.0.9",
@@ -82,16 +75,15 @@
         "babel-plugin-tester": "^10.1.0",
         "gulp-babel": "^8.0.0",
         "gulp-typescript": "^5.0.1",
-        "next": "^11.1.4",
+        "next": "^13.0.0",
         "object-assign": "^4.1.1",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2"
+        "react": "^17.0.0",
+        "react-dom": "^17.0.0"
     },
     "peerDependencies": {
-        "fibers": ">= 3.1.0",
-        "next": "^11.1.4",
+        "next": "^12.2.6 || ^13.0.0",
         "node-sass": "^4.0.0 || ^5.0.0",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2"
+        "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+        "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
     }
 }

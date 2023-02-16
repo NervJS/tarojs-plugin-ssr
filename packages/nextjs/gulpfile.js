@@ -35,16 +35,15 @@ function buildTaro() {
 
 function cleanTaro() {
     const lib = getTaroProjectPath('lib')
-    return gulp.src(lib, {
-        allowEmpty: true,
-        read: false
-    }).pipe(clean())
+    return gulp
+        .src(lib, {
+            allowEmpty: true,
+            read: false,
+        })
+        .pipe(clean())
 }
 
-gulp.task('taro', gulp.series(
-    cleanTaro,
-    buildTaro
-))
+gulp.task('taro', gulp.series(cleanTaro, buildTaro))
 
 function buildRouter() {
     const source = [
@@ -61,68 +60,70 @@ function buildRouter() {
 
 function cleanRouter() {
     const lib = getRouterProjectPath('lib')
-    return gulp.src(lib, {
-        allowEmpty: true,
-        read: false
-    }).pipe(clean())
+    return gulp
+        .src(lib, {
+            allowEmpty: true,
+            read: false,
+        })
+        .pipe(clean())
 }
 
-gulp.task('router', gulp.series(
-    cleanRouter,
-    buildRouter
-))
+gulp.task('router', gulp.series(cleanRouter, buildRouter))
 
 function cleanPlugin() {
     const lib = getPluginProjectPath('lib')
-    return gulp.src(lib, {
-        allowEmpty: true,
-        read: false
-    }).pipe(clean())
+    return gulp
+        .src(lib, {
+            allowEmpty: true,
+            read: false,
+        })
+        .pipe(clean())
 }
 
 const buildPlugin = () => {
     const tsConfig = getTSCommonConfig()
-    return gulp.src('src/**')
+    return gulp
+        .src('src/**')
         .pipe(ts(tsConfig))
         .pipe(gulp.dest(getPluginProjectPath('lib')))
 }
 
-gulp.task('plugin', gulp.series(
-    cleanPlugin,
-    buildPlugin
-))
+gulp.task('plugin', gulp.series(cleanPlugin, buildPlugin))
 
 function cleanComponents() {
     const lib = getComponentsProjectPath('lib')
-    return gulp.src(lib, {
-        allowEmpty: true,
-        read: false
-    }).pipe(clean())
+    return gulp
+        .src(lib, {
+            allowEmpty: true,
+            read: false,
+        })
+        .pipe(clean())
 }
 
 function buildComponents() {
     const tsConfig = getTSCommonConfig()
     const libDir = getComponentsProjectPath('lib')
-    return gulp.src('components/src/**')
+    return gulp
+        .src('components/src/**')
         .pipe(ts(tsConfig))
         .pipe(gulp.dest(libDir))
 }
 
 function copyComponentsCss(cb) {
     const tarorCss = require.resolve('@taror/components/dist/taror.css')
-    fs.copyFileSync(tarorCss, path.join(getComponentsProjectPath('lib'), 'taror.css'))
+    fs.copyFileSync(
+        tarorCss,
+        path.join(getComponentsProjectPath('lib'), 'taror.css')
+    )
     cb()
 }
 
-gulp.task('components', gulp.series(
-    cleanComponents,
-    buildComponents,
-    copyComponentsCss
-))
+gulp.task(
+    "components",
+    gulp.series(cleanComponents, buildComponents, copyComponentsCss)
+)
 
-gulp.task('default', gulp.parallel(
-    'plugin',
-    'taro',
-    'router',
-    'components'
-))
+gulp.task(
+    "default",
+    gulp.parallel('plugin", "taro", "router", "components')
+)

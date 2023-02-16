@@ -52,7 +52,7 @@ function renderNodes(nodes?: NodesType): string {
         if (node.type === 'text') {
             result += node.text
         } else if (node.name) {
-            result += `<${node.name}`
+            result = `<${node.name}`
             if (node.attrs) {
                 for (const key in node.attrs) {
                     result += ` ${key}="${node.attrs[key]}"`
