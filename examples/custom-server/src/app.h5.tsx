@@ -1,30 +1,30 @@
 /* eslint-disable react/prop-types */
-import React, { memo, useMemo } from "react";
-import * as R from "ramda";
-import Head from "next/head";
-import w from "next-page-transition";
+import React, { memo, useMemo } from 'react'
+import * as R from 'ramda'
+import Head from 'next/head'
+import w from 'next-page-transition'
 
-import "./app.scss";
+import './app.scss'
 
-import { slide, DIRECTIONS } from "./lib/next-page-transition/slide";
-import { useFoucFix } from "./lib/hooks/useFoucFix"; // 修复css被过早删除导致动画塌陷
+import { slide, DIRECTIONS } from './lib/next-page-transition/slide'
+import { useFoucFix } from './lib/hooks/useFoucFix' // 修复css被过早删除导致动画塌陷
 
-const TRANSITION_TIMEOUT = 200;
+const TRANSITION_TIMEOUT = 200
 
 const wrapper = w({
     containerProps: {
         style: {
-            position: "relative",
-            height: "100%"
+            position: 'relative',
+            height: '100%'
         }
     }
-});
+})
 
-let customRouteIndex = 0;
-let customRouteType = "advance";
+let customRouteIndex = 0
+let customRouteType = 'advance'
 
 const PWAHead = ({ tdk }) => {
-    const { title = "", description = "" } = tdk || {};
+    const { title = '', description = '' } = tdk || {}
     return (
         <>
             <meta name="application-name" content="PWA App" />
@@ -102,61 +102,61 @@ const PWAHead = ({ tdk }) => {
                 content="https://yourdomain.com/icons/apple-touch-icon.png"
             />
         </>
-    );
-};
+    )
+}
 
 const App = props => {
-    const { Component, customRoutes, router } = props;
-    const { pathname } = router || {};
+    const { Component, customRoutes, router } = props
+    const { pathname } = router || {}
 
     const pageProps = useMemo(() => {
-        if (typeof window !== "undefined") {
+        if (typeof window !== 'undefined') {
             // todo：pageProps 目前通过getServerSideProps获取，单无法跨页面，暂时先用__NEXT_DATA__解决
-            return window["__NEXT_DATA__"].props.pageProps;
+            return window['__NEXT_DATA__'].props.pageProps
         }
-        return props.pageProps;
-    }, [props.pageProps]);
+        return props.pageProps
+    }, [props.pageProps])
 
-    const { tdk } = pageProps || {};
-    const { title = "", description = "", keywords = "" } = tdk || {};
+    const { tdk } = pageProps || {}
+    const { title = '', description = '', keywords = '' } = tdk || {}
 
-    useFoucFix();
+    useFoucFix()
 
     const routerType = useMemo(() => {
         const routeIndex = R.findIndex(
             R.includes(pathname),
             R.values(customRoutes)
-        );
+        )
         if (routeIndex >= 0) {
             if (routeIndex > customRouteIndex) {
-                customRouteType = "advance";
+                customRouteType = 'advance'
             }
             if (routeIndex < customRouteIndex) {
-                customRouteType = "back";
+                customRouteType = 'back'
             }
-            customRouteIndex = routeIndex;
+            customRouteIndex = routeIndex
         }
-        return customRouteType;
-    }, [customRoutes, pathname]);
+        return customRouteType
+    }, [customRoutes, pathname])
 
     const Trans = useMemo(() => {
-        if (routerType === "back") {
+        if (routerType === 'back') {
             return wrapper(
                 Component,
                 slide(TRANSITION_TIMEOUT, DIRECTIONS.LEFT)
-            );
+            )
         }
-        if (routerType === "advance") {
+        if (routerType === 'advance') {
             return wrapper(
                 Component,
                 slide(TRANSITION_TIMEOUT, DIRECTIONS.RIGHT)
-            );
+            )
         }
         const TransComponent = ({ pageProps }) => (
             <Component {...pageProps}></Component>
-        );
-        return TransComponent;
-    }, [routerType, Component]);
+        )
+        return TransComponent
+    }, [routerType, Component])
 
     return (
         <>
@@ -190,7 +190,7 @@ const App = props => {
                 }}
             />
         </>
-    );
-};
+    )
+}
 
-export default memo(App);
+export default memo(App)

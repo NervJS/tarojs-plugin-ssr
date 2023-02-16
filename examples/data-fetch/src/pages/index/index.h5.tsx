@@ -1,5 +1,5 @@
 import {request} from '@tarojs/taro'
-export {default} from './view';
+export {default} from './view'
 
 export async function getStaticProps() {
     const res = await request({

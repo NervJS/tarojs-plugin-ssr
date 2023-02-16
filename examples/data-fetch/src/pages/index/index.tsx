@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {request} from '@tarojs/taro'
-import IndexView from './view';
+import IndexView from './view'
 
 function Index() {
     const [stars, setStars] = useState()

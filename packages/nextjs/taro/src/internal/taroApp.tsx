@@ -1,7 +1,7 @@
-import Router from "next/router"
-import { limited } from "../_util"
-import type * as swan from "../swan"
-import type { TaroPage, CustomRoutes } from "../_util/typings"
+import Router from 'next/router'
+import { limited } from '../_util'
+import type * as swan from '../swan'
+import type { TaroPage, CustomRoutes } from '../_util/typings'
 
 function isAbsoluteUrl(url?: string): boolean {
     if (!url) {
@@ -18,7 +18,7 @@ class TaroApp {
     constructor(customRoutes: CustomRoutes) {
         this.customRoutes = customRoutes
 
-        if (typeof window === "undefined") {
+        if (typeof window === 'undefined') {
             return
         }
         const page: TaroPage = {
@@ -27,13 +27,13 @@ class TaroApp {
         this.pageStack.push(page)
 
         this.getCurrentPages = limited.never(
-            "getCurrentPages",
+            'getCurrentPages',
             this.getCurrentPages
         )
-        this.navigateTo = limited.async("navigateTo", this.navigateTo)
-        this.navigateBack = limited.async("navigateBack", this.navigateBack)
-        this.redirectTo = limited.async("redirectTo", this.redirectTo)
-        this.reLaunch = limited.async("reLaunch", this.reLaunch)
+        this.navigateTo = limited.async('navigateTo', this.navigateTo)
+        this.navigateBack = limited.async('navigateBack', this.navigateBack)
+        this.redirectTo = limited.async('redirectTo', this.redirectTo)
+        this.reLaunch = limited.async('reLaunch', this.reLaunch)
     }
 
     getCurrentPages = (): TaroPage[] => {

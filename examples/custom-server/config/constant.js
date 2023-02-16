@@ -1,5 +1,5 @@
 module.exports = {
-    basePath: "/basePath",
-    host: "localhost",
+    basePath: '/basePath',
+    host: 'localhost',
     port: 9999
-};
+}
