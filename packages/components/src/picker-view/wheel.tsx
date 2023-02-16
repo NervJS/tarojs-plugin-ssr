@@ -1,24 +1,24 @@
-import React, { memo, useEffect, useMemo, useRef } from "react";
-import { useSpring, animated } from "@react-spring/web";
-import { useDrag } from "@use-gesture/react";
-import isEqual from "lodash.isequal";
-import toArray from "../_util/children/toArray";
+import React, { memo, useEffect, useMemo, useRef } from 'react'
+import { useSpring, animated } from '@react-spring/web'
+import { useDrag } from '@use-gesture/react'
+import isEqual from 'lodash.isequal'
+import toArray from '../_util/children/toArray'
 
-const classPrefix = "taro-picker-view";
+const classPrefix = 'taro-picker-view'
 
 function bound(
     position: number,
     min: number | undefined,
     max: number | undefined
 ): number {
-    let ret = position;
+    let ret = position
     if (min !== undefined) {
-        ret = Math.max(position, min);
+        ret = Math.max(position, min)
     }
     if (max !== undefined) {
-        ret = Math.min(ret, max);
+        ret = Math.min(ret, max)
     }
-    return ret;
+    return ret
 }
 
 function rubberband(
@@ -28,7 +28,7 @@ function rubberband(
 ): number {
     return (
         (distance * dimension * constant) / (dimension + constant * distance)
-    );
+    )
 }
 
 function rubberbandIfOutOfBounds(
@@ -38,12 +38,12 @@ function rubberbandIfOutOfBounds(
     dimension: number,
     constant = 0.15
 ): number {
-    if (constant === 0) return bound(position, min, max);
+    if (constant === 0) return bound(position, min, max)
     if (position < min)
-        return -rubberband(min - position, dimension, constant) + min;
+        return -rubberband(min - position, dimension, constant) + min
     if (position > max)
-        return +rubberband(position - max, dimension, constant) + max;
-    return position;
+        return +rubberband(position - max, dimension, constant) + max
+    return position
 }
 
 interface WheelProps {
@@ -57,66 +57,66 @@ const WheelInternal: React.FC<WheelProps> = ({ value, children, onSelect }) => {
         from: { y: 0 },
         config: {
             tension: 400,
-            mass: 0.8,
-        },
-    }));
+            mass: 0.8
+        }
+    }))
 
-    const items = useMemo(() => toArray(children), [children]);
+    const items = useMemo(() => toArray(children), [children])
 
-    const draggingRef = useRef(false);
+    const draggingRef = useRef(false)
 
-    const rootRef = useRef<HTMLDivElement>(null);
-    const itemHeight = useRef<number>(0);
+    const rootRef = useRef<HTMLDivElement>(null)
+    const itemHeight = useRef<number>(0)
 
     useEffect(() => {
         if (rootRef.current) {
-            itemHeight.current = rootRef.current.offsetHeight / items.length;
+            itemHeight.current = rootRef.current.offsetHeight / items.length
         }
-    }, [items]);
+    }, [items])
 
     useEffect(() => {
         if (draggingRef.current || value == null || value < 0) {
-            return;
+            return
         }
-        const min = -((items.length - 1) * itemHeight.current);
-        const finalPosition = value * -itemHeight.current;
+        const min = -((items.length - 1) * itemHeight.current)
+        const finalPosition = value * -itemHeight.current
         api.start({
             y: finalPosition < min ? min : finalPosition,
-            immediate: y.goal !== finalPosition,
-        });
-    }, [items, value]);
+            immediate: y.goal !== finalPosition
+        })
+    }, [items, value])
 
     function scrollSelect(index: number): void {
-        const finalPosition = index * -itemHeight.current;
-        api.start({ y: finalPosition });
-        onSelect?.(index);
+        const finalPosition = index * -itemHeight.current
+        api.start({ y: finalPosition })
+        onSelect?.(index)
     }
 
     useDrag(
         (state) => {
-            state.event.stopPropagation();
+            state.event.stopPropagation()
 
             if (!itemHeight.current) {
-                return;
+                return
             }
 
-            draggingRef.current = true;
-            const min = -((items.length - 1) * itemHeight.current);
-            const max = 0;
+            draggingRef.current = true
+            const min = -((items.length - 1) * itemHeight.current)
+            const max = 0
             if (state.last) {
-                draggingRef.current = false;
+                draggingRef.current = false
                 const position =
                     state.offset[1] +
-                    state.velocity[1] * state.direction[1] * 50;
+                    state.velocity[1] * state.direction[1] * 50
                 const targetIndex =
                     min < max
                         ? -Math.round(
                               bound(position, min, max) / itemHeight.current
                           )
-                        : 0;
-                scrollSelect(targetIndex);
+                        : 0
+                scrollSelect(targetIndex)
             } else {
-                const position = state.offset[1];
+                const position = state.offset[1]
                 api.start({
                     y: rubberbandIfOutOfBounds(
                         position,
@@ -124,18 +124,18 @@ const WheelInternal: React.FC<WheelProps> = ({ value, children, onSelect }) => {
                         max,
                         itemHeight.current * 50,
                         0.2
-                    ),
-                });
+                    )
+                })
             }
         },
         {
-            asix: "y",
+            asix: 'y',
             from: () => [0, y.get()],
             filterTaps: true,
             pointer: { touch: true },
-            target: rootRef,
+            target: rootRef
         }
-    );
+    )
 
     return (
         <div className={`${classPrefix}_column`}>
@@ -149,8 +149,8 @@ const WheelInternal: React.FC<WheelProps> = ({ value, children, onSelect }) => {
                         key={index}
                         className={`${classPrefix}_column-item`}
                         onClick={() => {
-                            draggingRef.current = true;
-                            scrollSelect(index);
+                            draggingRef.current = true
+                            scrollSelect(index)
                         }}
                     >
                         {item}
@@ -158,15 +158,15 @@ const WheelInternal: React.FC<WheelProps> = ({ value, children, onSelect }) => {
                 ))}
             </animated.div>
         </div>
-    );
-};
+    )
+}
 
 const Wheel = memo(WheelInternal, (prev, next) => {
     return (
         prev.value === next.value &&
         isEqual(prev.children, next.children) &&
         prev.onSelect === next.onSelect
-    );
-});
+    )
+})
 
-export default Wheel;
+export default Wheel

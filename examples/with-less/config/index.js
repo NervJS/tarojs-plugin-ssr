@@ -1,6 +1,6 @@
 const config = {
-    projectName: "with-less",
-    date: "2022-4-16",
+    projectName: 'with-less',
+    date: '2022-4-16',
     designWidth: 375,
     deviceRatio: {
         640: 1,
@@ -8,15 +8,15 @@ const config = {
         828: 1.81 / 2,
         375: 2 / 1
     },
-    sourceRoot: "src",
-    outputRoot: "dist",
-    plugins: [["tarojs-plugin-platform-nextjs", { withLess: true }]],
+    sourceRoot: 'src',
+    outputRoot: 'dist',
+    plugins: [['tarojs-plugin-platform-nextjs', { withLess: true }]],
     env: {},
     copy: {
         patterns: [],
         options: {}
     },
-    framework: "react",
+    framework: 'react',
     mini: {
         postcss: {
             pxtransform: {
@@ -32,15 +32,15 @@ const config = {
             cssModules: {
                 enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
                 config: {
-                    namingPattern: "module", // 转换模式，取值为 global/module
-                    generateScopedName: "[name]__[local]___[hash:base64:5]"
+                    namingPattern: 'module', // 转换模式，取值为 global/module
+                    generateScopedName: '[name]__[local]___[hash:base64:5]'
                 }
             }
         }
     },
     h5: {
-        publicPath: "/",
-        staticDirectory: "static",
+        publicPath: '/',
+        staticDirectory: 'static',
         postcss: {
             autoprefixer: {
                 enable: true,
@@ -49,23 +49,23 @@ const config = {
             cssModules: {
                 enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
                 config: {
-                    namingPattern: "module", // 转换模式，取值为 global/module
-                    generateScopedName: "[name]__[local]___[hash:base64:5]"
+                    namingPattern: 'module', // 转换模式，取值为 global/module
+                    generateScopedName: '[name]__[local]___[hash:base64:5]'
                 }
             }
         },
         router: {
-            mode: "browser",
+            mode: 'browser',
             customRoutes: {
-                "/pages/index/index": "/"
+                '/pages/index/index': '/'
             }
         }
     }
-};
+}
 
 module.exports = function(merge) {
-    if (process.env.NODE_ENV === "development") {
-        return merge({}, config, require("./dev"));
+    if (process.env.NODE_ENV === 'development') {
+        return merge({}, config, require('./dev'))
     }
-    return merge({}, config, require("./prod"));
-};
+    return merge({}, config, require('./prod'))
+}

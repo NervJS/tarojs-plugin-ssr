@@ -2,25 +2,25 @@ import React, {
     useEffect,
     useRef,
     useImperativeHandle,
-    forwardRef,
-} from "react";
-import classNames from "classnames";
+    forwardRef
+} from 'react'
+import classNames from 'classnames'
 import type {
     TaroBaseProps,
     TaroInputEventHandler,
     TaroInputEvent,
     TaroFocusEventHandler,
     TaroBlurEventHandler,
-    TaroConfirmEventHandler,
-} from "../_util/typings";
-import useTaroBaseEvents from "../_util/hooks/useTaroBaseEvents";
-import useMergedState from "../_util/hooks/useMergedState";
+    TaroConfirmEventHandler
+} from '../_util/typings'
+import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
+import useMergedState from '../_util/hooks/useMergedState'
 import {
     createTaroFocusEvent,
     createTaroBlurEvent,
-    createTaroConfirmEvent,
-} from "../_util/taroEvent";
-import useField from "../form/useField";
+    createTaroConfirmEvent
+} from '../_util/taroEvent'
+import useField from '../form/useField'
 
 export interface InputProps extends TaroBaseProps {
     /**
@@ -37,7 +37,7 @@ export interface InputProps extends TaroBaseProps {
      * input 的类型
      * @default "text"
      */
-    type?: "text" | "number" | "idcard" | "digit";
+    type?: 'text' | 'number' | 'idcard' | 'digit';
 
     /**
      * 是否是密码类型
@@ -81,7 +81,7 @@ export interface InputProps extends TaroBaseProps {
      * @default "done"
      * @unsupported
      */
-    confirmType?: "send" | "search" | "next" | "go" | "done";
+    confirmType?: 'send' | 'search' | 'next' | 'go' | 'done';
 
     /**
      * 点击键盘右下角按钮时是否保持键盘不收起
@@ -207,11 +207,11 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
         className,
         name,
         value,
-        type = "text",
+        type = 'text',
         password = false,
         placeholder,
         placeholderStyle: customPlaceholderStyle,
-        placeholderClass = "input-placeholder",
+        placeholderClass = 'input-placeholder',
         disabled = false,
         maxlength = 140,
         focus,
@@ -242,53 +242,53 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
     },
     ref
 ) => {
-    const props = useTaroBaseEvents(rest);
+    const props = useTaroBaseEvents(rest)
 
-    const inputEl = useRef<HTMLInputElement | null>(null);
-    const placeholderEl = useRef<HTMLDivElement | null>(null);
-    const keyCode = useRef<number | null>(null);
+    const inputEl = useRef<HTMLInputElement | null>(null)
+    const placeholderEl = useRef<HTMLDivElement | null>(null)
+    const keyCode = useRef<number | null>(null)
 
-    useImperativeHandle(ref, () => inputEl.current!);
+    useImperativeHandle(ref, () => inputEl.current!)
 
-    const [mergedValue, setMergedValue] = useMergedState("", {
-        value,
-    });
+    const [mergedValue, setMergedValue] = useMergedState('', {
+        value
+    })
 
-    useField(name, mergedValue);
+    useField(name, mergedValue)
 
     useEffect(() => {
         if (!inputEl.current) {
-            return;
+            return
         }
         if (focus) {
-            inputEl.current.focus();
+            inputEl.current.focus()
         }
-        if (typeof cursor === "number") {
-            inputEl.current.setSelectionRange(cursor, cursor);
+        if (typeof cursor === 'number') {
+            inputEl.current.setSelectionRange(cursor, cursor)
         } else if (
-            typeof selectionStart === "number" &&
+            typeof selectionStart === 'number' &&
             selectionStart !== -1 &&
-            typeof selectionEnd === "number" &&
+            typeof selectionEnd === 'number' &&
             selectionEnd !== -1
         ) {
-            inputEl.current.setSelectionRange(selectionStart, selectionEnd);
+            inputEl.current.setSelectionRange(selectionStart, selectionEnd)
         }
-    }, []);
+    }, [])
 
     const placeholderStyle: React.CSSProperties = Object.assign(
         {
-            display: mergedValue ? "none" : "block",
+            display: mergedValue ? 'none' : 'block'
         },
-        typeof customPlaceholderStyle === "object" ? customPlaceholderStyle : {}
-    );
+        typeof customPlaceholderStyle === 'object' ? customPlaceholderStyle : {}
+    )
 
     return (
-        <div className={classNames("taro-input", className)} {...props}>
+        <div className={classNames('taro-input', className)} {...props}>
             <div className="taro-input_content">
                 <div
                     ref={placeholderEl}
                     className={classNames(
-                        "taro-input_placeholder",
+                        'taro-input_placeholder',
                         placeholderClass
                     )}
                     style={placeholderStyle}
@@ -300,58 +300,58 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
                     className="taro-input_main"
                     name={name}
                     value={mergedValue}
-                    type={password ? "password" : type}
+                    type={password ? 'password' : type}
                     disabled={disabled}
                     maxLength={maxlength === -1 ? undefined : maxlength}
                     onChange={(event) => {
-                        const el = event.target;
+                        const el = event.target
                         if (onInput) {
-                            const { timeStamp, target, currentTarget } = event;
-                            const el = event.target as HTMLInputElement;
+                            const { timeStamp, target, currentTarget } = event
+                            const el = event.target as HTMLInputElement
                             const taroEvent: TaroInputEvent = {
                                 currentTarget,
                                 target,
                                 detail: {
                                     cursor: el.selectionStart || 0,
                                     keyCode: keyCode.current!,
-                                    value: el.value,
+                                    value: el.value
                                 },
                                 timeStamp,
-                                type: "input",
+                                type: 'input',
                                 preventDefault: () => event.preventDefault(),
-                                stopPropagation: () => event.stopPropagation(),
-                            };
-                            onInput(taroEvent);
+                                stopPropagation: () => event.stopPropagation()
+                            }
+                            onInput(taroEvent)
                         }
-                        setMergedValue(el.value);
+                        setMergedValue(el.value)
                     }}
                     onFocus={(event) => {
                         if (onFocus) {
-                            const taroEvent = createTaroFocusEvent(event);
-                            onFocus(taroEvent);
+                            const taroEvent = createTaroFocusEvent(event)
+                            onFocus(taroEvent)
                         }
                     }}
                     onBlur={(event) => {
                         if (onBlur) {
-                            const taroEvent = createTaroBlurEvent(event);
-                            onBlur(taroEvent);
+                            const taroEvent = createTaroBlurEvent(event)
+                            onBlur(taroEvent)
                         }
                     }}
                     onKeyDown={(event) => {
-                        keyCode.current = event.keyCode;
-                        if (onConfirm && "Enter" === event.key) {
-                            const el = event.target as HTMLInputElement;
+                        keyCode.current = event.keyCode
+                        if (onConfirm && 'Enter' === event.key) {
+                            const el = event.target as HTMLInputElement
                             if (!confirmHold) {
-                                el.blur();
+                                el.blur()
                             }
-                            const taroEvent = createTaroConfirmEvent(event);
-                            onConfirm(taroEvent);
+                            const taroEvent = createTaroConfirmEvent(event)
+                            onConfirm(taroEvent)
                         }
                     }}
                 />
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default forwardRef(Input);
+export default forwardRef(Input)
