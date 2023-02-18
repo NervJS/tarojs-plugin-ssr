@@ -10,6 +10,7 @@
     <a aria-label="License" href="https://github.com/NervJS/tarojs-plugin-platform-nextjs/blob/main/LICENSE">
         <img alt="" src="https://img.shields.io/npm/l/tarojs-plugin-platform-nextjs.svg?style=for-the-badge&labelColor=000000">
     </a>
+    <img alt="" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge&labelColor=000000">
 </p>
 
 让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，极致的首屏速度 🚀，利于 SEO 🔍。
