@@ -57,6 +57,8 @@ export type {ViewProps} from './view'
 export {default as WebView} from './web-view'
 export type {WebViewProps} from './web-view'
 
+export {default as Block} from './block'
+
 // internal components
 export {default as Toast} from './toast'
 export {default as Icon} from './icon'
