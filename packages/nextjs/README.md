@@ -244,6 +244,17 @@ yarn lerna run build
                     <b>zengshide123</b>
                 </a>
             </td>
+             <td align="center">
+                <a href="https://github.com/wpigdry">
+                    <img
+                        src="https://avatars.githubusercontent.com/u/53898106?v=4"
+                        width="100"
+                        alt=""
+                    >
+                    </br>
+                    <b>wpigdry</b>
+                </a>
+            </td>
         </tr>
     </tbody>
 </table>
