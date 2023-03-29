@@ -1,5 +1,5 @@
 {
-    "name": "lilin-project",
+    "name": "taror-project",
     "private": true,
     "workspaces": [
         "packages/*"
