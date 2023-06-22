@@ -151,6 +151,32 @@ export function usePageScroll(callback: PageScrollCallback): void {
     }, [])
 }
 
-export function useShareAppMessage(): void {}
+type Func = (...args: any[]) => any;
+
+export function useShareAppMessage(fn: Func): void {}
 
 export function useShareTimeline(): void {}
+
+// 以下 Hook 在 Taro v3.5.0+ 开始支持
+
+export function useLaunch(fn: Func): void {}
+
+export function useError(fn: Func): void {}
+
+export function usePageNotFound(fn: Func): void {}
+
+export function useUnhandledRejection(fn: Func): void {}
+
+export function useLoad(fn: Func): void {
+    useEffect(() => {
+        fn()
+    }, [])
+}
+
+export function useUnload(fn: Func): void {
+    useEffect(() => () => {
+        fn()
+    }, [])
+}
+
+export function useSaveExitState(fn: Func): void {}

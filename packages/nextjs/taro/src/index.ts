@@ -131,7 +131,14 @@ import {
     useRouter,
     usePageScroll,
     useShareAppMessage,
-    useShareTimeline
+    useShareTimeline,
+    useLaunch,
+    useError,
+    usePageNotFound,
+    useUnhandledRejection,
+    useLoad,
+    useUnload,
+    useSaveExitState
 } from './hooks'
 
 import {
@@ -260,6 +267,13 @@ export {
     usePageScroll,
     useShareAppMessage,
     useShareTimeline,
+    useLaunch,
+    useError,
+    usePageNotFound,
+    useUnhandledRejection,
+    useLoad,
+    useUnload,
+    useSaveExitState,
 
     switchTab,
     reLaunch,
@@ -392,6 +406,13 @@ export default {
     usePageScroll,
     useShareAppMessage,
     useShareTimeline,
+    useLaunch,
+    useError,
+    usePageNotFound,
+    useUnhandledRejection,
+    useLoad,
+    useUnload,
+    useSaveExitState,
 
     switchTab,
     reLaunch,
