@@ -18,7 +18,7 @@
 
 > 请 Star 🌟 这个项目来表达你的喜爱 ❤️ 和支持。
 
-## 使用
+## 安装
 
 你需要先有一个 Taro 项目，如果你还不知该如何创建一个 Taro 项目，请先从这里开始：[Taro 安装及使用](https://docs.taro.zone/docs/GETTING-STARTED)。
 
@@ -43,6 +43,8 @@ const config = {
     ]
 }
 ```
+
+## 使用
 
 ### 开发环境
 
