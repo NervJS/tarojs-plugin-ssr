@@ -6,6 +6,11 @@
     "scripts": {
         "test": "jest"
     },
+    "files": [
+        "cli.js",
+        "index.js",
+        "transform.js"
+    ],
     "keywords": [
         "init",
         "initialize",
