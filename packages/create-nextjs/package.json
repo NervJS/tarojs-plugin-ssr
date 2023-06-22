@@ -2,8 +2,9 @@
     "name": "create-tarojs-plugin-platform-nextjs",
     "version": "2.0.11",
     "description": "添加 Taro Next.js 插件到你的项目中",
-    "main": "lib/index.js",
+    "bin": "cli.js",
     "scripts": {
+        "test": "ava"
     },
     "keywords": [
         "init",
@@ -31,5 +32,11 @@
     "bugs": {
         "url": "https://github.com/NervJS/tarojs-plugin-platform-nextjs/issues"
     },
-    "homepage": "https://github.com/NervJS/tarojs-plugin-platform-nextjs#readme"
+    "homepage": "https://github.com/NervJS/tarojs-plugin-platform-nextjs#readme",
+    "dependencies": {
+		"execa": "^0.7.0",
+		"has-yarn": "^2.1.0",
+		"read-pkg-up": "^6.0.0",
+		"write-pkg": "^4.0.0"
+    }
 }

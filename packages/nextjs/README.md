@@ -28,16 +28,10 @@
 npm init tarojs-plugin-platform-nextjs
 ```
 
-或者，你更喜欢使用 Yarn：
-
-```bash
-yarn add tarojs-plugin-platform-nextjs --dev
-```
-
 或者，你可以手动安装在你的 Taro 项目中安装**本插件**和 **Next.js**。
 
 ```bash
-yarn add next tarojs-plugin-platform-nextjs
+npm install next tarojs-plugin-platform-nextjs
 ```
 
 并在 Taro 项目的 `config/index.js` 中添加插件。
