@@ -1,6 +1,6 @@
 <p align="center">
     <img src="https://user-images.githubusercontent.com/19852293/191987817-848a46a1-711b-49c7-9e8d-4da0ba4cf51a.png" height="130">
-    <h1 align="center">Tarojs Plugin Platform Nextjs</h1>
+    <h1 align="center">Taro Next.js SSR 插件</h1>
 </p>
 
 <p align="center">

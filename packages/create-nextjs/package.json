@@ -1,0 +1,35 @@
+{
+    "name": "create-tarojs-plugin-platform-nextjs",
+    "version": "2.0.11",
+    "description": "添加 Taro Next.js 插件到你的项目中",
+    "main": "lib/index.js",
+    "scripts": {
+    },
+    "keywords": [
+        "init",
+		"initialize",
+		"add",
+		"create",
+		"setup",
+		"generate",
+		"generator",
+		"scaffold",
+		"test",
+		"runner",
+        "taro",
+        "taro3",
+        "tarojs",
+        "next.js",
+        "ssr"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/NervJS/tarojs-plugin-platform-nextjs.git"
+    },
+    "author": "SyMind",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/NervJS/tarojs-plugin-platform-nextjs/issues"
+    },
+    "homepage": "https://github.com/NervJS/tarojs-plugin-platform-nextjs#readme"
+}
