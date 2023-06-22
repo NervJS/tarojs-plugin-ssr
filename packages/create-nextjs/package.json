@@ -1,6 +1,6 @@
 {
     "name": "create-tarojs-plugin-platform-nextjs",
-    "version": "2.0.12",
+    "version": "2.0.13",
     "description": "添加 Taro Next.js 插件到你的项目中",
     "bin": "cli.js",
     "scripts": {
