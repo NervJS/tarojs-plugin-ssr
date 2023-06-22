@@ -4,19 +4,19 @@
     "description": "添加 Taro Next.js 插件到你的项目中",
     "bin": "cli.js",
     "scripts": {
-        "test": "ava"
+        "test": "jest"
     },
     "keywords": [
         "init",
-		"initialize",
-		"add",
-		"create",
-		"setup",
-		"generate",
-		"generator",
-		"scaffold",
-		"test",
-		"runner",
+        "initialize",
+        "add",
+        "create",
+        "setup",
+        "generate",
+        "generator",
+        "scaffold",
+        "test",
+        "runner",
         "taro",
         "taro3",
         "tarojs",
@@ -34,9 +34,10 @@
     },
     "homepage": "https://github.com/NervJS/tarojs-plugin-platform-nextjs#readme",
     "dependencies": {
-		"execa": "^0.7.0",
-		"has-yarn": "^2.1.0",
-		"read-pkg-up": "^6.0.0",
-		"write-pkg": "^4.0.0"
+        "execa": "^0.7.0",
+        "has-yarn": "^2.1.0",
+        "jscodeshift": "^0.15.0",
+        "read-pkg-up": "^6.0.0",
+        "write-pkg": "^4.0.0"
     }
 }

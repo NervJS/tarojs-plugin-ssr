@@ -4,6 +4,7 @@ const execa = require('execa')
 const hasYarn = require('has-yarn')
 const readPkgUp = require('read-pkg-up')
 const writePkg = require('write-pkg')
+const {run: jscodeshift} = require('jscodeshift/src/Runner')
 
 module.exports = async (options = {}) => {
     const packageResult = readPkgUp.sync({
@@ -20,7 +21,15 @@ module.exports = async (options = {}) => {
     s['build:nextjs'] = 'taro build --type nextjs'
     s['dev:nextjs'] = 'npm run build:nextjs -- --watch'
 
-    writePkg.sync(packagePath, packageJson, {normalize: false})
+    writePkg.sync(packagePath, packageJson, { normalize: false })
+
+    const transformPath = path.join(__dirname, 'transform.js')
+    const configPath = path.join(options.cwd || process.cwd(), 'config/index.js')
+    await jscodeshift(transformPath, [configPath], {
+        cpu: 1,
+        verbose: 0,
+        silent: true
+    })
 
     if (options.skipInstall) {
         return
