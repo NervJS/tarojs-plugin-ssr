@@ -18,27 +18,29 @@
 
 > 请 Star 🌟 这个项目来表达你的喜爱 ❤️ 和支持。
 
-## 安装与使用
+## 使用
 
-你需要先拥有一个 Taro 项目，如果你还不知该如何创建一个 Taro 项目，请先从这里开始：[Taro 安装及使用](https://docs.taro.zone/docs/GETTING-STARTED)。
+你需要先有一个 Taro 项目，如果你还不知该如何创建一个 Taro 项目，请先从这里开始：[Taro 安装及使用](https://docs.taro.zone/docs/GETTING-STARTED)。
 
-### 安装
-
-本项目以 Taro 插件的形式存在，且依赖于 Next.js，你需要在你的 Taro 项目中安装**本插件**和 **Next.js**。
+要安装和设置本插件，请运行：
 
 ```bash
-npm install next tarojs-plugin-platform-nextjs
+npm init tarojs-plugin-platform-nextjs
 ```
+
+或者，你更喜欢使用 Yarn：
+
+```bash
+yarn add tarojs-plugin-platform-nextjs --dev
+```
+
+或者，你可以手动安装在你的 Taro 项目中安装**本插件**和 **Next.js**。
 
 ```bash
 yarn add next tarojs-plugin-platform-nextjs
 ```
 
-注意：原理上支持任意版本 Next.js，但目前仅对 10.1.2 版本做过测试。
-
-### 配置
-
-在 Taro 项目的 `config/index.js` 中添加插件。
+并在 Taro 项目的 `config/index.js` 中添加插件。
 
 ```javascript
 const config = {
