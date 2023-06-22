@@ -6,56 +6,56 @@ const readPkgUp = require('read-pkg-up')
 const writePkg = require('write-pkg')
 
 module.exports = async (options = {}) => {
-	const packageResult = readPkgUp.sync({
-		cwd: options.cwd,
-		normalize: false
-	}) || {}
-	const packageJson = packageResult.package || {}
-	const packagePath = packageResult.path || path.resolve(options.cwd || process.cwd(), 'package.json')
-	const packageCwd = path.dirname(packagePath)
+    const packageResult = readPkgUp.sync({
+        cwd: options.cwd,
+        normalize: false
+    }) || {}
+    const packageJson = packageResult.package || {}
+    const packagePath = packageResult.path || path.resolve(options.cwd || process.cwd(), 'package.json')
+    const packageCwd = path.dirname(packagePath)
 
-	packageJson.scripts = packageJson.scripts || {}
+    packageJson.scripts = packageJson.scripts || {}
 
-	const s = packageJson.scripts
-	s['build:nextjs'] = 'taro build --type nextjs'
+    const s = packageJson.scripts
+    s['build:nextjs'] = 'taro build --type nextjs'
     s['dev:nextjs'] = 'npm run build:nextjs -- --watch'
 
-	writePkg.sync(packagePath, packageJson, {normalize: false})
+    writePkg.sync(packagePath, packageJson, {normalize: false})
 
-	if (options.skipInstall) {
-		return
-	}
+    if (options.skipInstall) {
+        return
+    }
 
     const nextTag = 'next'
-	const pluginTag = 'tarojs-plugin-platform-nextjs'
+    const pluginTag = 'tarojs-plugin-platform-nextjs'
 
-	if (hasYarn(packageCwd)) {
-		const yarnArguments = ['add', nextTag, pluginTag]
+    if (hasYarn(packageCwd)) {
+        const yarnArguments = ['add', nextTag, pluginTag]
 
-		try {
-			await execa('yarn', yarnArguments, {
-				cwd: packageCwd,
-				stdio: 'inherit'
-			})
-		} catch (error) {
-			if (error.code === 'ENOENT') {
-				console.error('This project uses Yarn but you don\'t seem to have Yarn installed.\nRun `npm install --global yarn` to install it.')
-				return
-			}
+        try {
+            await execa('yarn', yarnArguments, {
+                cwd: packageCwd,
+                stdio: 'inherit'
+            })
+        } catch (error) {
+            if (error.code === 'ENOENT') {
+                console.error('This project uses Yarn but you don\'t seem to have Yarn installed.\nRun `npm install --global yarn` to install it.')
+                return
+            }
 
-			throw error
-		}
+            throw error
+        }
 
-		return
-	}
+        return
+    }
 
-	const npmArguments = ['install']
+    const npmArguments = ['install']
 
     npmArguments.push(nextTag)
-	npmArguments.push(pluginTag)
+    npmArguments.push(pluginTag)
 
-	await execa('npm', npmArguments, {
-		cwd: packageCwd,
-		stdio: 'inherit'
-	})
+    await execa('npm', npmArguments, {
+        cwd: packageCwd,
+        stdio: 'inherit'
+    })
 }
