@@ -16,7 +16,7 @@
 让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，极致的首屏速度 🚀，利于 SEO 🔍。
 
 
-> 请 Star 🌟 这个项目来表达你的喜爱 ❤️ 和支持。
+> 作为该项目的 Owner，我目前的工作不再涉及 Taro 的开发，难以投入持续的精力来维护该项目，所以正在积极寻找本插件的贡献者。如果你有兴趣，请添加微信 SharpYourMind 与我联系。
 
 ## 安装
 
