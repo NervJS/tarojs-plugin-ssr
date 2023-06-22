@@ -18,12 +18,15 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true
     },
+    transpilePackages: [
+        'taro-ui'
+    ],
     webpack(config, options) {
         const {isServer, webpack} = options
 
         if (!isServer && !withLess && !reported) {
             const chalk = require('chalk')
-            console.log(chalk.red('\nThe current version of Next.js cannot support Less, please feed back on the issue of github.'))
+            console.log(chalk.yellow('\nThe current version of Next.js cannot support Less, please feed back on the issue of github.\n'))
             reported = true
         }
 
