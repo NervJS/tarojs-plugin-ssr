@@ -10,6 +10,7 @@ import chalk from 'chalk'
 import spawn from 'cross-spawn'
 import * as babel from '@babel/core'
 import type {IPluginContext} from '@tarojs/service'
+import type { Stream } from 'stream'
 import {mergeTaroPages} from './taroUtils'
 import {
     getNextExportedFunctions,
@@ -27,20 +28,9 @@ import {
 import { SCRIPT_EXTS } from './constants'
 import openBrowser from './openBrowser'
 
-const isWindows = process.platform === 'win32'
-
 const DEFAULT_ROUTER_CONFIG = {
     mode: 'browser',
     customRoutes: {}
-}
-
-const DEFAULT_POSTCSS_OPTIONS = ['autoprefixer', 'pxtransform', 'cssModules']
-
-const DEFAULT_AUTOPREFIXER_OPTION = {
-    enable: true,
-    config: {
-        flexbox: 'no-2009'
-    }
 }
 
 const DEFAULT_PORT = '10086'
@@ -54,14 +44,19 @@ interface PluginOptions {
      * 是否打开浏览器
      */
     browser?: boolean
+    /**
+     * 指定构建时还需要包含的其他文件
+     */
+    extraFiles?: string[]
 }
 
 export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
     const {paths, helper, runOpts} = ctx
     const {appPath, outputPath, sourcePath, configPath} = paths
 
-    const runNextjs = pluginOpts.runNextjs == null && true
-    const browser = pluginOpts.browser == null && true
+    const runNextjs = pluginOpts.runNextjs ?? true
+    const browser = pluginOpts.browser ?? true
+    const extraFiles = pluginOpts.extraFiles ?? []
 
     ctx.registerCommand({
         name: 'start',
@@ -91,7 +86,6 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                 alias = {},
                 sass = {},
                 designWidth = 750,
-                postcss = {},
                 isWatch,
                 devServer = {}
             } = config
@@ -212,7 +206,13 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
             createNextjsPages()
 
             function scaffold() {
+                const files: Stream[] = []
+                if (Array.isArray(extraFiles) && extraFiles.length) {
+                    files.push(src(extraFiles, { cwd: appPath, base: '.' }).pipe(dest(outputPath)))
+                }
+
                 return es.merge(
+                    ...files,
                     src(`${appPath}/*.d.ts`).pipe(dest(outputPath)),
                     src(`${sourcePath}/**`)
                         .pipe(filter(file => {
@@ -289,50 +289,9 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         }))
                         .pipe(rename('next.config.js'))
                         .pipe(dest(outputPath)),
-                    src(`${templateDir}/postcss.config.ejs`)
-                        .pipe(es.through(function (data) {
-                            const plugins = Object.entries(postcss).reduce((result, info) => {
-                                const [pluginName, pluginOption] = info as any
-                                if (
-                                    !DEFAULT_POSTCSS_OPTIONS.includes(pluginName) &&
-                                    pluginOption?.enable
-                                ) {
-                                    const isRelative = pluginName.startsWith('./') ||
-                                        pluginName.startsWith('../') ||
-                                        ((isWindows && pluginName.startsWith('.\\')) ||
-                                        pluginName.startsWith('..\\'))
 
-                                    let request = pluginName
-                                    if (isRelative) {
-                                        const absolutePath = path.join(appPath, pluginName)
-                                        request = path.relative(outputPath, absolutePath)
-                                    }
+                    src(`${templateDir}/postcss.config.js`).pipe(dest(outputPath)),
 
-                                    const plugin = {
-                                        request,
-                                        option: pluginOption
-                                    }
-                                    result.push(plugin)
-                                }
-
-                                return result
-                            }, [] as {request: string, option: Record<string, any>}[])
-
-                            const autoprefixerOption = merge({}, DEFAULT_AUTOPREFIXER_OPTION, postcss.autoprefixer)
-                            const ejsData = {
-                                designWidth,
-                                autoprefixerOption: autoprefixerOption.enable
-                                    ? JSON.stringify(autoprefixerOption.config)
-                                    : null,
-                                plugins
-                            }
-                            const result = ejs.render(data.contents.toString(), ejsData)
-                            data.contents = Buffer.from(result)
-
-                            this.emit('data', data)
-                        }))
-                        .pipe(rename('postcss.config.js'))
-                        .pipe(dest(outputPath)),
                     src(`${templateDir}/babel.config.ejs`)
                         .pipe(es.through(function (data) {
                             const ejsData = {
