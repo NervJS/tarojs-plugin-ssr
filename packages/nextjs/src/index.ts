@@ -43,14 +43,19 @@ interface PluginOptions {
      * 是否打开浏览器
      */
     browser?: boolean
+    /**
+     * 指定构建时还需要包含的其他文件
+     */
+    extraFiles?: string[]
 }
 
 export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
     const {paths, helper, runOpts} = ctx
     const {appPath, outputPath, sourcePath, configPath} = paths
 
-    const runNextjs = pluginOpts.runNextjs == null && true
-    const browser = pluginOpts.browser == null && true
+    const runNextjs = pluginOpts.runNextjs ?? true
+    const browser = pluginOpts.browser ?? true
+    const extraFiles = pluginOpts.extraFiles ?? []
 
     ctx.registerCommand({
         name: 'start',
@@ -201,6 +206,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
 
             function scaffold() {
                 return es.merge(
+                    src(extraFiles, { cwd: appPath, base: '.' }).pipe(dest(outputPath)),
                     src(`${appPath}/*.d.ts`).pipe(dest(outputPath)),
                     src(`${sourcePath}/**`)
                         .pipe(filter(file => {
