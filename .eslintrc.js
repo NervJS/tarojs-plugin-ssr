@@ -26,7 +26,8 @@ module.exports = {
         'quote-props': ['error', 'as-needed'],
         'no-inner-declarations': 'off',
         'no-empty': 'off',
-        'react/react-in-jsx-scope': 'off'
+        'react/react-in-jsx-scope': 'off',
+        'no-unused-vars': ['error', { ignoreRestSiblings: true }]
     },
     overrides: [
         {
