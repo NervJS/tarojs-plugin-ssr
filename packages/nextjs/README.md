@@ -16,7 +16,7 @@
 让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，极致的首屏速度 🚀，利于 SEO 🔍。
 
 
-> 作为该项目的 Owner，我目前的工作不再涉及 Taro 的开发，难以投入持续的精力来维护该项目，所以正在积极寻找本插件的贡献者。如果你有兴趣，请添加微信 SharpYourMind 与我联系。
+> 作为这个项目的创建者，我现在的工作已经和 Taro 开发无关，因而无法为其持续投入必要的精力进行维护。此刻，我正在寻找对此插件感兴趣且愿意进行贡献的热心者。如果你有热情并且对本项目感兴趣，请通过添加微信号：SharpYourMind 与我取得联系。
 
 ## 安装
 
@@ -180,6 +180,30 @@ class MyComponent extends Component {
 
 - export default MyComponent
 + export default withRouter(MyComponent)
+```
+
+## 插件配置
+
+该插件支持以下配置项：
+
+```javascript
+const config = {
+    plugins: [
+        ['tarojs-plugin-platform-nextjs', {
+            // 当执行 taro build --type nextjs --watch 命令后，是否需要自动执行 next dev 命令
+            // 默认为 true
+            runNextjs: true,
+            // 是否启动后自动打开浏览器
+            // 默认为 true
+            browser: true,
+            // 在插件编译阶段需要复制到 Next.js 中的附加文件
+            // 作为示例，比如你本地编写的 postcss 插件目录
+            extraFiles: [
+                'postcss-plugins/**'
+            ]
+        }]
+    ]
+}
 ```
 
 ## Taro 组件的 React 实现
