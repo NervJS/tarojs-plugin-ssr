@@ -1,6 +1,6 @@
 // 同步 Taro 项目中 packages/taro-webpack5-runner/src/postcss/postcss.h5.ts 中的逻辑
 const path = require('path')
-const { merge, cloneDeep } = require('lodash')
+const { merge } = require('lodash')
 const { sync } = require('resolve')
 
 const platform = 'h5'
@@ -76,21 +76,21 @@ const getPostCssConfig = getConfig => {
     }
     const pxtransformOption = merge({}, defaultPxtransformOption, pxtransform)
     if (isEnable(pxtransformOption)) {
-        plugins.push([require.resolve('postcss-pxtransform'), pxtransformOption])
+        plugins.push([require.resolve('postcss-pxtransform'), pxtransformOption.config || {}])
     }
     
     const htmlTransformOption = merge({}, defaultHtmltransformOption, htmltransform)
     if (isEnable(htmlTransformOption)) {
-        plugins.push([require.resolve('postcss-html-transform'), htmlTransformOption])
+        plugins.push([require.resolve('postcss-html-transform'), htmlTransformOption.config || {}])
     }
 
-    plugins.push([require.resolve('postcss-plugin-constparse'), cloneDeep(defaultConstparseOption)])
+    plugins.push([require.resolve('postcss-plugin-constparse'), defaultConstparseOption.config || {}])
 
     // TODO: 处理 postcss-alias 插件
 
     const urlOption = merge({}, defaultUrlOption, url)
     if (isEnable(urlOption)) {
-        plugins.push([require.resolve('postcss-url'), urlOption])
+        plugins.push([require.resolve('postcss-url'), urlOption.config || {}])
     }
 
     const appPath = process.cwd()
@@ -104,7 +104,7 @@ const getPostCssConfig = getConfig => {
         }
         try {
             const pluginPath = sync(pluginName, { basedir: appPath })
-            plugins.push(require(pluginPath)(pluginOption.config || {}))
+            plugins.push([pluginPath, pluginOption.config || {}])
         } catch (e) {
             const msg = e.code === 'MODULE_NOT_FOUND' ? `缺少 postcss 插件 "${pluginName}", 已忽略` : e
             console.log(msg)
