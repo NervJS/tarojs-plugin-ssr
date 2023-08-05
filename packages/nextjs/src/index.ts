@@ -10,6 +10,7 @@ import chalk from 'chalk'
 import spawn from 'cross-spawn'
 import * as babel from '@babel/core'
 import type {IPluginContext} from '@tarojs/service'
+import type { Stream } from 'stream'
 import {mergeTaroPages} from './taroUtils'
 import {
     getNextExportedFunctions,
@@ -205,8 +206,13 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
             createNextjsPages()
 
             function scaffold() {
+                const files: Stream[] = []
+                if (Array.isArray(extraFiles) && extraFiles.length) {
+                    files.push(src(extraFiles, { cwd: appPath, base: '.' }).pipe(dest(outputPath)))
+                }
+
                 return es.merge(
-                    src(extraFiles, { cwd: appPath, base: '.' }).pipe(dest(outputPath)),
+                    ...files,
                     src(`${appPath}/*.d.ts`).pipe(dest(outputPath)),
                     src(`${sourcePath}/**`)
                         .pipe(filter(file => {
