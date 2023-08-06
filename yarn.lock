@@ -3137,6 +3137,15 @@
     "@babel/runtime" "^7.14.5"
     "@tarojs/runtime" "3.4.7"
 
+"@tarojs/api@3.6.11":
+  version "3.6.11"
+  resolved "https://registry.npmjs.org/@tarojs/api/-/api-3.6.11.tgz#5378ee1a3ce6202ca8f978775f77124a7debcf97"
+  integrity sha512-AMjxSYU5yD8ooRiZc4eqdBfiZU1XMWmlcrvme6Tx1305BXYcZJ2Hqu1H+GhbyRkiWG+7eIzz1dKc673dlgh0OQ==
+  dependencies:
+    "@babel/runtime" "^7.14.5"
+    "@tarojs/runtime" "3.6.11"
+    "@tarojs/shared" "3.6.11"
+
 "@tarojs/cli@3.4.7":
   version "3.4.7"
   resolved "https://registry.npmjs.org/@tarojs/cli/-/cli-3.4.7.tgz#e8e1c138de134748d3ad171a87e3bbf182b33071"
@@ -3487,6 +3496,14 @@
     lodash-es "4.17.15"
     reflect-metadata "^0.1.13"
 
+"@tarojs/runtime@3.6.11":
+  version "3.6.11"
+  resolved "https://registry.npmjs.org/@tarojs/runtime/-/runtime-3.6.11.tgz#135e3fec56b83566eaef05b7c3432f249e40187e"
+  integrity sha512-1sRVm6vSp96PSlnBbmuLV6UcIyRu1niLpXDTxWHh3BLao+lCNJDkj2bumlqlxyAU5CjfXvVVsdiVfQ4fxzFTbw==
+  dependencies:
+    "@tarojs/shared" "3.6.11"
+    lodash-es "4.17.21"
+
 "@tarojs/service@3.4.7":
   version "3.4.7"
   resolved "https://registry.npmjs.org/@tarojs/service/-/service-3.4.7.tgz#d7bd862bf6a1163c2a3e349108ae0f470405c2cf"
@@ -3526,6 +3543,11 @@
   version "3.4.7"
   resolved "https://registry.npmjs.org/@tarojs/shared/-/shared-3.4.7.tgz#9b31874862e76506bbaf40d2c864674bb2872ebd"
   integrity sha512-RxHyuf4WSEk2u3aHn9xZ0eH7XhaPhEZduMLCyJoRAToUWae+z3zg/kz7rIbUKDAyC9NBswB6z5mhKF4RMkk+AA==
+
+"@tarojs/shared@3.6.11":
+  version "3.6.11"
+  resolved "https://registry.npmjs.org/@tarojs/shared/-/shared-3.6.11.tgz#efd00c3083668f1cfc46fb828d5e9f16d531d849"
+  integrity sha512-gAhhKUWL0c/JJm36lZ69tY0fn3n3I4wl02KSnxdz2JNmqSlnth6fQhBQG1NpsEfzM5WXRgPMhr01wCOqyhBkvA==
 
 "@tarojs/taro-h5@3.4.13":
   version "3.4.13"
@@ -3583,6 +3605,14 @@
     "@tarojs/api" "3.4.7"
     "@tarojs/runtime" "3.4.7"
     "@tarojs/taro-h5" "3.4.7"
+
+"@tarojs/taro@^3.6.11":
+  version "3.6.11"
+  resolved "https://registry.npmjs.org/@tarojs/taro/-/taro-3.6.11.tgz#9b1e12492abf1f019aa3b143f3fd9686763ac14e"
+  integrity sha512-wAqvGRuOjEdIfpRn+7APimf00RjQBOmkhK1ZF67iRUPw6kUBrXfDtmoserVTarlPEj0DPt2I8vWGN7tas+cWlQ==
+  dependencies:
+    "@tarojs/api" "3.6.11"
+    "@tarojs/runtime" "3.6.11"
 
 "@tarojs/taroize@3.4.7":
   version "3.4.7"
@@ -3929,7 +3959,7 @@
   dependencies:
     "@types/unist" "*"
 
-"@types/history@*", "@types/history@^4.7.11", "@types/history@^4.7.9":
+"@types/history@*", "@types/history@^4.7.11":
   version "4.7.11"
   resolved "https://registry.npmjs.org/@types/history/-/history-4.7.11.tgz#56588b17ae8f50c53983a524fc3cc47437969d64"
   integrity sha512-qjDJRrmvBMiTx+jyLxvLfJU7UznFuokDv4f3WRuriHKERccVpFU+8XMQUAbDzoiJCsmexxRExQeMwwCdamSKDA==
@@ -4074,12 +4104,19 @@
   resolved "https://registry.npmjs.org/@types/q/-/q-1.5.5.tgz#75a2a8e7d8ab4b230414505d92335d1dcb53a6df"
   integrity sha512-L28j2FcJfSZOnL1WBjDYp2vUHCeIFlyYI/53EwD/rKUBQ7MtUUfbQWiyKJGpcnv4/WgrhWsFKrcPstcAt/J0tQ==
 
-"@types/react-dom@<18.0.0", "@types/react-dom@^16.9.8", "@types/react-dom@^17.0.14":
+"@types/react-dom@<18.0.0", "@types/react-dom@^17.0.14":
   version "17.0.17"
   resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-17.0.17.tgz#2e3743277a793a96a99f1bf87614598289da68a1"
   integrity sha512-VjnqEmqGnasQKV0CWLevqMTXBYG9GbwuE6x3VetERLh0cq2LTptFE73MrQi2S7GkKXCf2GgwItB/melLnxfnsg==
   dependencies:
     "@types/react" "^17"
+
+"@types/react-dom@^16.9.8":
+  version "16.9.19"
+  resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.9.19.tgz#6a139c26b02dec533a7fa131f084561babb10a8f"
+  integrity sha512-xC8D280Bf6p0zguJ8g62jcEOKZiUbx9sIe6O3tT/lKfR87A7A6g65q13z6D5QUMIa/6yFPkNhqjF5z/VVZEYqQ==
+  dependencies:
+    "@types/react" "^16"
 
 "@types/react-router-config@5.0.2":
   version "5.0.2"
@@ -4124,10 +4161,19 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.9.43", "@types/react@^17", "@types/react@^17.0.14":
+"@types/react@*", "@types/react@^17", "@types/react@^17.0.14":
   version "17.0.48"
   resolved "https://registry.npmjs.org/@types/react/-/react-17.0.48.tgz#a4532a8b91d7b27b8768b6fc0c3bccb760d15a6c"
   integrity sha512-zJ6IYlJ8cYYxiJfUaZOQee4lh99mFihBoqkOSEGV+dFi9leROW6+PgstzQ+w3gWTnUfskALtQPGHK6dYmPj+2A==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@^16", "@types/react@^16.9.43":
+  version "16.14.43"
+  resolved "https://registry.npmjs.org/@types/react/-/react-16.14.43.tgz#bc6e7a0e99826809591d38ddf1193955de32c446"
+  integrity sha512-7zdjv7jvoLLQg1tTvpQsm+hyNUMT2mPlNV1+d0I8fbGhkJl82spopMyBlu4wb1dviZAxpGdk5eHu/muacknnfw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -4142,6 +4188,11 @@
     "@types/node" "*"
     "@types/tough-cookie" "*"
     form-data "^2.5.0"
+
+"@types/resolve@^1.20.2":
+  version "1.20.2"
+  resolved "https://registry.npmjs.org/@types/resolve/-/resolve-1.20.2.tgz#97d26e00cd4a0423b4af620abecf3e6f442b7975"
+  integrity sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==
 
 "@types/sass@^1.16.0":
   version "1.43.1"
@@ -14495,6 +14546,11 @@ lodash-es@4.17.15:
   version "4.17.15"
   resolved "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
   integrity sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==
+
+lodash-es@4.17.21:
+  version "4.17.21"
+  resolved "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
+  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
 
 lodash._reinterpolate@^3.0.0:
   version "3.0.0"
