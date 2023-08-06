@@ -20,9 +20,15 @@ function getComponentsProjectPath(...filePath) {
     return path.join(root, ...filePath)
 }
 
+function getPostCSSProjectPath(...filePath) {
+    const root = path.resolve(__dirname, '../postcss')
+    return path.join(root, ...filePath)
+}
+
 module.exports = {
     getPluginProjectPath,
     getTaroProjectPath,
     getRouterProjectPath,
-    getComponentsProjectPath
+    getComponentsProjectPath,
+    getPostCSSProjectPath
 }

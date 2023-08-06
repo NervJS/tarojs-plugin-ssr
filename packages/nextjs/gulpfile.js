@@ -8,7 +8,8 @@ const {
     getPluginProjectPath,
     getTaroProjectPath,
     getRouterProjectPath,
-    getComponentsProjectPath
+    getComponentsProjectPath,
+    getPostCSSProjectPath
 } = require('./build/projectHelper')
 const getBabelCommonConfig = require('./build/getBabelCommonConfig')
 const getTSCommonConfig = require('./build/getTSCommonConfig')
@@ -120,9 +121,37 @@ gulp.task('components', gulp.series(
     copyComponentsCss
 ))
 
+function cleanPostCSS() {
+    const lib = getPostCSSProjectPath('lib')
+    return gulp.src(lib, {
+        allowEmpty: true,
+        read: false
+    }).pipe(clean())
+}
+
+function buildPostCSS() {
+    const source = [
+        'postcss/src/**/*.jsx',
+        'postcss/src/**/*.js',
+        'postcss/src/**/*.tsx',
+        'postcss/src/**/*.ts'
+    ]
+    const lib = getPostCSSProjectPath('lib')
+    const tsConfig = getTSCommonConfig()
+    return gulp.src(source)
+        .pipe(ts(tsConfig))
+        .pipe(gulp.dest(lib))
+}
+
+gulp.task('postcss', gulp.series(
+    cleanPostCSS,
+    buildPostCSS
+))
+
 gulp.task('default', gulp.parallel(
     'plugin',
     'taro',
     'router',
-    'components'
+    'components',
+    'postcss'
 ))
