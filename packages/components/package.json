@@ -1,6 +1,6 @@
 {
     "name": "@taror/components",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "description": "React-based Taro3 components implementation",
     "license": "MIT",
     "files": [
