@@ -2,7 +2,7 @@
 
 ## 文档
 
-https://nervjs.github.io/tarojs-plugin-platform-nextjs/
+https://nervjs.github.io/ssr/
 
 ## 安装
 

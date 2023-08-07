@@ -1,6 +1,6 @@
 import {defineConfig} from 'dumi'
 
-const BASE_PATH = '/tarojs-plugin-platform-nextjs'
+const BASE_PATH = '/tarojs-plugin-ssr'
 
 export default defineConfig({
     title: 'taror',
