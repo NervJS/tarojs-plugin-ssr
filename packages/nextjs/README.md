@@ -7,7 +7,7 @@
     <a aria-label="NPM version" href="https://www.npmjs.com/package/tarojs-plugin-platform-nextjs">
         <img alt="" src="https://img.shields.io/npm/v/tarojs-plugin-platform-nextjs.svg?style=for-the-badge&labelColor=000000">
     </a>
-    <a aria-label="License" href="https://github.com/NervJS/tarojs-plugin-platform-nextjs/blob/main/LICENSE">
+    <a aria-label="License" href="https://github.com/NervJS/tarojs-plugin-ssr/blob/main/LICENSE">
         <img alt="" src="https://img.shields.io/npm/l/tarojs-plugin-platform-nextjs.svg?style=for-the-badge&labelColor=000000">
     </a>
     <img alt="" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge&labelColor=000000">
@@ -102,7 +102,7 @@ export async function getServerSideProps(context) {
 }
 ```
 
-示例 - [Data Fetch Demo](https://github.com/NervJS/tarojs-plugin-platform-nextjs/tree/main/examples/data-fetch)
+示例 - [Data Fetch Demo](https://github.com/NervJS/tarojs-plugin-ssr/tree/main/examples/data-fetch)
 
 > 阅读 Next.js 文档了解更多：[getServerSideProps](https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props)。
 
@@ -129,7 +129,7 @@ export async function getStaticProps() {
 }
 ```
 
-示例 - [GitHub Reactions Demo](https://github.com/NervJS/tarojs-plugin-platform-nextjs/tree/main/examples/reactions)
+示例 - [GitHub Reactions Demo](https://github.com/NervJS/tarojs-plugin-ssr/tree/main/examples/reactions)
 
 > 阅读 Next.js 文档了解更多：[Incremental Static Regeneration](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)。
 
@@ -208,7 +208,7 @@ const config = {
 
 ## Taro 组件的 React 实现
 
-Taro 官方的 H5 组件库是基于 Stencil 框架开发，为了更好的性能和兼容性，本项目使用完全基于 React 开发的 Taro 组件库 [@taror/components](https://nervjs.github.io/tarojs-plugin-platform-nextjs/)。
+Taro 官方的 H5 组件库是基于 Stencil 框架开发，为了更好的性能和兼容性，本项目使用完全基于 React 开发的 Taro 组件库 [@taror/components](https://nervjs.github.io/tarojs-plugin-ssr/)。
 
 ## 参与建设
 
