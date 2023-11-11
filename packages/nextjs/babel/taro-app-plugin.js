@@ -13,7 +13,7 @@ module.exports = function (babel, options, dirname) {
         visitor: {
             Program: {
                 enter(programPath, state) {
-                    if (state.file.opts.filename !== outputAppFilePath) {
+                    if (nodePath.normalize(state.file.opts.filename) !== outputAppFilePath) {
                         return
                     }
 
