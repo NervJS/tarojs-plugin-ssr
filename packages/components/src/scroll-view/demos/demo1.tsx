@@ -81,6 +81,7 @@ const App: React.FC = () => {
                     upperThreshold={1}
                     lowerThreshold={1}
                     scrollIntoView={scrollIntoViewX}
+                    scrollIntoViewAlignment='center'
                     onScrollToUpper={() => {
                         console.log('到最左边了')
                     }}

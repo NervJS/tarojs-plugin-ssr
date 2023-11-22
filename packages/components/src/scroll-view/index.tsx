@@ -159,7 +159,7 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
         node.scrollIntoView({
             behavior: scrollWithAnimation ? 'smooth' : 'auto',
             block: scrollY ? (scrollIntoViewAlignment || 'center') : 'center',
-            inline: scrollX ? (scrollIntoViewAlignment || 'center') : 'center'
+            inline: scrollX ? (scrollIntoViewAlignment || 'start') : 'start'
         })
     }, [scrollIntoView, scrollIntoViewAlignment, scrollWithAnimation, scrollX, scrollY])
 
