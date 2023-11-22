@@ -44,6 +44,11 @@ export interface ScrollViewProps extends TaroBaseProps {
     scrollIntoView?: string
 
     /**
+     * 指定 scroll-into-view 目标节点在视口内的位置
+     */
+    scrollIntoViewAlignment?: ScrollLogicalPosition;
+
+    /**
      * 在设置滚动条位置时使用动画过渡
      * @default false
      */
@@ -87,6 +92,7 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
     scrollTop,
     scrollLeft,
     scrollIntoView,
+    scrollIntoViewAlignment,
     scrollWithAnimation,
     // TODO: 待实现
     // enableBackToTop,
@@ -144,13 +150,15 @@ const ScrollView: React.ForwardRefRenderFunction<HTMLDivElement, ScrollViewProps
             return
         }
         const node = el.current.querySelector(`#${scrollIntoView}`)
+
         if (!node) {
             return
         }
+
         node.scrollIntoView({
             behavior: scrollWithAnimation ? 'smooth' : 'auto',
-            block: 'center',
-            inline: 'start'
+            block: scrollY ? (scrollIntoViewAlignment || 'center') : 'center',
+            inline: scrollX ? (scrollIntoViewAlignment || 'start') : 'start'
         })
     }, [scrollIntoView])
 

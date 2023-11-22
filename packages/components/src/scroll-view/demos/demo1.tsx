@@ -2,11 +2,13 @@ import React, {useState} from 'react'
 import { View, ScrollView } from '@taror/components'
 import './demo1.scss'
 
-const order = ['one', 'two', 'three']
+const scrollYorder = ['one', 'two', 'three']
+const scrollXorder = ['four', 'five', 'six']
 
 const App: React.FC = () => {
     const [scrollTop, setScrollTop] = useState(0)
-    const [scrollIntoView, setScrollIntoView] = useState('one')
+    const [scrollIntoViewY, setScrollIntoViewY] = useState('one')
+    const [scrollIntoViewX, setScrollIntoViewX] = useState('four')
     const [scrollLeft, setScrollLeft] = useState(0)
 
     return (
@@ -20,7 +22,7 @@ const App: React.FC = () => {
                     upperThreshold={1}
                     lowerThreshold={1}
                     scrollTop={scrollTop}
-                    scrollIntoView={scrollIntoView}
+                    scrollIntoView={scrollIntoViewY}
                     onScrollToUpper={() => {
                         console.log('到顶了')
                     }}
@@ -41,11 +43,11 @@ const App: React.FC = () => {
                     <View
                         className="next-page"
                         onClick={() => {
-                            for (let i = 0; i < order.length; ++i) {
-                                console.log(order[i], scrollIntoView)
-                                if (order[i] === scrollIntoView) {
-                                    const next = (i + 1) % order.length
-                                    setScrollIntoView(order[next])
+                            for (let i = 0; i < scrollYorder.length; ++i) {
+                                console.log('scrollYorder:', scrollYorder[i], scrollIntoViewY)
+                                if (scrollYorder[i] === scrollIntoViewY) {
+                                    const next = (i + 1) % scrollYorder.length
+                                    setScrollIntoViewY(scrollYorder[next])
                                 }
                             }
                         }}
@@ -78,6 +80,8 @@ const App: React.FC = () => {
                     scrollLeft={scrollLeft}
                     upperThreshold={1}
                     lowerThreshold={1}
+                    scrollIntoView={scrollIntoViewX}
+                    scrollIntoViewAlignment='center'
                     onScrollToUpper={() => {
                         console.log('到最左边了')
                     }}
@@ -94,6 +98,22 @@ const App: React.FC = () => {
                     <View id="five" className="color-b row-view">B</View>
                     <View id="six" className="color-c row-view">C</View>
                 </ScrollView>
+                <View className="page-section-btns">
+                    <View
+                        className="next-page"
+                        onClick={() => {
+                            for (let i = 0; i < scrollXorder.length; ++i) {
+                                console.log('scrollXorder:', scrollXorder[i], scrollIntoViewX)
+                                if (scrollXorder[i] === scrollIntoViewX) {
+                                    const next = (i + 1) % scrollXorder.length
+                                    setScrollIntoViewX(scrollXorder[next])
+                                }
+                            }
+                        }}
+                    >
+                        下一页
+                    </View>
+                </View>
             </View>
         </View>
     )
