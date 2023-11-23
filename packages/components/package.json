@@ -38,7 +38,7 @@
         "classnames": "^2.2.5",
         "lodash": "^4.17.21",
         "react-is": "^18.1.0",
-        "swiper": "^6.8.0",
+        "swiper": "^9.0.0",
         "weui": "^1.1.2"
     },
     "peerDependencies": {
