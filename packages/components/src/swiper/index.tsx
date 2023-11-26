@@ -1,9 +1,10 @@
-import React, {useEffect, useRef, useMemo} from 'react'
+import React, {useEffect, useRef, useMemo, useCallback} from 'react'
 import classNames from 'classnames'
 import SwiperCore, {Autoplay, SwiperOptions} from 'swiper'
 import {createTaroSwiperEvent} from '../_util/taroEvent'
 import useMergedState from '../_util/hooks/useMergedState'
 import toArray from '../_util/children/toArray'
+import {debounce} from '../_util/util'
 import {TaroBaseProps, TaroSwiperEventHandler} from '../_util/typings'
 
 SwiperCore.use([Autoplay])
@@ -188,10 +189,44 @@ const Swiper: React.FC<SwiperProps> = ({
 
     const onChangeRef = useRef<TaroSwiperEventHandler | undefined>(onChange)
     const onAnimationFinishRef = useRef<TaroSwiperEventHandler | undefined>(onAnimationFinish)
+    const swiperObserverRef = useRef<MutationObserver>()
+    const swiperFisrtObserverRef = useRef<MutationObserver>()
+    const swiperLastObserverRef = useRef<MutationObserver>()
     
     const [mergedCurrent, setMergedCurrent] = useMergedState(0, {
         defaultValue: current
     })
+
+    const handleSwiperLoop = useCallback(debounce(() => {
+        const swiper = swiperRef.current as any
+        const wrapper = swiper?.$wrapperEl
+        if (wrapper && circular) {
+            swiper?.loopDestroy?.()
+            swiper?.loopCreate?.()
+          }
+    }), [])
+
+    const handleSwiperLoopListen = useCallback(() => {
+        swiperFisrtObserverRef.current?.disconnect?.()
+        swiperLastObserverRef.current?.disconnect?.()
+
+
+        swiperFisrtObserverRef.current = new MutationObserver(handleSwiperLoop)
+        swiperLastObserverRef.current = new MutationObserver(handleSwiperLoop)
+
+        const wrapper = swiperRef.current?.$wrapperEl?.[0]
+        const list = wrapper?.querySelectorAll?.('taro-swiper-item-core:not(.swiper-slide-duplicate)') || [];
+
+        if (list.length >= 1) {
+            swiperFisrtObserverRef.current.observe(list[0], {
+                characterData: true
+            })
+        } else if (list.length >= 2) {
+            swiperLastObserverRef.current.observe(list[list.length - 1], {
+                characterData: true
+            })
+        }
+    }, [])
 
     useEffect(() => {
         if (!swiperElRef.current) {
@@ -215,6 +250,15 @@ const Swiper: React.FC<SwiperProps> = ({
                 transitionEnd(swiper) {
                     const taroEvent = createTaroSwiperEvent('animationfinish', swiper)
                     onAnimationFinishRef.current?.(taroEvent)
+
+                    if (circular) {
+                        swiper.slideToLoop(swiper.realIndex, 0)
+                    }
+                },
+                observerUpdate(swiper) {
+                    if (circular) {
+                        swiper.slideToLoop(swiper.realIndex, 0)
+                    }
                 }
             }
         }
@@ -245,6 +289,33 @@ const Swiper: React.FC<SwiperProps> = ({
             swiper.autoplay.stop()
         }
     }, [autoplay])
+
+    useEffect(() => {
+        if (circular) {
+            (swiperRef.current as any)?.loopDestroy?.()
+            ;(swiperRef.current as any)?.loopCreate?.()
+        }
+    }, [children, circular])
+
+    useEffect(() => {
+        const swiper = swiperRef.current
+        if (!swiper || !circular) {
+            return
+        }
+
+        const wrapper = swiper.$wrapperEl[0]
+        swiperObserverRef.current = new MutationObserver(handleSwiperLoopListen)
+
+        swiperObserverRef.current.observe(wrapper, {
+            childList: true
+        })
+
+        return () => {
+            swiperObserverRef.current?.disconnect?.()
+            swiperFisrtObserverRef.current?.disconnect?.()
+            swiperLastObserverRef.current?.disconnect?.()
+        }
+    }, [])
 
     const items = useMemo(() => toArray(children), [children])
 
