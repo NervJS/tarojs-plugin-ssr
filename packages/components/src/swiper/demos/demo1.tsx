@@ -215,9 +215,9 @@ const App: React.FC = () => {
                 <View className="swiper-wrap">
                     <Swiper
                         className="swiper"
-                        autoplay="auto"
+                        autoplay
                         interval="1000"
-                        duration="500"
+                        duration={500}
                         circular
                     >
                         {
