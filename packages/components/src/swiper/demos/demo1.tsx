@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {View, Text, Swiper, SwiperItem, Switch} from '@taror/components'
+import {View, Text, Swiper, SwiperItem, Switch, Button} from '@taror/components'
 import './demo1.scss'
 
 const swiperList = [
@@ -17,9 +17,30 @@ const swiperList = [
     }
 ]
 
+const swiper1List = swiperList.map(item => ({...item}))
+
 const App: React.FC = () => {
     const [switchIndicateStatus, setSwitchIndicateStatus] = useState(true)
     const [switchAutoPlayStatus, setSwitchAutoPlayStatus] = useState(false)
+    const [list, setList] = useState(swiper1List)
+    const [len, setLen] = useState(3)
+
+    const handleListLenChange = () => {
+        setLen(prevLen => (prevLen + 1) % (list.length + 1))
+    }
+
+    const handleListContentChange = () => {
+        setList(prevList => prevList.map(item => ({
+            ...item,
+            value: item.value + 1
+        })))
+    }
+
+    const handleClick = item => {
+        console.log('triggerClickSlide', item)
+    }
+
+    const swiper1RenderList = list.slice(0, len)
 
     return (
         <View className='wrap'>
@@ -188,6 +209,38 @@ const App: React.FC = () => {
                         <View>我是其他</View>
                     </SwiperItem>
                 </Swiper> */}
+            </View>
+
+            <View className="card-area">
+                <View className="swiper-wrap">
+                    <Swiper
+                        className="swiper"
+                        autoplay="auto"
+                        interval="1000"
+                        duration="500"
+                        circular
+                    >
+                        {
+                            swiper1RenderList.map(item => (
+                                <SwiperItem
+                                    key={item.value}
+                                    className={item.className}
+                                    itemId={item.value}
+                                    onClick={() => handleClick(item)}
+                                >
+                                    <View className="swiper-item">{item.value}</View>
+                                </SwiperItem>
+                            ))
+                        }
+                    </Swiper>
+
+                    <View className="item-scroll border-bottom">
+                        <Button onClick={handleListLenChange} size="mini" type="primary" >改变list长度 ({len})</Button>
+                    </View>
+                    <View className="item-scroll border-bottom">
+                        <Button onClick={handleListContentChange} size="mini" type="primary" >改变list内容</Button>
+                    </View>
+                </View>
             </View>
         </View>
     )
