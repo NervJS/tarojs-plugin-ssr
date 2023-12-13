@@ -46,6 +46,9 @@ const App: React.FC = () => {
                         key={item.value}
                         className={item.className}
                         itemId={item.value}
+                        onClick={() => {
+                            console.log('click swiper item', item.value)
+                        }}
                     >
                         <View className="swiper-item">{item.value}</View>
                     </SwiperItem>

@@ -1,9 +1,10 @@
 import React from 'react'
 import classNames from 'classnames'
-import useTaroBaseEvents from '../_util/hooks/useTaroBaseEvents'
-import {TaroBaseProps} from '../_util/typings'
+import {TaroBaseAttributes, TaroMouseEventHandler} from '../_util/typings'
+import { createTaroMouseEvent } from '../_util/taroEvent'
 
-export interface SwiperItemProps extends TaroBaseProps {
+export interface SwiperItemProps extends TaroBaseAttributes {
+    
     /**
      * 该 swiper-item 的标识符
      */
@@ -13,16 +14,23 @@ export interface SwiperItemProps extends TaroBaseProps {
      * 内容
      */
     children?: React.ReactNode
+
+    /**
+     * 触摸后马上离开
+     */
+    onClick?: TaroMouseEventHandler
 }
 
-const SwiperItem: React.FC<SwiperItemProps> = ({className, itemId, children, ...rest}) => {
-    const props = useTaroBaseEvents(rest)
-
+const SwiperItem: React.FC<SwiperItemProps> = ({className, itemId, children, onClick, ...rest}) => {
     return (
         <div
             key={itemId}
             className={classNames('swiper-slide', className)}
-            {...props}
+            onClick={reactEvent => {
+                const taroEvent = createTaroMouseEvent('tap', reactEvent)
+                onClick?.(taroEvent)
+            }}
+            {...rest}
         >
             {children}
         </div>
