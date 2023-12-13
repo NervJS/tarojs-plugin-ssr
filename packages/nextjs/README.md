@@ -74,11 +74,34 @@ npx next start dist -p 10086
 
 ## 谁在使用
 
-<p align="center">
-  <a href="https://lemon.baidu.com/wiki" target="_blank" rel="noopener noreferrer">
-    <img width="180" src="https://user-images.githubusercontent.com/19852293/200127195-68e37d40-18a7-4354-92b3-3ac54174fe80.png" alt="Beauty wiki logo">
-  </a>
-</p>
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://lemon.baidu.com/wiki">
+                    <img
+                        src="https://github.com/NervJS/tarojs-plugin-ssr/assets/19852293/3e1efdb3-70e8-481d-b8c8-90bc9964e20d"
+                        width="200"
+                        alt="logo"
+                    >
+                    </br>
+                    <b>百度健康医美</b>
+                </a>
+            </td>
+             <td align="center">
+                <a href="https://m.ctrip.com/html5/flight/swift/index">
+                    <img
+                        src="https://github.com/NervJS/tarojs-plugin-ssr/assets/19852293/07b333e2-505e-4eed-8aa3-faf7824ba4e4"
+                        width="200"
+                        alt="logo"
+                    >
+                    </br>
+                    <b>携程机票</b>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 ## 主要功能
 
