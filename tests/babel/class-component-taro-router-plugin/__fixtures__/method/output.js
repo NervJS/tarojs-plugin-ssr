@@ -1,8 +1,6 @@
 import { withRouter } from "tarojs-plugin-platform-nextjs/router";
 import Taro from "@tarojs/taro";
-
 let _Index;
-
 class Index extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +10,6 @@ class Index extends Component {
     });
     console.log($instance);
   }
-
   render() {
     const $instance = Taro.getCurrentInstance({
       type: "class",
@@ -22,6 +19,5 @@ class Index extends Component {
     return null;
   }
 }
-
 _Index = withRouter(Index);
 export { _Index as default };

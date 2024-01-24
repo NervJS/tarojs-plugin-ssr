@@ -5,7 +5,6 @@ function Function1() {
     },
   };
 }
-
 function Function2() {
   var bug = 1;
   return {
