@@ -72,7 +72,6 @@
         "@babel/plugin-syntax-jsx": "^7.16.7",
         "@babel/plugin-transform-runtime": "^7.17.0",
         "@babel/plugin-transform-typescript": "^7.16.8",
-        "@babel/preset-env": "^7.16.11",
         "@babel/preset-react": "^7.16.7",
         "@babel/runtime": "^7.17.9",
         "@tarojs/cli": "3.4.7",
