@@ -1,5 +1,6 @@
 import path from 'upath'
 import fs from 'fs'
+import vm from 'vm'
 import {src, dest, watch} from 'gulp'
 import rename from 'gulp-rename'
 import filter from 'gulp-filter'
@@ -10,7 +11,6 @@ import chalk from 'chalk'
 import spawn from 'cross-spawn'
 import * as babel from '@babel/core'
 import type {IPluginContext} from '@tarojs/service'
-import type { Stream } from 'stream'
 import {mergeTaroPages} from './taroUtils'
 import {
     getNextExportedFunctions,
@@ -153,12 +153,22 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         // 读取 Taro 页面配置
                         // 注意：需要处理 definePageConfig 宏函数
                         const res = babel.transformFileSync(configAbsolutePath, {
+                            targets: {
+                                node: 'current'
+                            },
                             presets: [['@babel/preset-env']],
                             plugins: ['@babel/plugin-proposal-class-properties']
                         })
                         const macro = 'function definePageConfig(config) { return config }\n'
                         const code = macro + res!.code as string
-                        const pageConfig = eval(code)
+                        const sandbox = {
+                            exports: {} as any,
+                            process
+                        }
+                        vm.createContext(sandbox)
+                        const script = new vm.Script(code)
+                        script.runInContext(sandbox)
+                        const pageConfig = sandbox.exports.default
 
                         contents = unIndent`
                             import {TaroPage} from 'tarojs-plugin-platform-nextjs/taro'
@@ -206,7 +216,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
             createNextjsPages()
 
             function scaffold() {
-                const files: Stream[] = []
+                const files: NodeJS.ReadWriteStream[] = []
                 if (Array.isArray(extraFiles) && extraFiles.length) {
                     files.push(src(extraFiles, { cwd: appPath, base: '.' }).pipe(dest(outputPath)))
                 }

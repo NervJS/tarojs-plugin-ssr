@@ -17,7 +17,7 @@ const NEXT_EXPORT_FUNCTIONS = [
 
 export function getNextExportedFunctions(filename: string): string[] {
     const code = fs.readFileSync(filename, 'utf-8')
-    const ast = babel.parseSync(code, {filename})
+    const ast = babel.parseSync(code, {filename})!
 
     const result: string[] = []
 
