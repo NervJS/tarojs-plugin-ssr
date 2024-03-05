@@ -15,9 +15,6 @@
 
 让 Taro H5 支持 [Pre-rendering](https://nextjs.org/docs/basic-features/pages#pre-rendering)、[SSR](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) 和 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)，极致的首屏速度 🚀，利于 SEO 🔍。
 
-
-> 作为这个项目的创建者，我现在的工作已经和 Taro 开发无关，因而无法为其持续投入必要的精力进行维护。此刻，我正在寻找对此插件感兴趣且愿意进行贡献的热心者。如果你有热情并且对本项目感兴趣，请通过添加微信号：SharpYourMind 与我取得联系。
-
 ## 安装
 
 你需要先有一个 Taro 项目，如果你还不知该如何创建一个 Taro 项目，请先从这里开始：[Taro 安装及使用](https://docs.taro.zone/docs/GETTING-STARTED)。
@@ -31,7 +28,7 @@ npm init tarojs-plugin-platform-nextjs
 或者，你可以手动安装在你的 Taro 项目中安装**本插件**和 **Next.js**。
 
 ```bash
-npm install next tarojs-plugin-platform-nextjs
+npm install next@14 tarojs-plugin-platform-nextjs
 ```
 
 并在 Taro 项目的 `config/index.js` 中添加插件。
