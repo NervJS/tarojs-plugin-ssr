@@ -6,6 +6,7 @@
     ],
     "scripts": {
         "lerna": "lerna",
+        "build": "lerna run build --stream",
         "test": "jest"
     },
     "engines": {
