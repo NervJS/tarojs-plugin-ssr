@@ -48,6 +48,10 @@ interface PluginOptions {
      * 指定构建时还需要包含的其他文件
      */
     extraFiles?: string[]
+    /**
+     * 自定义 Next.js 的根元素 jsx 模板
+     */
+    customDocumentPath: string
 }
 
 export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
@@ -57,6 +61,7 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
     const runNextjs = pluginOpts.runNextjs ?? true
     const browser = pluginOpts.browser ?? true
     const extraFiles = pluginOpts.extraFiles ?? []
+    const customDocumentPath = pluginOpts.customDocumentPath ?? ''
 
     ctx.registerCommand({
         name: 'start',
@@ -260,6 +265,8 @@ export default (ctx: IPluginContext, pluginOpts: PluginOptions) => {
                         }))
                         .pipe(rename('_app.jsx'))
                         .pipe(dest(path.join(outputPath, 'pages'))),
+                        customDocumentPath ? 
+                    src(path.join(appPath, customDocumentPath)).pipe(dest(path.join(outputPath, 'pages'))) :
                     src(`${templateDir}/pages/_document.jsx`).pipe(dest(path.join(outputPath, 'pages'))),
                     src(`${appPath}/config/**`).pipe(dest(path.join(outputPath, 'config'))),
                     src(`${templateDir}/next.config.ejs`)

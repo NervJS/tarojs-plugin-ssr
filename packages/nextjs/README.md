@@ -223,7 +223,11 @@ const config = {
             // 作为示例，比如你本地编写的 postcss 插件目录
             extraFiles: [
                 'postcss-plugins/**'
-            ]
+            ],
+            // 自定义 Next.js 的根元素 jsx 模板
+            // 默认为 插件内置的模板
+            // 如果你需要自定义模板根元素上的脚本或样式，可以使用该选项
+            customDocumentPath: 'src/custom-document.jsx'
         }]
     ]
 }
