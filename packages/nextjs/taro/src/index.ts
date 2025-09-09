@@ -1,3 +1,6 @@
+// Taro API 的 Next.js 兼容实现
+// 提供与 Taro 官方 API 完全一致的接口，但适配 Next.js 环境
+
 import {
     // debug
     setEnableDebug,
@@ -11,7 +14,8 @@ import {
     getAppAuthorizeSetting,
     getSystemInfoSync,
     getSystemInfoAsync,
-    getSystemInfo
+    getSystemInfo,
+    eventCenter
 } from './basics'
 
 import {
@@ -184,6 +188,7 @@ export {
     getSystemInfoSync,
     getSystemInfoAsync,
     getSystemInfo,
+    eventCenter,
 
     createOffscreenCanvas,
     createCanvasContext,
@@ -323,6 +328,7 @@ export default {
     getSystemInfoSync,
     getSystemInfoAsync,
     getSystemInfo,
+    eventCenter,
 
     createOffscreenCanvas,
     createCanvasContext,
