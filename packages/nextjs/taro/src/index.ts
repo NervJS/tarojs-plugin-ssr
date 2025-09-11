@@ -169,6 +169,8 @@ import {uploadFile} from './network/upload'
 
 import {getLocation} from './location'
 
+import {eventCenter} from './shared'
+
 import {initTaroApp, TaroPage} from './internal'
 
 export {
@@ -305,6 +307,8 @@ export {
     getLocation,
 
     getMenuButtonBoundingClientRect,
+
+    eventCenter,
 
     initTaroApp,
     TaroPage
@@ -444,6 +448,8 @@ export default {
     getLocation,
 
     getMenuButtonBoundingClientRect,
+
+    eventCenter,
 
     initTaroApp,
     TaroPage
