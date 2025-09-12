@@ -223,7 +223,11 @@ const config = {
             // 作为示例，比如你本地编写的 postcss 插件目录
             extraFiles: [
                 'postcss-plugins/**'
-            ]
+            ],
+            // 自定义 Document 模板，默认为插件内置的模板
+            // 如果你需要更改内置模板上的脚本或样式，可以使用该选项
+            // 参见：https://www.nextjs.cn/docs/advanced-features/custom-document
+            customDocumentPath: 'src/custom-document.jsx'
         }]
     ]
 }
